@@ -5,4 +5,5 @@ export type TeacherDTO = {
     sdt: string,
     diachi: string,
     email: string
+    chucvu: string
 }

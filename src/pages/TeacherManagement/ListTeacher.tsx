@@ -1,12 +1,24 @@
+import { FormCreateTeacher } from "@/components/layout/form-create/form-create-teacher";
+import { Button } from "@/components/ui/button";
+import { Dialog } from "@/components/ui/dialog";
 import { FilterForm } from "@/components/ui/filter-form";
 import { SearchForm } from "@/components/ui/search-form";
-import { Table } from "@/components/ui/table";
+
 import type { TeacherDTO } from "@/types/TeacherType";
 import API from "@/utils/axios";
+import { Edit, Plus, Trash } from "lucide-react";
 
 import { useEffect, useState } from "react";
 
-const headerTableTeacher = ["MSGV", "Name", "Birth", "Phone", "Email"];
+const headerTableTeacher = [
+  "STT",
+  "MSGV",
+  "Họ tên",
+  "Số điện thoại",
+  "Email",
+  "Chức danh",
+  "Tác vụ",
+];
 
 const data_mock = [
   {
@@ -61,17 +73,18 @@ const InitParams: ParamsGetTeacherType = {
 };
 
 const ListTeacherPage = () => {
-  const [dataTeacher, setDataTeacher] = useState<TeacherDTO>();
+  const [dataTeacher, setDataTeacher] = useState<TeacherDTO[]>();
   const [paramsData, setParamsData] =
     useState<ParamsGetTeacherType>(InitParams);
   console.log("paramsData:", paramsData);
+
   const getAllTeacher = async () => {
     try {
       const filter = paramsData.filter
         .map((f) => `${f.key}=${f.value}`)
         .join("&");
       console.log("filter:", filter);
-      const params = `keyword=${paramsData.keyword}&limit=${paramsData.limit}&page=${paramsData.page}`;
+      const params = `keyword=${paramsData.keyword}&${filter}&limit=${paramsData.limit}&page=${paramsData.page}`;
       console.log("params:", params);
       const res = await API.get(`/teacher/getAllTeacher?${params}`);
       console.log(res.data);
@@ -104,20 +117,61 @@ const ListTeacherPage = () => {
   };
 
   return (
-    <div className="py-3 px-5 flex-1">
-      <div className="w-full">
-        <h2 className="text-2xl">Teacher Management</h2>
+    <div className="py-3 px-10 flex-1">
+      <div className="w-full px-2">
+        <h2 className="text-2xl">Quản lý giảng viên</h2>
       </div>
-      {/* Filter */}
-
-      <div className="flex items-center gap-2 my-5">
-        <div>
-          <SearchForm handleSearch={handleSearch} />
+      {/* Content */}
+      <div className="p-3 shadow-2xs rounded-md">
+        <div className="flex justify-between items-center gap-2 my-5">
+          <div className="flex gap-2">
+            <SearchForm handleSearch={handleSearch} />
+            <FilterForm data={data_mock} handleFilter={handleFilter} />
+          </div>
+          <Dialog
+            trigger={
+              <Button
+                title="Thêm"
+                icon={<Plus size={18} />}
+                className="h-full"
+                variant="primary"
+              />
+            }
+          >
+            <FormCreateTeacher/>
+          </Dialog>
         </div>
-        <FilterForm data={data_mock} handleFilter={handleFilter} />
+        {/* table */}
+        <div className="w-full">
+          <table className="table-auto w-full">
+            <thead>
+              <tr className="text-left border-b">
+                {headerTableTeacher.map((h) => (
+                  <th className="py-2">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {dataTeacher?.map((t: any, i) => (
+                <tr className="border-b text-left">
+                  <td className="py-3">{i + 1}</td>
+                  <td>{t.MSGV}</td>
+                  <td>{t.hoten}</td>
+                  <td>{t.sdt}</td>
+                  <td>{t.email}</td>
+                  <td>{t.chucdanh}</td>
+                  <td>
+                    <div className="flex gap-2">
+                      <Edit size={18} />
+                      <Trash size={18} color="red" />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-      {/* table */}
-      <Table header={headerTableTeacher} data={dataTeacher ?? []} />
     </div>
   );
 };
