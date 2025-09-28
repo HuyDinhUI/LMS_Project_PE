@@ -17,53 +17,46 @@ type Props = {
 };
 
 const sidebarItems: SidebarItem[] = [
-  { type: "item", label: "Home", icon: <Home size={18} />, href: "/" },
-  { type: "separator", label: "User" },
+  { type: "item", label: "Trang chủ", icon: <Home size={18} />, href: "/" },
+  { type: "separator", label: "Người dùng" },
   {
     type: "item",
-    label: "Teacher Management",
+    label: "Quản lý giảng viên",
     icon: <SquareKanban size={18} />,
     href: '#',
     subItems: [
-      { type: "item", label: "List Teachers", href: "/teachermanagement/listteacher" },
-      { type: "item", label: "Schedules", href: "/teachermanagement/schedules" },
+      { type: "item", label: "Quản lý hồ sơ giảng viên", href: "/teachermanagement/listteacher" },
+      { type: "item", label: "Quản lý lịch dạy", href: "/teachermanagement/schedules" },
     ]
   },
   {
     type: "item",
-    label: "Student Management",
+    label: "Quản lý sinh viên",
     icon: <LayoutDashboard size={18} />,
     subItems: [
-      { type: "item", label: "List Students", href: "#" },
-      { type: "item", label: "List Grades", href: "#" },
+      { type: "item", label: "Quản lý hồ sơ sinh viên", href: "#" },
+      { type: "item", label: "Quản lý điểm", href: "#" },
     ],
   },
   
   { type: "separator" },
-  { type: "separator", label: "Account" },
+  { type: "separator", label: "Tài khoản" },
   {
     type: "item",
-    label: "Account Management",
+    label: "Quản lý tài khoản",
     icon: <Rocket size={18} />,
     subItems: [
       {
         type: "item",
-        label: "Boards",
+        label: "Quản lý tài khoản sinh viên",
         href: "#",
         icon: <LayoutDashboard size={18} />,
       },
-      { type: "item", label: "Members", href: "#", icon: <Users2 size={18} /> },
       {
         type: "item",
-        label: "Settings",
+        label: "Quản lý tài khoản giảng viên",
         href: "#",
         icon: <Settings size={18} />,
-      },
-      {
-        type: "item",
-        label: "Billing",
-        href: "#",
-        icon: <CreditCard size={18} />,
       },
     ],
   },

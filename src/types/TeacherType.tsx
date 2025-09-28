@@ -5,5 +5,11 @@ export type TeacherDTO = {
     sdt: string,
     diachi: string,
     email: string
-    chucvu: string
+    trangthai: string
+    gioitinh: string
+    MaBM: string,
+    loai_giangvien: string
+    don_vi_cong_tac: string
+    trinhdo: string
+    ngaytuyendung: Date
 }

@@ -1,32 +1,49 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { type TeacherDTO } from "@/types/TeacherType";
+import type { TeacherDTO } from "@/types/TeacherType";
 import API from "@/utils/axios";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { data } from "react-router-dom";
 import { toast } from "react-toastify";
 
 type Props = {
-  submitCreateTeacher: (data: any) => void;
- 
+  submitUpdateTeacher: (data: any) => void;
+  msgv: string;
 };
 
-export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
+export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
-  
+  const [dataTeacher, setDataTeacher] = useState<TeacherDTO>();
+
+  useEffect(() => {
+    const getTeacher = async () => {
+      try {
+        const res = await API.get("/teacher/getOneTeacher/" + msgv);
+        console.log(res.data);
+        setDataTeacher(res.data.data[0]);
+        reset(res.data.data[0])
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getTeacher();
+  }, [reset]);
 
   return (
     <div className="p-5 h-full relative">
       <div className="border-b py-2">
-        <h1 className="text-2xl uppercase">Thêm giảng viên</h1>
+        <h1 className="text-2xl uppercase">Cập nhật giảng viên</h1>
       </div>
       <div className="py-4 overflow-auto relative">
-        <form className="p-2" onSubmit={handleSubmit(submitCreateTeacher)}>
+        <form className="p-2" onSubmit={handleSubmit(submitUpdateTeacher)}>
           <div>
             <div>
               <h2 className="uppercase font-bold text-blue-600">
@@ -34,9 +51,19 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               </h2>
             </div>
             <div className="grid grid-cols-4 gap-4 mt-3">
+               <div className="grid gap-2">
+                <label>Mã số giảng viên</label>
+                <Input
+                  readOnly
+                  
+                  type="text"
+                  {...register("MSGV", { required: "Họ tên là bắt buộc" })}
+                />
+              </div>
               <div className="grid gap-2">
                 <label>Họ tên</label>
                 <Input
+                  defaultValue={dataTeacher?.hoten}
                   type="text"
                   placeholder="Nguyễn Văn A"
                   {...register("hoten", { required: "Họ tên là bắt buộc" })}
@@ -45,6 +72,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Ngày sinh</label>
                 <Input
+                  
                   type="date"
                   {...register("ngaysinh", {
                     required: "Ngày sinh là bắt buộc",
@@ -54,6 +82,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Giới tính</label>
                 <select
+                  
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("gioitinh", {
                     required: "Giới tính là bắt buộc",
@@ -66,6 +95,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Số điện thoại</label>
                 <Input
+                  
                   type="text"
                   placeholder="+86 54382607"
                   {...register("sdt", {
@@ -76,6 +106,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Email</label>
                 <Input
+                  
                   type="email"
                   placeholder="m@example.com"
                   {...register("email", { required: "Email là bắt buộc" })}
@@ -84,6 +115,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Địa chỉ </label>
                 <Input
+                  
                   type="text"
                   placeholder="15/8 Nguyễn Hữu Tiến"
                   {...register("diachi", { required: "Địa chỉ là bắt buộc" })}
@@ -92,6 +124,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Bộ môn</label>
                 <select
+                  
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("MaBM", { required: "Giới tính là bắt buộc" })}
                 >
@@ -103,6 +136,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Trình độ</label>
                 <select
+                  
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("trinhdo", { required: "Trình độ là bắt buộc" })}
                 >
@@ -115,8 +149,9 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Loại giảng viên</label>
                 <select
+                  
                   className="ring ring-gray-200 rounded-sm p-2"
-                  {...register("loaigiangvien", {
+                  {...register("loai_giangvien", {
                     required: "Loại giảng viên là bắt buộc",
                   })}
                 >
@@ -127,14 +162,19 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               <div className="grid gap-2">
                 <label>Đơn vị công tác</label>
                 <Input
+                  
                   type="text"
                   placeholder="Công thương"
-                  {...register("donvicongtac")}
+                  {...register("don_vi_cong_tac")}
                 />
               </div>
               <div className="grid gap-2">
                 <label>Ngày tuyển dụng</label>
-                <Input type="date" {...register("ngaytuyendung")} />
+                <Input
+                  
+                  type="date"
+                  {...register("ngaytuyendung")}
+                />
               </div>
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">
                 <Button variant="dark" title="Lưu và tiếp tục" type="submit" />
