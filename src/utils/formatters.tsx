@@ -1,12 +1,5 @@
-export function generatePlaceholdeCard(column: any) {
-    return {
-        _id: column._id+'-placeholder-card',
-        label: '',
-        FE_placeholderCard: true,
-        columnId: column._id,
-        checklist:[]
-    }
-}
+import { convertTietToTime } from "./converTietToTime"
+
 
 export function slugtify(val: string) {
     if (!val) return ''
@@ -18,4 +11,21 @@ export function slugtify(val: string) {
     .replace(/[^a-z0-9 -]/g, '')
     .replace(/\s+/g,'-')
     .replace(/-+/g,'-')
+}
+
+export const formatterDataEventCalendar = (data: any) =>{
+    const events = data.map((item: any) => {
+        const startTime = convertTietToTime(item.tiet_batdau)
+        const endTime = item.tiet_kethuc < 9 ? convertTietToTime(item.tiet_kethuc + 1) : "17:00:00"
+
+        return {
+            id: item.MaLichDay,
+            title: `${item.ten_mon} - ${item.ten_lop} - ${item.giangvien} (${item.phonghoc})`,
+            start: `${item.ngay_day}T${startTime}`,
+            end: `${item.ngay_day}T${endTime}`
+        }
+
+    })
+
+    return events
 }

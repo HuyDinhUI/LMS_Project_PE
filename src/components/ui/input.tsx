@@ -40,13 +40,13 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
         className="outline-none w-full"
         placeholder="Search"
       ></input>
-      {onSearch && (
+      {/* {onSearch && (
         <div className="absolute w-full h-50 p-2 bg-white top-10 rounded dark:bg-card border-1 z-999">
           <label className="uppercase text-[10px] dark:text-gray-200">
             Recent boards
           </label>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

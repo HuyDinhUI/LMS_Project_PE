@@ -2,6 +2,8 @@
 
 
 
+
+
 @custom-variant dark (&:is(.dark *));
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -182,4 +184,20 @@
       transform: scale(1);
     }
   }
+}
+
+.fc .fc-toolbar-title {
+  font-size: 20px;
+}
+
+.fc .fc-daygrid-day-number {
+  color: #4280e3; /* text-gray-700 */
+}
+
+.fc .fc-event {
+   /* xanh */
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  padding: 2px 6px;
 }
