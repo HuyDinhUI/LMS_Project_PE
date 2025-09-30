@@ -49,7 +49,7 @@ const ScheduleTeacher = () => {
     setParams({ ...params, msgv });
   };
   return (
-    <div className="py-3 px-10 flex-1">
+    <div className="py-5 px-10 w-full bg-white rounded-md">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Quản lý giảng viên</h2>
       </div>

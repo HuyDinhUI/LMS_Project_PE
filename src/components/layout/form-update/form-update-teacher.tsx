@@ -12,6 +12,25 @@ type Props = {
   msgv: string;
 };
 
+const ListKhoa = [
+  {
+    id: "0100",
+    name: "Công nghệ thông tin",
+  },
+  {
+    id: "0200",
+    name: "Công nghệ thực phẩm",
+  },
+  {
+    id: "0300",
+    name: "Ngoại ngữ",
+  },
+  {
+    id: "0400",
+    name: "Kinh tế",
+  },
+];
+
 export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
   const {
     register,
@@ -28,7 +47,7 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
         const res = await API.get("/teacher/getOneTeacher/" + msgv);
         console.log(res.data);
         setDataTeacher(res.data.data[0]);
-        reset(res.data.data[0])
+        reset(res.data.data[0]);
       } catch (err) {
         console.log(err);
       }
@@ -51,11 +70,10 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               </h2>
             </div>
             <div className="grid grid-cols-4 gap-4 mt-3">
-               <div className="grid gap-2">
+              <div className="grid gap-2">
                 <label>Mã số giảng viên</label>
                 <Input
                   readOnly
-                  
                   type="text"
                   {...register("MSGV", { required: "Họ tên là bắt buộc" })}
                 />
@@ -63,7 +81,6 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               <div className="grid gap-2">
                 <label>Họ tên</label>
                 <Input
-                  defaultValue={dataTeacher?.hoten}
                   type="text"
                   placeholder="Nguyễn Văn A"
                   {...register("hoten", { required: "Họ tên là bắt buộc" })}
@@ -72,7 +89,6 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               <div className="grid gap-2">
                 <label>Ngày sinh</label>
                 <Input
-                  
                   type="date"
                   {...register("ngaysinh", {
                     required: "Ngày sinh là bắt buộc",
@@ -82,7 +98,6 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               <div className="grid gap-2">
                 <label>Giới tính</label>
                 <select
-                  
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("gioitinh", {
                     required: "Giới tính là bắt buộc",
@@ -95,7 +110,6 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               <div className="grid gap-2">
                 <label>Số điện thoại</label>
                 <Input
-                  
                   type="text"
                   placeholder="+86 54382607"
                   {...register("sdt", {
@@ -106,7 +120,6 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               <div className="grid gap-2">
                 <label>Email</label>
                 <Input
-                  
                   type="email"
                   placeholder="m@example.com"
                   {...register("email", { required: "Email là bắt buộc" })}
@@ -115,28 +128,25 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               <div className="grid gap-2">
                 <label>Địa chỉ </label>
                 <Input
-                  
                   type="text"
                   placeholder="15/8 Nguyễn Hữu Tiến"
                   {...register("diachi", { required: "Địa chỉ là bắt buộc" })}
                 />
               </div>
               <div className="grid gap-2">
-                <label>Bộ môn</label>
+                <label>Khoa</label>
                 <select
-                  
                   className="ring ring-gray-200 rounded-sm p-2"
-                  {...register("MaBM", { required: "Giới tính là bắt buộc" })}
+                  {...register("MaKhoa", { required: "Khoa là bắt buộc" })}
                 >
-                  <option value="CNTT01">Công nghệ phần mềm</option>
-                  <option value="CNTT02">Hệ thống thông tin</option>
-                  <option value="KT01">Toán ứng dụng</option>
+                  {ListKhoa.map((k) => (
+                    <option value={k.id}>{k.name}</option>
+                  ))}
                 </select>
               </div>
               <div className="grid gap-2">
                 <label>Trình độ</label>
                 <select
-                  
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("trinhdo", { required: "Trình độ là bắt buộc" })}
                 >
@@ -149,7 +159,6 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               <div className="grid gap-2">
                 <label>Loại giảng viên</label>
                 <select
-                  
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("loai_giangvien", {
                     required: "Loại giảng viên là bắt buộc",
@@ -162,7 +171,6 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               <div className="grid gap-2">
                 <label>Đơn vị công tác</label>
                 <Input
-                  
                   type="text"
                   placeholder="Công thương"
                   {...register("don_vi_cong_tac")}
@@ -170,11 +178,7 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
               </div>
               <div className="grid gap-2">
                 <label>Ngày tuyển dụng</label>
-                <Input
-                  
-                  type="date"
-                  {...register("ngaytuyendung")}
-                />
+                <Input type="date" {...register("ngaytuyendung")} />
               </div>
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">
                 <Button variant="dark" title="Lưu và tiếp tục" type="submit" />

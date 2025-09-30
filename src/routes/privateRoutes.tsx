@@ -3,6 +3,7 @@ import { lazy } from 'react'
 
 const ListTeacherPage = lazy(() =>  import('@/pages/TeacherManagement/ListTeacher'))
 const ScheduleTeacherPage = lazy(() => import('@/pages/TeacherManagement/ScheduleTeacher'))
+const ListCoursePage = lazy(() => import('@/pages/CourseManagement/ListCourse'))
 
 export const privateRoutes = [
     {
@@ -12,5 +13,9 @@ export const privateRoutes = [
     {
         path: '/teachermanagement/schedules',
         element: <MainLayout><ScheduleTeacherPage/></MainLayout>
+    },
+    {
+        path: '/coursemanagement/listcourse',
+        element: <MainLayout><ListCoursePage/></MainLayout>
     }
 ]

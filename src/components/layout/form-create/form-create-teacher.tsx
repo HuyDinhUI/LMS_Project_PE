@@ -11,6 +11,27 @@ type Props = {
  
 };
 
+
+const ListKhoa = [
+  {
+    id: '0100',
+    name: 'Công nghệ thông tin'
+  },
+  {
+    id: '0200',
+    name: 'Công nghệ thực phẩm'
+  },
+  {
+    id: '0300',
+    name: 'Ngoại ngữ'
+  },
+  {
+    id: '0400',
+    name: 'Kinh tế'
+  }
+]
+
+
 export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
   const {
     register,
@@ -90,14 +111,14 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                 />
               </div>
               <div className="grid gap-2">
-                <label>Bộ môn</label>
+                <label>Khoa</label>
                 <select
                   className="ring ring-gray-200 rounded-sm p-2"
-                  {...register("MaBM", { required: "Giới tính là bắt buộc" })}
+                  {...register("MaKhoa", { required: "Khoa là bắt buộc" })}
                 >
-                  <option value="CNTT01">Công nghệ phần mềm</option>
-                  <option value="CNTT02">Hệ thống thông tin</option>
-                  <option value="KT01">Toán ứng dụng</option>
+                  {ListKhoa.map(k => (
+                    <option value={k.id}>{k.name}</option>
+                  ))}
                 </select>
               </div>
               <div className="grid gap-2">

@@ -18,7 +18,7 @@ const mock_data_pagination = {
 
 export const Pagination = ({page, limit, totalPages, prevFunction, nextFunction, pageFunction}: PaginationType) => {
     return (
-        <div className="py-5 mt-20">
+        <div className="py-5 mt-10">
             {/* pagination */}
             <div className="flex items-center gap-2">
                 <Button disabled={page === 1} onClick={() => prevFunction()} size="md" icon={<ChevronLeft color="gray"/>}/>

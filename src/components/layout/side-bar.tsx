@@ -40,7 +40,7 @@ export const Sidebar = ({items}:SidebarItemProps) => {
   
 
   return (
-    <aside className="w-70 h-[85vh] scroll-auto sticky top-0 overflow-auto ps-7 py-4 space-y-2">
+    <aside className="xl:block hidden w-70 h-[92vh] scroll-auto sticky top-0 overflow-auto px-4 py-4 space-y-2">
       {items.map((item, index) => {
         if (item.type === 'separator') {
           return item.label ? (

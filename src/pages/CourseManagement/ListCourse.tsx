@@ -1,4 +1,5 @@
-import { FormCreateTeacher } from "@/components/layout/form-create/form-create-teacher";
+import { FormCreateCourse } from "@/components/layout/form-create/form-create-course";
+import { FormUpdateCourse } from "@/components/layout/form-update/form-update-course";
 import { FormUpdateTeacher } from "@/components/layout/form-update/form-update-teacher";
 import AlertDialogDemo from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -6,47 +7,45 @@ import { Dialog } from "@/components/ui/dialog";
 import { FilterForm } from "@/components/ui/filter-form";
 import { Pagination } from "@/components/ui/pagination";
 import { SearchForm } from "@/components/ui/search-form";
-
-import type { TeacherDTO } from "@/types/TeacherType";
+import type { CourseType } from "@/types/CourseType";
 import API from "@/utils/axios";
 import {
   Edit,
+  Pencil,
   Plus,
   Trash,
+  Trash2,
   UserRoundPen,
   UserRoundPlus,
   UserRoundX,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const headerTableTeacher = [
+const headerTableCourse = [
   "STT",
-  "MSGV",
-  "Họ tên",
-  "Số điện thoại",
-  "Email",
-  "Trạng thái",
+  "Mã học phần",
+  "Tên học phần",
+  "Số tín chỉ",
   "Tác vụ",
 ];
 
 const data_mock = [
   {
-    key: "gioitinh",
+    key: "Khoa",
     select: [
       {
         name: "All",
         value: "",
       },
       {
-        name: "Nam",
-        value: "Nam",
+        name: "Công nghệ thông tin",
+        value: "0100",
       },
       {
-        name: "Nữ",
-        value: "nữ",
+        name: "Công nghệ thực phẩm",
+        value: "0200",
       },
     ],
   },
@@ -70,29 +69,29 @@ type FilterType = {
   value: string;
 };
 
-type ParamsGetTeacherType = {
+type ParamsGetCourseType = {
   page: number;
   limit: number;
   keyword: string;
   filter: FilterType[];
 };
 
-const InitParams: ParamsGetTeacherType = {
+const InitParams: ParamsGetCourseType = {
   page: 1,
   limit: 10,
   keyword: "",
   filter: [],
 };
 
-const ListTeacherPage = () => {
-  const [dataTeacher, setDataTeacher] = useState<TeacherDTO[]>();
+const ListCoursePage = () => {
+  const [dataCourse, setDataCourse] = useState<CourseType[]>();
   const [paramsData, setParamsData] =
-    useState<ParamsGetTeacherType>(InitParams);
+    useState<ParamsGetCourseType>(InitParams);
   const [totalPages, setTotalPages] = useState<number>(1);
   console.log("paramsData:", paramsData);
-  
+  console.log("dataCourse:", dataCourse)
 
-  const getAllTeacher = async () => {
+  const getAllCourse = async () => {
     try {
       const filter = paramsData.filter
         .map((f) => `${f.key}=${f.value}`)
@@ -100,49 +99,49 @@ const ListTeacherPage = () => {
       console.log("filter:", filter);
       const params = `keyword=${paramsData.keyword}&${filter}&limit=${paramsData.limit}&page=${paramsData.page}`;
       console.log("params:", params);
-      const res = await API.get(`/teacher/getAllTeacher?${params}`);
+      const res = await API.get(`/course/getAllCourse?${params}`);
       console.log(res.data);
-      setDataTeacher(res.data.data);
-      setTotalPages(res.data.totalPages);
+      setDataCourse(res.data.result.data);
+      setTotalPages(res.data.result.totalPages);
     } catch (err: any) {
       console.log(err.message);
     }
   };
 
-  const submitCreateTeacher = async (data: any) => {
+  const submitCreateCourse= async (data: any) => {
     console.log("data:", data);
     try {
-      const res = await API.post("/teacher/createTeacher", data);
-      toast.success("Thêm giảng viên thành công");
+      const res = await API.post("/course/createCourse", data);
+      toast.success("Thêm học phần thành công");
     } catch (err: any) {
       console.log(err);
       toast.error(err.response?.data.message);
     }
 
-    getAllTeacher();
+    getAllCourse();
   };
 
-  const submitDeleteTeacher = async (msgv: string) => {
+  const submitDeleteCourse = async (mahp: string) => {
     try {
-      const res = await API.delete(`teacher/deleteTeacher/${msgv}`);
-      toast.success("Xoá giảng viên thành công");
+      const res = await API.delete(`course/deleteCourse/${mahp}`);
+      toast.success("Xoá học phần thành công");
     } catch (err) {
       console.log(err);
     }
 
-    getAllTeacher();
+    getAllCourse();
   };
 
-  const submitupdateTeacher = async (data: any) => {
+  const submitupdateCourse = async (data: any) => {
     console.log(data);
     try {
-      const res = await API.put(`teacher/updateTeacher`, data);
-      toast.success("Update giảng viên thành công");
+      const res = await API.put(`course/updateCourse`, data);
+      toast.success("Update học phần thành công");
     } catch (err) {
       console.log(err);
     }
 
-    getAllTeacher();
+    getAllCourse();
   };
 
   const prevPage = () => {
@@ -164,7 +163,7 @@ const ListTeacherPage = () => {
   };
 
   useEffect(() => {
-    getAllTeacher();
+    getAllCourse();
   }, [paramsData]);
 
   const handleSearch = async (keyword: string) => {
@@ -188,7 +187,7 @@ const ListTeacherPage = () => {
   return (
     <div className="py-5 px-10 w-full h-full bg-white rounded-md">
       <div className="w-full px-2">
-        <h2 className="text-2xl uppercase">Quản lý giảng viên</h2>
+        <h2 className="text-2xl uppercase">Quản lý học phần</h2>
       </div>
       {/* Content */}
       <div className="p-3 ring ring-gray-100 rounded-md mt-5">
@@ -201,13 +200,13 @@ const ListTeacherPage = () => {
             trigger={
               <Button
                 title="Thêm"
-                icon={<UserRoundPlus size={18} />}
+                icon={<Plus size={18} />}
                 className="h-full"
                 variant="primary"
               />
             }
           >
-            <FormCreateTeacher submitCreateTeacher={submitCreateTeacher} />
+            <FormCreateCourse submitCreateCourse={submitCreateCourse} />
           </Dialog>
         </div>
         {/* table */}
@@ -215,21 +214,19 @@ const ListTeacherPage = () => {
           <table className="table-auto w-full">
             <thead>
               <tr className="text-left border-b">
-                {headerTableTeacher.map((h) => (
+                {headerTableCourse.map((h) => (
                   <th className="py-2">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {dataTeacher?.map((t: any, i) => (
+              {dataCourse?.map((t: any, i) => (
                 <tr className="border-b text-left">
                   {/* 2  */}
                   <td className="py-3">{i + 1}</td>
-                  <td>{t.MSGV}</td>
-                  <td>{t.hoten}</td>
-                  <td>{t.sdt}</td>
-                  <td>{t.email}</td>
-                  <td>{t.trangthai}</td>
+                  <td>{t.MaHP}</td>
+                  <td>{t.ten_hocphan}</td>
+                  <td>{t.so_tinchi}</td>
                   <td>
                     <div className="flex">
                       <Dialog
@@ -237,23 +234,23 @@ const ListTeacherPage = () => {
                           <Button
                             variant="icon"
                             size="ic"
-                            icon={<UserRoundPen size={18} />}
+                            icon={<Pencil size={18} />}
                           />
                         }
                       >
-                        <FormUpdateTeacher
-                          submitUpdateTeacher={submitupdateTeacher}
-                          msgv={t.MSGV}
+                        <FormUpdateCourse
+                          submitUpdateCourse={submitupdateCourse}
+                          MaHP={t.MaHP}
                         />
                       </Dialog>
 
                       <AlertDialogDemo
-                        onclick={() => submitDeleteTeacher(t.MSGV)}
+                        onclick={() => submitDeleteCourse(t.MaHP)}
                         trigger={
                           <Button
                             variant="icon"
                             size="ic"
-                            icon={<UserRoundX size={18} color="red" />}
+                            icon={<Trash2 size={18} color="red" />}
                           />
                         }
                         label="Bạn có muốn xoá không ?"
@@ -279,4 +276,4 @@ const ListTeacherPage = () => {
   );
 };
 
-export default ListTeacherPage;
+export default ListCoursePage;
