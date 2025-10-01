@@ -15,6 +15,7 @@ import {
   BookUser,
   Presentation,
   Clipboard,
+  Calendar,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
@@ -59,13 +60,14 @@ const sidebarItems: SidebarItem[] = [
   {
     type: "item",
     label: "Quản lý lớp học phần",
+    href: "/classcoursemanagement/listclasscourse",
     icon: <Presentation size={18} />,
   },
 
   {
     type: "item",
-    label: "Phân công giảng dạy",
-    icon: <Clipboard size={18} />,
+    label: "Danh sách lịch dạy & học",
+    icon: <Calendar size={18} />,
   },
   
   { type: "separator" },

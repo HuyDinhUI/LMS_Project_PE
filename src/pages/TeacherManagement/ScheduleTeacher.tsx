@@ -14,7 +14,7 @@ type ParamsGetScheduleType = {
 const dataInitParams: ParamsGetScheduleType = {
   msgv: "",
   from: "2025-10-01",
-  to: "2025-10-07",
+  to: "2025-11-01",
 };
 
 const ScheduleTeacher = () => {
