@@ -198,6 +198,11 @@
   background: transparent;
 }
 
+.fc .fc-button{
+  background-color: oklch(0.696 0.17 162.48) !important;
+  border: none;
+}
+
 *{
   
   scrollbar-color:white;

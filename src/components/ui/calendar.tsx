@@ -45,6 +45,7 @@ export const Calendar = ({ data }: props) => {
       slotMaxTime="20:00:00"
       locale="vi" // tiếng Việt
       allDaySlot={false}
+      
     />
   );
 };

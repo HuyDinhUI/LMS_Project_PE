@@ -12,4 +12,5 @@ export type TeacherDTO = {
     don_vi_cong_tac: string
     trinhdo: string
     ngaytuyendung: Date
+    ten_khoa: string
 }
