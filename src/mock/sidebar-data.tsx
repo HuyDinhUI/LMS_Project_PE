@@ -43,7 +43,7 @@ export const SidebarAdminData: SidebarItem[] = [
     label: "Quản lý sinh viên",
     icon: <SquareKanban size={18} />,
     subItems: [
-      { type: "item", label: "Quản lý hồ sơ sinh viên", href: "#" },
+      { type: "item", label: "Quản lý hồ sơ sinh viên", href: "/studentmanagement/liststudent" },
       { type: "item", label: "Quản lý điểm", href: "#" },
     ],
   },
@@ -102,12 +102,6 @@ export const SidebarTeacherData: SidebarItem[] = [
     href: `/teacher/dashboard`,
   },
   { type: "separator" },
-  {
-    type: "item",
-    label: "Hồ sơ cá nhân",
-    icon: <SquareKanban size={18} />,
-    href: `/teacher/information`,
-  },
   {
     type: "item",
     label: "Quản lý lớp học",

@@ -31,6 +31,10 @@ const TeacherSchedulePage = lazy(
   () => import("@/pages/Teacher/TeacherSchedule")
 );
 
+const ListStudentPage = lazy(
+  () => import("@/pages/StudentManagement/ListStudent")
+);
+
 export const privateRoutes = [
   /////////////  Admin  /////////////////
   {
@@ -74,10 +78,19 @@ export const privateRoutes = [
     ),
   },
 
+  {
+    path: "/studentmanagement/liststudent",
+    element: (
+      <MainLayout sidebarItems={SidebarAdminData}>
+        <ListStudentPage />
+      </MainLayout>
+    ),
+  },
+
   /////////////  Teacher  ////////////////
 
   {
-    path: "/teacher/information",
+    path: "/teacher/information/update",
     element: (
       <Guard>
         <MainLayout sidebarItems={SidebarTeacherData}>

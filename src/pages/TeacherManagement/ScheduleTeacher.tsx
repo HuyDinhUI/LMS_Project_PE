@@ -49,7 +49,7 @@ const ScheduleTeacher = () => {
     setParams({ ...params, msgv });
   };
   return (
-    <div className="py-5 px-10 w-full bg-white rounded-md">
+    <div className="py-5 px-10 w-full bg-white dark:bg-card rounded-md">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Quản lý giảng viên</h2>
       </div>
@@ -57,7 +57,7 @@ const ScheduleTeacher = () => {
         <div className="flex gap-2">
           <SearchForm handleSearch={handleSearchSchedule} />
         </div>
-        <Calendar data={events} />
+        <Calendar data={events}/>
       </div>
     </div>
   );

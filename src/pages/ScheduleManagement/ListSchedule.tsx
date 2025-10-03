@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { FormUpdateClassCourse } from "@/components/layout/form-update/form-update-classcourse";
 import type { ScheduleType } from "@/types/ScheduleType";
+import { FormUpdateSchedule } from "@/components/layout/form-update/form-update-schedule";
 
 const headerTableSchedule = [
   "STT",
@@ -86,7 +87,7 @@ const InitParams: ParamsGetScheduleType = {
   filter: [],
 };
 
-const ListClassCoursePage = () => {
+const ListSchedulePage = () => {
   const [dataSchedule, setDataSchedule] = useState<ScheduleType[]>();
   const [paramsData, setParamsData] =
     useState<ParamsGetScheduleType>(InitParams);
@@ -126,7 +127,7 @@ const ListClassCoursePage = () => {
     console.log(data);
     try {
       const res = await API.put(`schedule/updateSchedule`, data);
-      toast.success("Update lịch thành công");
+      toast.success("Cập nhật lịch thành công");
     } catch (err) {
       console.log(err);
     }
@@ -175,12 +176,12 @@ const ListClassCoursePage = () => {
   };
 
   return (
-    <div className="py-5 px-10 w-full h-full bg-white rounded-md">
+    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Quản lý lịch dạy & học</h2>
       </div>
       {/* Content */}
-      <div className="p-3 ring ring-gray-100 rounded-md mt-5">
+      <div className="p-3 ring ring-gray-100 max-h-[550px] dark:ring-gray-700  rounded-md mt-5">
         <div className="flex justify-between items-center gap-2 my-5">
           <div className="flex gap-2">
             <SearchForm handleSearch={handleSearch} />
@@ -219,9 +220,9 @@ const ListClassCoursePage = () => {
                           />
                         }
                       >
-                        <FormUpdateClassCourse
-                          submitUpdateClassCourse={submitupdateSchedule}
-                          MaLop={t.MaLop}
+                        <FormUpdateSchedule
+                          submitUpdateSchedule={submitupdateSchedule}
+                          MaLichDay={t.MaLichDay}
                         />
                       </Dialog>
 
@@ -257,4 +258,4 @@ const ListClassCoursePage = () => {
   );
 };
 
-export default ListClassCoursePage;
+export default ListSchedulePage;

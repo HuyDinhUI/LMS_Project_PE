@@ -186,12 +186,12 @@ const ListTeacherPage = () => {
   };
 
   return (
-    <div className="py-5 px-10 w-full h-full bg-white rounded-md">
+    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Quản lý giảng viên</h2>
       </div>
       {/* Content */}
-      <div className="p-3 ring ring-gray-100 rounded-md mt-5">
+      <div className="p-3 ring ring-gray-100 max-h-[550px] dark:ring-gray-700 rounded-md mt-5">
         <div className="flex justify-between items-center gap-2 my-5">
           <div className="flex gap-2">
             <SearchForm handleSearch={handleSearch} />

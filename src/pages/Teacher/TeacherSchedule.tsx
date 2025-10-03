@@ -1,4 +1,4 @@
-import { Calendar, type EventType } from "@/components/ui/calendar";
+import { Calendar,CalendarToday, type EventType } from "@/components/ui/calendar";
 import { SearchForm } from "@/components/ui/search-form";
 import API from "@/utils/axios";
 import { formatterDataEventCalendar } from "@/utils/formatters";
@@ -33,7 +33,7 @@ const TeacherSchedule = () => {
   
     
   return (
-    <div className="py-5 px-10 w-full bg-white rounded-md">
+    <div className="py-5 px-10 w-full bg-white dark:bg-card rounded-md">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Lịch dạy</h2>
       </div>

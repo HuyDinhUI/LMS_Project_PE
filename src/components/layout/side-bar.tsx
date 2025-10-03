@@ -59,7 +59,7 @@ export const Sidebar = ({items}:SidebarItemProps) => {
           <div key={item.label} className="">
             <button
               onClick={() => hasSub && toggleMenu(item.label)}
-              className={`cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition ${isActive ? "bg-green-300/30 text-green-800 dark:bg-green-700/20 dark:text-green-400" : "hover:bg-gray-800/10 dark:hover:bg-white/10"
+              className={`cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition ${isActive ? "bg-green-300/30 text-green-800 dark:bg-green-700/20 dark:text-green-500" : "hover:bg-gray-800/10 dark:hover:bg-white/10"
                 }`}
             >
               <span className="flex items-center gap-2 flex-1">
@@ -96,7 +96,7 @@ export const Sidebar = ({items}:SidebarItemProps) => {
                     <Link
                       key={sub.label}
                       to={sub.href!}
-                      className={`flex items-center gap-2 ps-10 px-2 py-2 text-sm rounded ${isSubActive ? "bg-green-300/20 text-green-800 " : "hover:bg-gray-200 dark:hover:bg-white/10"
+                      className={`flex items-center gap-2 ps-10 px-2 py-2 text-sm rounded-md ${isSubActive ? "bg-green-300/20 text-green-500 dark:bg-green-700/20" : "hover:bg-gray-200 dark:hover:bg-white/10"
                         }`}
                     >
                       {sub.icon}

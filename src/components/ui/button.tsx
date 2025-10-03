@@ -14,7 +14,7 @@ type ButtonProps = {
 
 const variantClass: Record<ButtonVariant, string> = {
     default: 'bg-gray-100 rounded hover:bg-gray-200 dark:hover:bg-gray-200/50',
-    primary: 'bg-blue-500 rounded hover:bg-blue-600 text-white dark:border dark:border-white dark:hover:border-purple-500 dark:hover:bg-transparent dark:bg-transparent',
+    primary: 'bg-green-500 rounded hover:bg-green-600 text-white dark:border dark:border-white dark:hover:border-green-500 dark:hover:bg-transparent dark:bg-transparent',
     danger: 'bg-red-500 rounded hover:bg-red-600 text-white',
     dark: 'bg-black rounded hover:bg-black/80 text-white dark:bg-gray-200 dark:text-black dark:hover:bg-white',
     outline: 'rounded ring ring-gray-200 dark:ring-gray-500 hover:bg-white/10',

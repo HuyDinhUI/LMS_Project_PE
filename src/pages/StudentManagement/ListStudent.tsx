@@ -1,37 +1,36 @@
-import { FormCreateCourse } from "@/components/layout/form-create/form-create-course";
-import { FormUpdateCourse } from "@/components/layout/form-update/form-update-course";
-import {FormCreateClassCourse} from "@/components/layout/form-create/form-create-classcourse"
+
 import AlertDialogDemo from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { FilterForm } from "@/components/ui/filter-form";
 import { Pagination } from "@/components/ui/pagination";
 import { SearchForm } from "@/components/ui/search-form";
-import type { ClassCourseType } from "@/types/ClassCourseType";
-import type { CourseType } from "@/types/CourseType";
+
+
 import API from "@/utils/axios";
 import {
-  Edit,
   Pencil,
-  Plus,
-  Trash,
   Trash2,
-  UserRoundPen,
   UserRoundPlus,
-  UserRoundX,
+  
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { FormUpdateClassCourse } from "@/components/layout/form-update/form-update-classcourse";
+import type { ScheduleType } from "@/types/ScheduleType";
+import { FormUpdateSchedule } from "@/components/layout/form-update/form-update-schedule";
+import type { StudentType } from "@/types/StudentType";
+import { FormCreateStudent } from "@/components/layout/form-create/form-create-student";
+import { FormUpdateStudent } from "@/components/layout/form-update/form-update-student";
 
-const headerTableClassCourse = [
+const headerTableStudent = [
   "STT",
-  "Mã lớp học phần",
-  "Tên lớp học phần",
-  "Học phần",
-  "Giảng viên",
-  "Sỉ số",
+  "MSSV",
+  "Họ tên",
+  "Email",
+  "Số điện thoại",
+  "Khoa",
+  "Lớp",
   "Tác vụ"
 ];
 
@@ -73,29 +72,29 @@ type FilterType = {
   value: string;
 };
 
-type ParamsGetClassCourseType = {
+type ParamsGetStudentType = {
   page: number;
   limit: number;
   keyword: string;
   filter: FilterType[];
 };
 
-const InitParams: ParamsGetClassCourseType = {
+const InitParams: ParamsGetStudentType = {
   page: 1,
   limit: 10,
   keyword: "",
   filter: [],
 };
 
-const ListClassCoursePage = () => {
-  const [dataClassCourse, setDataClassCourse] = useState<ClassCourseType[]>();
+const ListStudentPage = () => {
+  const [dataStudent, setDataStudent] = useState<StudentType[]>();
   const [paramsData, setParamsData] =
-    useState<ParamsGetClassCourseType>(InitParams);
+    useState<ParamsGetStudentType>(InitParams);
   const [totalPages, setTotalPages] = useState<number>(1);
   console.log("paramsData:", paramsData);
-  console.log("dataCourse:", dataClassCourse);
+  console.log("dataCourse:", dataStudent);
 
-  const getAllClassCourse = async () => {
+  const getAllStudent = async () => {
     try {
       const filter = paramsData.filter
         .map((f) => `${f.key}=${f.value}`)
@@ -103,49 +102,49 @@ const ListClassCoursePage = () => {
       console.log("filter:", filter);
       const params = `keyword=${paramsData.keyword}&${filter}&limit=${paramsData.limit}&page=${paramsData.page}`;
       console.log("params:", params);
-      const res = await API.get(`/classCourse/getAllClassCourse?${params}`);
+      const res = await API.get(`/student/getAllStudent?${params}`);
       console.log(res.data);
-      setDataClassCourse(res.data.result.data);
-      setTotalPages(res.data.result.totalPages);
+      setDataStudent(res.data.result.data);
+      setTotalPages(res.data.data.totalPages);
     } catch (err: any) {
       console.log(err.message);
     }
   };
 
-  const submitCreateClassCourse = async (data: any) => {
+  const submitCreateStudent = async (data: any) => {
     console.log("data:", data);
     try {
-      const res = await API.post("/classCourse/createClassCourse", data);
-      toast.success("Thêm lớp học phần thành công");
+      const res = await API.post("/student/createStudent", data);
+      toast.success("Thêm sinh viên thành công");
     } catch (err: any) {
       console.log(err);
       toast.error(err.response?.data.message);
     }
 
-    getAllClassCourse();
+    getAllStudent();
   };
 
-  const submitDeleteClassCourse = async (mahp: string) => {
+  const submitDeleteStudent = async (malich: string) => {
     try {
-      const res = await API.delete(`classCourse/deleteClassCourse/${mahp}`);
-      toast.success("Xoá lớp học phần thành công");
+      const res = await API.delete(`student/deleteStudent${malich}`);
+      toast.success("Xoá sinh viên thành công");
     } catch (err) {
       console.log(err);
     }
 
-    getAllClassCourse();
+    getAllStudent();
   };
 
-  const submitupdateClassCourse = async (data: any) => {
+  const submitupdateStudent = async (data: any) => {
     console.log(data);
     try {
-      const res = await API.put(`classCourse/updateClassCourse`, data);
-      toast.success("Update lớp học phần thành công");
+      const res = await API.put(`student/updateStudent`, data);
+      toast.success("Cập nhật sinh viên thành công");
     } catch (err) {
       console.log(err);
     }
 
-    getAllClassCourse();
+    getAllStudent();
   };
 
   const prevPage = () => {
@@ -167,7 +166,7 @@ const ListClassCoursePage = () => {
   };
 
   useEffect(() => {
-    getAllClassCourse();
+    getAllStudent();
   }, [paramsData]);
 
   const handleSearch = async (keyword: string) => {
@@ -191,7 +190,7 @@ const ListClassCoursePage = () => {
   return (
     <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md">
       <div className="w-full px-2">
-        <h2 className="text-2xl uppercase">Quản lý học phần</h2>
+        <h2 className="text-2xl uppercase">Quản lý sinh viên</h2>
       </div>
       {/* Content */}
       <div className="p-3 ring ring-gray-100 max-h-[550px] dark:ring-gray-700  rounded-md mt-5">
@@ -204,13 +203,13 @@ const ListClassCoursePage = () => {
             trigger={
               <Button
                 title="Thêm"
-                icon={<Plus size={18} />}
+                icon={<UserRoundPlus size={18} />}
                 className="h-full"
                 variant="primary"
               />
             }
           >
-            <FormCreateClassCourse submitCreateClassCourse={submitCreateClassCourse} />
+            <FormCreateStudent submitCreateStudent={submitCreateStudent} />
           </Dialog>
         </div>
         {/* table */}
@@ -218,21 +217,22 @@ const ListClassCoursePage = () => {
           <table className="table-auto w-full">
             <thead>
               <tr className="text-left border-b">
-                {headerTableClassCourse.map((h) => (
+                {headerTableStudent.map((h) => (
                   <th className="py-2">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {dataClassCourse?.map((t: any, i) => (
+              {dataStudent?.map((t: any, i) => (
                 <tr className="border-b text-left">
-                  {/* 2  */}
+                  
                   <td className="py-3">{i + 1}</td>
-                  <td>{t.MaLop}</td>
-                  <td>{t.ten_lop}</td>
-                  <td>{t.MaHP}</td>
-                  <td>{t.MSGV}</td>
-                  <td>{t.si_so}</td>
+                  <td>{t.MaSV}</td>
+                  <td>{t.hoten}</td>
+                  <td>{t.email}</td>
+                  <td>{t.sdt}</td>
+                  <td>{t.MaKhoa}</td>
+                  <td>{t.MaLopHC}</td>
                   
                   <td>
                     <div className="flex">
@@ -245,14 +245,14 @@ const ListClassCoursePage = () => {
                           />
                         }
                       >
-                        <FormUpdateClassCourse
-                          submitUpdateClassCourse={submitupdateClassCourse}
-                          MaLop={t.MaLop}
+                        <FormUpdateStudent
+                          submitUpdateStudent={submitupdateStudent}
+                          masv={t.MaSV}
                         />
                       </Dialog>
 
                       <AlertDialogDemo
-                        onclick={() => submitDeleteClassCourse(t.MaLop)}
+                        onclick={() => submitDeleteStudent(t.MaSV)}
                         trigger={
                           <Button
                             variant="icon"
@@ -283,4 +283,4 @@ const ListClassCoursePage = () => {
   );
 };
 
-export default ListClassCoursePage;
+export default ListStudentPage;

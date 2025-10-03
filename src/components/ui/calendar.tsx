@@ -8,6 +8,7 @@ export type EventType = {
   title: string;
   start: string;
   end: string;
+  status: string
 };
 
 type props = {
@@ -19,9 +20,9 @@ export const Calendar = ({ data }: props) => {
     <FullCalendar
       eventContent={(arg) => {
         let bgColor = "";
-        switch (arg.event.extendedProps.phonghoc) {
-          case "Zoom":
-            bgColor = "bg-blue-500 text-white";
+        switch (arg.event.extendedProps.status) {
+          case "TamNgung":
+            bgColor = "bg-red-500 text-white";
             break;
           default:
             bgColor = "bg-gray-200 text-black";
@@ -41,6 +42,38 @@ export const Calendar = ({ data }: props) => {
       }}
       events={data}
       height="65vh"
+      slotMinTime="07:00:00"
+      slotMaxTime="20:00:00"
+      locale="vi" // tiếng Việt
+      allDaySlot={false}
+      
+    />
+  );
+};
+
+export const CalendarToday = ({ data }: props) => {
+  return (
+    <FullCalendar
+      eventContent={(arg) => {
+        let bgColor = "";
+        switch (arg.event.extendedProps.status) {
+          case "TamNgung":
+            bgColor = "bg-red-500 text-white";
+            break;
+          default:
+            bgColor = "bg-gray-200 text-black";
+        }
+        return (
+          <div className={`${bgColor} px-1 rounded w-full h-full p-2 overflow-hidden`}>
+            {arg.event.title}
+          </div>
+        );
+      }}
+      plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+      initialView="timeGridDay"
+      headerToolbar={false}
+      events={data}
+      height="35vh"
       slotMinTime="07:00:00"
       slotMaxTime="20:00:00"
       locale="vi" // tiếng Việt
