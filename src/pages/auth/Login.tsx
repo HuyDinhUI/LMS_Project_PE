@@ -31,7 +31,11 @@ const Login = () => {
       }
 
       if (res.data.role === "admin") {
-        navigate('/management/dashboard')
+        navigate('/teachermanagement/listteacher')
+      }
+
+      if (res.data.role === "SV") {
+        navigate('/student/dashboard')
       }
     }
     catch (error: any) {

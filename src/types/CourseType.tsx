@@ -3,4 +3,5 @@ export type CourseType = {
     ten_hocphan: string,
     so_tinchi: number,
     MaKhoa: string
+    HocPhi: number
 }

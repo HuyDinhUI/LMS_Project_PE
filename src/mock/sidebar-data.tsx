@@ -3,8 +3,11 @@ import {
   BookUser,
   Calendar,
   CircleUser,
+  FileUser,
+  GraduationCap,
   Home,
   LayoutDashboard,
+  Library,
   Presentation,
   Shield,
   SquareKanban,
@@ -105,12 +108,58 @@ export const SidebarTeacherData: SidebarItem[] = [
   {
     type: "item",
     label: "Quản lý lớp học",
-    icon: <BookUser size={18}/>
+    icon: <Presentation size={18}/>
   },
   {
     type: "item",
     label: "Lịch dạy",
     href: "/teacher/schedule",
     icon: <Calendar size={18}/>
+  },
+  {
+    type: "item",
+    label: "Cập nhật hồ sơ",
+    href: "/teacher/information/update",
+    icon: <FileUser size={18}/>
+  },
+  {
+    type: "item",
+    label: "Quản lý điểm",
+    href: "/teacher/gradesmanagement",
+    icon: <GraduationCap size={18}/>
   }
+];
+
+export const SidebarStudentData: SidebarItem[] = [
+  { type: "item", label: "Trang chủ", icon: <Home size={18} />, href: "/" },
+  {
+    type: "item",
+    label: "Dashboard",
+    icon: <LayoutDashboard size={18} />,
+    href: `/student/dashboard`,
+  },
+  { type: "separator" },
+  {
+    type: "item",
+    label: "Danh sách lớp học",
+    icon: <BookUser size={18}/>
+  },
+  {
+    type: "item",
+    label: "Lịch học",
+    href: "/student/schedule",
+    icon: <Calendar size={18}/>
+  },
+  {
+    type: "item",
+    label: "Đăng ký học phần",
+    href: "/student/courses/enroll",
+    icon: <Library size={18}/>
+  },
+  {
+    type: "item",
+    label: "Cập nhật hồ sơ",
+    href: "/student/information/update",
+    icon: <BookUser size={18}/>
+  },
 ];

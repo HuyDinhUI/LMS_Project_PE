@@ -3,9 +3,12 @@ export type ClassCourseType = {
     ten_lop: string,
     MaHK: string,
     phonghoc: string,
-    si_so: 60,
+    si_so: number,
     ngay_day: Date
-    tiet_batdau: 1,
-    tiet_ketthuc: 3,
+    tiet_batdau: number,
+    tiet_kethuc: number,
     MSGV: string
+    ThuTrongTuan: number
+    giangvien: number
+    sl_dangky: number
 }

@@ -25,9 +25,9 @@ const ScheduleTeacher = () => {
   const getSchedule = async () => {
     try {
       const res = await API.get(
-        `/teacher/schedule/getSchedule?msgv=${params.msgv}&from=${params.from}&to=${params.to}`
+        `/teacher/getSchedule/${params.msgv}`
       );
-      const event = formatterDataEventCalendar(res.data.data);
+      const event = formatterDataEventCalendar(res.data.result.data);
       setEvents(event);
     } catch (err: any) {
       toast.error(err.response?.data.message);

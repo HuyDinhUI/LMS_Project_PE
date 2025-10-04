@@ -1,5 +1,5 @@
 import MainLayout from "@/layouts/mainLayout";
-import { SidebarAdminData, SidebarTeacherData } from "@/mock/sidebar-data";
+import { SidebarAdminData, SidebarStudentData, SidebarTeacherData } from "@/mock/sidebar-data";
 import Guard from "@/routes/guard";
 
 import { lazy } from "react";
@@ -35,6 +35,13 @@ const ListStudentPage = lazy(
   () => import("@/pages/StudentManagement/ListStudent")
 );
 
+const StudentDashboardPage = lazy(
+  () => import("@/pages/Student/StudentDashboard")
+);
+
+const StudentEnrollClassCoursePage = lazy(() => import('@/pages/Student/StudentEnrollClassCourse'))
+
+const StudentInformationPage = lazy(() => import("@/pages/Student/StudentInformation"))
 export const privateRoutes = [
   /////////////  Admin  /////////////////
   {
@@ -119,4 +126,37 @@ export const privateRoutes = [
       </Guard>
     ),
   },
+
+  /////////////  Student  ////////////////
+
+  {
+    path: "/student/dashboard",
+    element: (
+      <Guard>
+        <MainLayout sidebarItems={SidebarStudentData}>
+          <StudentDashboardPage />
+        </MainLayout>
+      </Guard>
+    ),
+  },
+  {
+    path: "/student/information/update",
+    element: (
+      <Guard>
+        <MainLayout sidebarItems={SidebarStudentData}>
+          <StudentInformationPage/>
+        </MainLayout>
+      </Guard>
+    )
+  },
+  {
+    path: "/student/courses/enroll",
+    element: (
+      <Guard>
+        <MainLayout sidebarItems={SidebarStudentData}>
+          <StudentEnrollClassCoursePage/>
+        </MainLayout>
+      </Guard>
+    )
+  }
 ];

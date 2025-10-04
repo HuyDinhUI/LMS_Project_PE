@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import type { StudentEducation } from "@/types/StudentType";
 import type { TeacherDTO } from "@/types/TeacherType";
 import API from "@/utils/axios";
 import { useEffect, useState } from "react";
@@ -7,27 +8,8 @@ import { useForm } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
-const ListKhoa = [
-  {
-    id: "0100",
-    name: "Công nghệ thông tin",
-  },
-  {
-    id: "0200",
-    name: "Công nghệ thực phẩm",
-  },
-  {
-    id: "0300",
-    name: "Ngoại ngữ",
-  },
-  {
-    id: "0400",
-    name: "Kinh tế",
-  },
-];
-
-const TeacherInformation = () => {
-  const [dataTeach, setDataTeach] = useState<TeacherDTO>();
+const StudentInformation = () => {
+  const [dataStudent,setDataStudent] = useState<StudentEducation>();
 
   const {
     register,
@@ -36,30 +18,30 @@ const TeacherInformation = () => {
     formState: { errors },
   } = useForm();
 
-  const getOneTeacher = async () => {
+  const getOneStudent = async () => {
     try {
       const res = await API.get(
-        "/teacher/getOneTeacher/" + localStorage.getItem("username")
+        "/student/getOneStudent/" + localStorage.getItem("username")
       );
-      setDataTeach(res.data.data[0]);
-      reset(res.data.data[0]);
+      setDataStudent(res.data.result.data[0]);
+      reset(res.data.result.data[0]);
     } catch (err: any) {
       toast.error(err?.response?.message);
     }
   };
 
   useEffect(() => {
-    getOneTeacher();
+    getOneStudent();
   }, [reset]);
 
   const handleUpdateInformation = async (data: any) => {
     try {
-      const res = await API.put(`teacher/updateTeacher`, data);
-      toast.success("Update giảng viên thành công");
+      const res = await API.put(`student/updateStudent`, data);
+      toast.success("Cập nhật thành công");
     } catch (err) {
       console.log(err);
     }
-    getOneTeacher();
+    getOneStudent();
   };
   return (
     <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md relative">
@@ -67,7 +49,7 @@ const TeacherInformation = () => {
         <h2 className="text-2xl uppercase">Hồ sơ cá nhân</h2>
       </div>
       <div className="flex flex-col mt-5 gap-5 px-2">
-        {/* Thông tin giảng dạy*/}
+        
         <form onSubmit={handleSubmit(handleUpdateInformation)}>
           <h1 className="text-orange-400 font-bold uppercase pb-3 border-b">
             I. Thông tin cá nhân
@@ -142,4 +124,4 @@ const TeacherInformation = () => {
   );
 };
 
-export default TeacherInformation;
+export default StudentInformation;
