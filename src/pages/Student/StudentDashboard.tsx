@@ -1,17 +1,28 @@
-import { Calendar, CalendarToday, type EventType } from "@/components/ui/calendar";
+import {
+  Calendar,
+  CalendarToday,
+  type EventType,
+} from "@/components/ui/calendar";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 
 import API from "@/utils/axios";
 import { formatterDataEventCalendar } from "@/utils/formatters";
 import {
+  Bell,
+  BookOpen,
+  BookOpenCheck,
   BookText,
+  ChartColumn,
   ChevronRight,
   FileUser,
   GraduationCap,
   icons,
   Info,
+  LogIn,
+  MessageSquareDiff,
   Presentation,
   ScanFace,
+  TriangleAlert,
   User,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -19,30 +30,31 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import bg_light from "@/assets/v904-nunny-012.jpg";
 import type { StudentEducation, StudentType } from "@/types/StudentType";
+import { Process } from "@/components/ui/process";
 
 const list_feature = [
   {
     name: "Danh sách lớp học",
     href: "/student/class",
-    icon: <Presentation size={30} />,
+    icon: <Presentation size={20} />,
     color: "from-blue-400 to-blue-500",
   },
   {
     name: "Kết quả học tập",
     href: "/student/grades",
-    icon: <GraduationCap size={30} />,
+    icon: <GraduationCap size={20} />,
     color: "from-purple-400 to-purple-500",
   },
   {
     name: "Chương trình khung",
     href: "/student/program",
-    icon: <BookText size={30} />,
+    icon: <BookText size={20} />,
     color: "from-pink-400 to-pink-500",
   },
   {
     name: "Cập nhật hồ sơ",
     href: "/student/information/update",
-    icon: <FileUser size={30} />,
+    icon: <FileUser size={20} />,
     color: "from-rose-400 to-rose-500",
   },
 ];
@@ -54,7 +66,7 @@ const StudentDashboard = () => {
 
   const getListClassCourse = async () => {
     const res = await API.get(
-      "/classCourse/getClassCourseByTeacher/" + localStorage.getItem("username")
+      "/classCourse/getClassCourseByStudent/" + localStorage.getItem("username")
     );
     setListClassCourse(res.data.result.data);
   };
@@ -64,10 +76,9 @@ const StudentDashboard = () => {
       const res = await API.get(
         "/student/getOneStudent/" + localStorage.getItem("username")
       );
-      console.log(res.data)
-      localStorage.setItem('MaNganh',res.data.result.data[0].MaNganh)
+      console.log(res.data);
+      localStorage.setItem("MaNganh", res.data.result.data[0].MaNganh);
       setDataStudent(res.data.result.data[0]);
-
     } catch (err: any) {
       toast.error(err?.response?.message);
     }
@@ -90,16 +101,12 @@ const StudentDashboard = () => {
 
   return (
     <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md overflow-auto">
-      <div className="w-full px-2">
-        <h1 className="text-2xl uppercase text-amber-400 font-bold">
-          Dashboard
-        </h1>
-      </div>
-      <div className="grid grid-cols-4 mt-3 gap-2 px-2">
-        <div className="h-70 shadow-md p-3">
-          <img className="h-full" src={bg_light}></img>
+      <div className="flex items-center mt-3 gap-2 px-2">
+        <div className="h-70 w-70 rounded-full">
+          <img className="h-full rounded-full" src={bg_light}></img>
         </div>
-        <div className="flex-1 col-span-3 flex-col gap-2 ms-10">
+        <div className="flex-1 flex-col gap-2 ms-10">
+          <h1 className="text-2xl mb-5 font-bold uppercase text-green-600">Thông tin học vấn</h1>
           <div className="flex gap-20 text-md">
             <div className="flex flex-col gap-2">
               <p>
@@ -121,7 +128,9 @@ const StudentDashboard = () => {
                 Khoa: <strong>{dataStudent?.ten_khoa}</strong>
               </p>
               <p>Hệ đào tạo:</p>
-              <p>Ngành: <strong>{dataStudent?.ten_nganh}</strong></p>
+              <p>
+                Ngành: <strong>{dataStudent?.ten_nganh}</strong>
+              </p>
               <p>
                 Lớp: <strong>{dataStudent?.MaLopHC}</strong>
               </p>
@@ -133,46 +142,102 @@ const StudentDashboard = () => {
         </div>
       </div>
       <div className="mt-5 px-2">
-        <div className="grid grid-cols-4 gap-2 mt-3">
-          {list_feature.map((f, i) => (
-            <Link
-              to={f.href}
-              key={i}
-              className={`flex items-center gap-4 dark:text-white ring ring-gray-200 rounded-md p-4 h-20`}
-            >
-              {f.icon}
-              {f.name}
-            </Link>
-          ))}
+        <div className="grid grid-cols-4 gap-4 mt-3">
+          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5">
+            <div>
+              <label className="font-light">Điểm trung bình</label>
+              <p className="text-xl text-green-600 font-bold">8.5</p>
+            </div>
+            <div className="flex justify-center p-2 bg-green-100 rounded-full"><ChartColumn color="green" size={30}/></div>
+          </div>
+          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5">
+            <div>
+              <label className="font-light">Tín chỉ hoàn thành</label>
+              <p className="text-xl text-green-600 font-bold">0/120</p>
+            </div>
+            <div className="flex justify-center p-2 bg-green-100 rounded-full"><GraduationCap color="green" size={30}/></div>
+          </div>
+          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5">
+            <div>
+              <label className="font-light">Môn học hiện tại</label>
+              <p className="text-xl text-green-600 font-bold">{ListClassCourse?.length}</p>
+            </div>
+            <div className="flex justify-center p-2 bg-green-100 rounded-full"><BookText color="green" size={30}/></div>
+          </div>
+          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5">
+            <div>
+              <label className="font-light">Bài tập chưa nộp</label>
+              <p className="text-xl text-green-600 font-bold">0</p>
+            </div>
+            <div className="flex justify-center p-2 bg-green-100 rounded-full"><BookOpenCheck color="green" size={30}/></div>
+          </div>
         </div>
       </div>
-      {/* Nhắc nhở & Lịch dạy */}
       <div className="px-2">
-        <div className="grid grid-cols-2 gap-2 mt-3">
-          <div className="p-4 rounded-md ring ring-gray-200">
-            <CalendarToday data={events} />
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          <div className="flex flex-col gap-4">
+            <div className="p-4 rounded-md shadow-md">
+              <h2 className="text-xl font-bold pb-3">Lịch học hôm nay</h2>
+              <CalendarToday data={events} />
+            </div>
+            <div className="flex flex-col gap-4 p-4 rounded-md shadow-md">
+              <h2 className="text-xl font-bold pb-3">Danh sách lớp học</h2>
+              {ListClassCourse?.map((c,i) => (
+                <Link to={''} key={i} className="p-3 shadow-md rounded-md border-l-5 border-green-500 flex items-center justify-between">
+                  <div>
+                    <span className="font-bold">{c.ten_lop} - {c.MaHP}</span>
+                    <p className="flex items-center mt-2"><User size={18}/>{c.si_so}</p>
+                  </div>
+                  <div className="p-3 bg-green-100 rounded-full">
+                    <LogIn color="green"/>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 grid-rows-2 gap-2">
-            {ListClassCourse?.map((l, i) => (
-              <div
-                key={i}
-                className="flex flex-col ring ring-gray-100 rounded-md overflow-hidden"
-              >
-                <div className="bg-linear-to-r from-green-300 to-green-400 h-25"></div>
-                <div className="p-3 flex justify-between">
-                  <p>{l.ten_lop}</p>
-                  <span className="flex items-center">
-                    <User size={18} />
-                    {l.si_so}
-                  </span>
+          <div className="flex flex-col gap-2">
+            {/* Tiến độ học tập */}
+            <div className="flex flex-col gap-3 p-4 shadow-md rounded-md">
+              <h2 className="text-xl font-bold">Tiến độ học tập</h2>
+              <Process label="Tín chỉ tín luỹ" total={120} current={15} classname="bg-green-500" size="sm"/>
+              <Process label="Điểm trung bình" total={10} current={8} classname="bg-green-600" size="sm"/>
+              <Process label="Bài tập hoàn thành" total={20} current={5} classname="bg-green-700" size="sm"/>
+            </div>
+            <div className="grid grid-cols-2 gap-3 p-4 shadow-md rounded-md">
+              {/* Công cụ */}
+              <h2 className="text-xl font-bold col-span-2">Công cụ</h2>
+              {list_feature.map((f,i) => (
+                <Link to={f.href} key={i} className="flex items-center p-2 gap-3 bg-green-100 rounded-md text-green-700">
+                  <div>{f.icon}</div>
+                  <div>{f.name}</div>
+                </Link>
+              ))}
+            </div>
+            <div className="flex flex-col gap-3 p-4 shadow-md rounded-md">
+              {/* Công cụ */}
+              <h2 className="text-xl font-bold">Thông báo</h2>
+              <div className="bg-green-50 p-3 rounded-md">
+                <div className="flex gap-3 text-green-600 font-bold">
+                  <Bell/>
+                  <label>Thông báo về lịch học</label>
                 </div>
+                <p></p>
               </div>
-            ))}
-            <Link to={'/teacher/classmanagement'} className="flex items-center justify-center ring ring-gray-200 rounded-md overflow-hidden">
-              <span className="flex items-center">
-                Xem tất cả lớp học <ChevronRight size={18} />
-              </span>
-            </Link>
+              <div className="bg-green-50 p-3 rounded-md">
+                <div className="flex gap-3 text-green-600 font-bold">
+                  <MessageSquareDiff/>
+                  <label>Cập nhật điểm</label>
+                </div>
+                <p></p>
+              </div>
+              <div className="bg-green-50 p-3 rounded-md">
+                <div className="flex gap-3 text-green-600 font-bold">
+                  <TriangleAlert/>
+                  <label>Nhắc nhở bài tập</label>
+                </div>
+                <p></p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

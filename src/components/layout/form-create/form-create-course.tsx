@@ -77,7 +77,15 @@ export const FormCreateCourse = ({ submitCreateCourse }: Props) => {
                   ))}
                 </select>
               </div>
-              
+              <div className="grid gap-2">
+                <label>Học phí</label>
+                <Input
+                  type="number"
+                  {...register("HocPhi", {
+                    required: "Học phí là bắt buộc",
+                  })}
+                />
+              </div>
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">
                 <Button variant="dark" title="Lưu và tiếp tục" type="submit" />
                 <Button type="submit" title="Lưu và đóng" />

@@ -1,42 +1,53 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import API from "@/utils/axios";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 
 type Props = {
   submitCreateStudent: (data: any) => void;
- 
 };
-
 
 const ListKhoa = [
   {
-    id: '0100',
-    name: 'Công nghệ thông tin'
+    id: "0100",
+    name: "Công nghệ thông tin",
   },
   {
-    id: '0200',
-    name: 'Công nghệ thực phẩm'
+    id: "0200",
+    name: "Công nghệ thực phẩm",
   },
   {
-    id: '0300',
-    name: 'Ngoại ngữ'
+    id: "0300",
+    name: "Ngoại ngữ",
   },
   {
-    id: '0400',
-    name: 'Kinh tế'
-  }
-]
+    id: "0400",
+    name: "Kinh tế",
+  },
+];
 
+type MajorType = {
+  MaNganh: string
+  ten_nganh: string
+}
 
-export const FormCreateStudent = ({ submitCreateStudent}: Props) => {
+export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  
+  const [major,setMajor] = useState<MajorType[]>([])
+
+  useEffect(() => {
+    const getAllMajor = async () => {
+      const res = await API.get('/major/getAllMajor')
+      setMajor(res.data.result.data)
+    } 
+    getAllMajor()
+  },[])
 
   return (
     <div className="p-5 h-full relative">
@@ -113,14 +124,28 @@ export const FormCreateStudent = ({ submitCreateStudent}: Props) => {
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("MaKhoa", { required: "Khoa là bắt buộc" })}
                 >
-                  {ListKhoa.map(k => (
+                  {ListKhoa.map((k) => (
                     <option value={k.id}>{k.name}</option>
                   ))}
                 </select>
               </div>
               <div className="grid gap-2">
+                <label>Chuyên ngành</label>
+                <select
+                  className="ring ring-gray-200 rounded-sm p-2"
+                  {...register("MaNganh", { required: "Chuyên ngành là bắt buộc" })}
+                >
+                  {major.map((m) => (
+                    <option value={m.MaNganh}>{m.ten_nganh}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="grid gap-2">
                 <label>Lớp</label>
-                <Input type="text" {...register("MaLopHC",{required: "Lớp là bắt buộc"})} />
+                <Input
+                  type="text"
+                  {...register("MaLopHC", { required: "Lớp là bắt buộc" })}
+                />
               </div>
               <div className="grid gap-2">
                 <label>Ngày nhập học</label>

@@ -1,6 +1,8 @@
+import AlertDialogDemo from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import type { CourseType } from "@/types/CourseType";
+import type { EnrollCourseType } from "@/types/EnrolledCourseType";
 import API from "@/utils/axios";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -21,14 +23,23 @@ const headerTableClassCourse = [
   "",
 ];
 
-
+const headerTableEnrolledCourse = [
+  "Mã lớp",
+  "Tên học phần",
+  "Học phí",
+  "Trạng thái công nợ",
+  "Ngày đăng ký",
+  "",
+];
 
 const StudentEnrollClassCourse = () => {
   const [dataCourse, setDataCourse] = useState<CourseType[]>();
   const [dataClassCourse, setDataClassCourse] = useState<ClassCourseType[]>();
   const [CourseSelected, setCourseSelected] = useState<CourseType>();
-  const MaSV: string = localStorage.getItem("username") ?? ''
-
+  const [dataEnrolledCourse, setDataEnrolledCourse] = useState<
+    EnrollCourseType[]
+  >([]);
+  const MaSV: string = localStorage.getItem("username") ?? "";
 
   const getCourseByPrograme = async () => {
     try {
@@ -56,21 +67,30 @@ const StudentEnrollClassCourse = () => {
     }
   };
 
+  const getEnrolledCourse = async () => {
+    try {
+      const res = await API.get(`enrollClassCourse/getEnrolledCourse/${MaSV}`);
+      setDataEnrolledCourse(res.data.result.data);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
   const enrollClassCourse = async (
     MaSV: string,
     MaLop: string,
     MaHK: string,
     HocPhi: number,
-    MaHP: string,
+    MaHP: string
   ) => {
     const data = {
       MaSV,
       MaLop,
       MaHK,
       HocPhi,
-      MaHP
-    }
-    console.log(data)
+      MaHP,
+    };
+    console.log(data);
     try {
       const res = await API.post("/enrollClassCourse/enroll", {
         MaSV,
@@ -79,16 +99,29 @@ const StudentEnrollClassCourse = () => {
         HocPhi,
         MaHP,
       });
-      getClassCourseByPrograme(CourseSelected)
-      toast.success('Đăng ký học phần thành công')
-      setCourseSelected(undefined)
+      getClassCourseByPrograme(CourseSelected);
+      getEnrolledCourse();
+      toast.success("Đăng ký học phần thành công");
     } catch (err: any) {
-      toast.error(err?.response?.message);
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
+  const CancleEnrollCourse = async (MaLop: string, MaHP: string) => {
+    try {
+      const res = await API.delete(
+        `/enrollClassCourse/cancle?masv=${MaSV}&malop=${MaLop}&mahp=${MaHP}`
+      );
+      getEnrolledCourse();
+      toast.success("Huỷ học phần thành công");
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
     }
   };
 
   useEffect(() => {
     getCourseByPrograme();
+    getEnrolledCourse();
   }, []);
   return (
     <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md overflow-auto">
@@ -155,7 +188,23 @@ const StudentEnrollClassCourse = () => {
                     {c.sl_dangky}/{c.si_so}
                   </td>
                   <td>
-                    <Button onClick={() => enrollClassCourse(MaSV,c.MaLop,c.MaHK,CourseSelected?.HocPhi ?? 0,CourseSelected?.MaHP ?? '')} variant="primary" title="Đăng ký" size="sm" />
+                    <Button
+                      disabled={dataEnrolledCourse.some(
+                        (e) => e.MaHP === c.MaHP
+                      )}
+                      onClick={() =>
+                        enrollClassCourse(
+                          MaSV,
+                          c.MaLop,
+                          c.MaHK,
+                          CourseSelected?.HocPhi ?? 0,
+                          CourseSelected?.MaHP ?? ""
+                        )
+                      }
+                      variant="primary"
+                      title="Đăng ký"
+                      size="sm"
+                    />
                   </td>
                 </tr>
               ))}
@@ -169,26 +218,29 @@ const StudentEnrollClassCourse = () => {
           <table className="table-auto w-full">
             <thead>
               <tr className="text-left border-b bg-gray-100">
-                {headerTableClassCourse.map((h) => (
+                {headerTableEnrolledCourse.map((h) => (
                   <th className="py-2">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {dataClassCourse?.map((c, i) => (
+              {dataEnrolledCourse?.map((c, i) => (
                 <tr key={i} className="border-b text-left">
                   <td className="py-3">{c.MaLop}</td>
-                  <td>{c.giangvien}</td>
+                  <td>{c.ten_hocphan}</td>
+                  <td>{c.HocPhi.toLocaleString("vi-VN")}đ</td>
+                  <td>{c.TrangThai}</td>
+
+                  <td>{String(c.NgayDangKy)}</td>
                   <td>
-                    Thứ {c.ThuTrongTuan + 1}, Tiết {c.tiet_batdau} -
-                    {c.tiet_kethuc}
-                  </td>
-                  <td>{c.phonghoc}</td>
-                  <td>
-                    {c.sl_dangky}/{c.si_so}
-                  </td>
-                  <td>
-                    <Button  variant="primary" title="Đăng ký" size="sm" />
+                    <AlertDialogDemo
+                      label="Bạn có muốn huỷ đăng ký không ?"
+                      description="Lưu ý: trong thời gian đăng ký bạn có thể huỷ hoặc đăng ký lại, nếu hết thời gian sẽ không được huỷ."
+                      onclick={() => CancleEnrollCourse(c.MaLop, c.MaHP)}
+                      trigger={
+                        <Button variant="danger" title="Huỷ" size="sm" />
+                      }
+                    />
                   </td>
                 </tr>
               ))}

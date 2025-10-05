@@ -1,5 +1,9 @@
 import MainLayout from "@/layouts/mainLayout";
-import { SidebarAdminData, SidebarStudentData, SidebarTeacherData } from "@/mock/sidebar-data";
+import {
+  SidebarAdminData,
+  SidebarStudentData,
+  SidebarTeacherData,
+} from "@/mock/sidebar-data";
 import Guard from "@/routes/guard";
 
 import { lazy } from "react";
@@ -39,9 +43,19 @@ const StudentDashboardPage = lazy(
   () => import("@/pages/Student/StudentDashboard")
 );
 
-const StudentEnrollClassCoursePage = lazy(() => import('@/pages/Student/StudentEnrollClassCourse'))
+const StudentSchedulePage = lazy(
+  () => import("@/pages/Student/StudentSchedule")
+);
 
-const StudentInformationPage = lazy(() => import("@/pages/Student/StudentInformation"))
+const StudentEnrollClassCoursePage = lazy(
+  () => import("@/pages/Student/StudentEnrollClassCourse")
+);
+
+const StudentInformationPage = lazy(
+  () => import("@/pages/Student/StudentInformation")
+);
+
+const StudentGradesPage = lazy(() => import("@/pages/Student/StudentGrades"))
 export const privateRoutes = [
   /////////////  Admin  /////////////////
   {
@@ -144,19 +158,39 @@ export const privateRoutes = [
     element: (
       <Guard>
         <MainLayout sidebarItems={SidebarStudentData}>
-          <StudentInformationPage/>
+          <StudentInformationPage />
         </MainLayout>
       </Guard>
-    )
+    ),
   },
   {
     path: "/student/courses/enroll",
     element: (
       <Guard>
         <MainLayout sidebarItems={SidebarStudentData}>
-          <StudentEnrollClassCoursePage/>
+          <StudentEnrollClassCoursePage />
         </MainLayout>
       </Guard>
-    )
-  }
+    ),
+  },
+  {
+    path: "/student/schedule",
+    element: (
+      <Guard>
+        <MainLayout sidebarItems={SidebarStudentData}>
+          <StudentSchedulePage />
+        </MainLayout>
+      </Guard>
+    ),
+  },
+  {
+    path: "/student/grades",
+    element: (
+      <Guard>
+        <MainLayout sidebarItems={SidebarStudentData}>
+          <StudentGradesPage />
+        </MainLayout>
+      </Guard>
+    ),
+  },
 ];
