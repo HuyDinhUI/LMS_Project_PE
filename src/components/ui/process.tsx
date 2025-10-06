@@ -16,7 +16,7 @@ const SizeOption = {
 
 export const Process = ({total,current,classname,size,label}:ProcessProps) => {
 
-    const widthClass = `w-[${current/total*100}%]`    
+    const widthClass = `${Math.round(current/total*100)}%`    
 
     return (
         <div>
@@ -25,7 +25,7 @@ export const Process = ({total,current,classname,size,label}:ProcessProps) => {
                 <p className="text-sm">{`${current}/${total}`}</p>
             </div>
             <div className={`w-full mt-2 bg-gray-200 rounded-2xl ${SizeOption[size]}`}>
-                <div className={`${classname} rounded-2xl h-full ${widthClass}`}></div>
+                <div className={`${classname} rounded-2xl h-full`} style={{width:widthClass}}></div>
             </div>
         </div>
     )

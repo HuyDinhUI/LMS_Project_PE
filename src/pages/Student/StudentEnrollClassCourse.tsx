@@ -149,8 +149,8 @@ const StudentEnrollClassCourse = () => {
                 <tr
                   onClick={() => getClassCourseByPrograme(t)}
                   key={i}
-                  className={`border-b text-left hover:bg-green-100 ${
-                    CourseSelected?.MaHP === t.MaHP ? "bg-green-100" : ""
+                  className={`border-b text-left hover:bg-green-50 ${
+                    CourseSelected?.MaHP === t.MaHP ? "bg-green-50" : ""
                   }`}
                 >
                   <td className="py-3">{t.MaHP}</td>

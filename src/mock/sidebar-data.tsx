@@ -162,4 +162,10 @@ export const SidebarStudentData: SidebarItem[] = [
     href: "/student/information/update",
     icon: <BookUser size={18}/>
   },
+  {
+    type: "item",
+    label: "Kết quả học tập",
+    href: "/student/grades",
+    icon: <GraduationCap size={18}/>
+  },
 ];

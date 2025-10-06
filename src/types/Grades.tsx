@@ -8,4 +8,6 @@ export type GradesType = {
     diem_tong: number,
     diem_thang_4: number,
     diem_chu: string
+    XepLoai: string
+    TrangThai: string
 }

@@ -14,6 +14,8 @@ const headerTableGrades = [
   "Điểm tổng",
   "Điểm thang 4",
   "Điểm chữ",
+  "Xếp loại",
+  "Trạng thái"
 ];
 
 const StudentGrades = () => {
@@ -62,6 +64,8 @@ const StudentGrades = () => {
                 <td className="p-3 border border-gray-300">{g.diem_tong}</td>
                 <td className="p-3 border border-gray-300">{g.diem_thang_4}</td>
                 <td className="p-3 border border-gray-300">{g.diem_chu}</td>
+                <td className="p-3 border border-gray-300">{g.XepLoai}</td>
+                <td className="p-3 border border-gray-300">{g.TrangThai}</td>
               </tr>
             ))}
           </tbody>

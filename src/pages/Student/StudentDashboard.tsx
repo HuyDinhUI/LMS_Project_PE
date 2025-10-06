@@ -37,25 +37,25 @@ const list_feature = [
     name: "Danh sách lớp học",
     href: "/student/class",
     icon: <Presentation size={20} />,
-    color: "from-blue-400 to-blue-500",
+    color: "bg-blue-50 text-blue-700 hover:bg-blue-100",
   },
   {
     name: "Kết quả học tập",
     href: "/student/grades",
     icon: <GraduationCap size={20} />,
-    color: "from-purple-400 to-purple-500",
+    color: "bg-green-50 text-green-700 hover:bg-green-100",
   },
   {
     name: "Chương trình khung",
     href: "/student/program",
     icon: <BookText size={20} />,
-    color: "from-pink-400 to-pink-500",
+    color: "bg-violet-50 text-violet-700 hover:bg-violet-100",
   },
   {
     name: "Cập nhật hồ sơ",
     href: "/student/information/update",
     icon: <FileUser size={20} />,
-    color: "from-rose-400 to-rose-500",
+    color: "bg-amber-50 text-amber-700 hover:bg-amber-100",
   },
 ];
 
@@ -86,7 +86,7 @@ const StudentDashboard = () => {
 
   const getSchedule = async () => {
     const res = await API.get(
-      "/teacher/getSchedule/" + localStorage.getItem("username")
+      "/student/getSchedule/" + localStorage.getItem("username")
     );
     console.log(res.data);
     console.log(formatterDataEventCalendar(res.data.result.data));
@@ -143,33 +143,33 @@ const StudentDashboard = () => {
       </div>
       <div className="mt-5 px-2">
         <div className="grid grid-cols-4 gap-4 mt-3">
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5">
+          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Điểm trung bình</label>
-              <p className="text-xl text-green-600 font-bold">8.5</p>
+              <p className="text-x font-bold">8.5/10</p>
             </div>
-            <div className="flex justify-center p-2 bg-green-100 rounded-full"><ChartColumn color="green" size={30}/></div>
+            <div className="flex justify-center p-2 bg-blue-50 rounded-full"><ChartColumn color="blue" size={30}/></div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5">
+          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Tín chỉ hoàn thành</label>
-              <p className="text-xl text-green-600 font-bold">0/120</p>
+              <p className="text-xl font-bold">0/120</p>
             </div>
-            <div className="flex justify-center p-2 bg-green-100 rounded-full"><GraduationCap color="green" size={30}/></div>
+            <div className="flex justify-center p-2 bg-green-50 rounded-full"><GraduationCap color="green" size={30}/></div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5">
+          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Môn học hiện tại</label>
-              <p className="text-xl text-green-600 font-bold">{ListClassCourse?.length}</p>
+              <p className="text-xl font-bold">{ListClassCourse?.length}</p>
             </div>
-            <div className="flex justify-center p-2 bg-green-100 rounded-full"><BookText color="green" size={30}/></div>
+            <div className="flex justify-center p-2 bg-violet-50 rounded-full"><BookText color="purple" size={30}/></div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5">
+          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Bài tập chưa nộp</label>
-              <p className="text-xl text-green-600 font-bold">0</p>
+              <p className="text-xl font-bold">0</p>
             </div>
-            <div className="flex justify-center p-2 bg-green-100 rounded-full"><BookOpenCheck color="green" size={30}/></div>
+            <div className="flex justify-center p-2 bg-amber-50 rounded-full"><BookOpenCheck color="orange" size={30}/></div>
           </div>
         </div>
       </div>
@@ -199,25 +199,25 @@ const StudentDashboard = () => {
             {/* Tiến độ học tập */}
             <div className="flex flex-col gap-3 p-4 shadow-md rounded-md">
               <h2 className="text-xl font-bold">Tiến độ học tập</h2>
-              <Process label="Tín chỉ tín luỹ" total={120} current={15} classname="bg-green-500" size="sm"/>
-              <Process label="Điểm trung bình" total={10} current={8} classname="bg-green-600" size="sm"/>
-              <Process label="Bài tập hoàn thành" total={20} current={5} classname="bg-green-700" size="sm"/>
+              <Process label="Tín chỉ tín luỹ" total={120} current={13} classname="bg-blue-400" size="sm"/>
+              <Process label="Điểm trung bình" total={10} current={2} classname="bg-green-400" size="sm"/>
+              <Process label="Bài tập hoàn thành" total={20} current={5} classname="bg-amber-400" size="sm"/>
             </div>
             <div className="grid grid-cols-2 gap-3 p-4 shadow-md rounded-md">
               {/* Công cụ */}
               <h2 className="text-xl font-bold col-span-2">Công cụ</h2>
               {list_feature.map((f,i) => (
-                <Link to={f.href} key={i} className="flex items-center p-2 gap-3 bg-green-100 rounded-md text-green-700">
+                <Link to={f.href} key={i} className={`flex items-center p-2 gap-3 ${f.color} rounded-md`}>
                   <div>{f.icon}</div>
                   <div>{f.name}</div>
                 </Link>
               ))}
             </div>
             <div className="flex flex-col gap-3 p-4 shadow-md rounded-md">
-              {/* Công cụ */}
+              {/* Thông báo */}
               <h2 className="text-xl font-bold">Thông báo</h2>
-              <div className="bg-green-50 p-3 rounded-md">
-                <div className="flex gap-3 text-green-600 font-bold">
+              <div className="bg-blue-50 p-3 rounded-md">
+                <div className="flex gap-3 text-blue-600 font-bold">
                   <Bell/>
                   <label>Thông báo về lịch học</label>
                 </div>
@@ -230,8 +230,8 @@ const StudentDashboard = () => {
                 </div>
                 <p></p>
               </div>
-              <div className="bg-green-50 p-3 rounded-md">
-                <div className="flex gap-3 text-green-600 font-bold">
+              <div className="bg-amber-50 p-3 rounded-md">
+                <div className="flex gap-3 text-amber-600 font-bold">
                   <TriangleAlert/>
                   <label>Nhắc nhở bài tập</label>
                 </div>
