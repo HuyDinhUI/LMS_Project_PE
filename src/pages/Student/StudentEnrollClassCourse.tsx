@@ -124,7 +124,7 @@ const StudentEnrollClassCourse = () => {
     getEnrolledCourse();
   }, []);
   return (
-    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md overflow-auto">
+    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card overflow-auto">
       <div className="w-full px-2">
         <h1 className="text-2xl uppercase text-amber-400 text-center font-bold">
           Đăng ký học phần

@@ -19,13 +19,22 @@ export type SidebarItem =
     label?: string;
   };
 
+type SidebarVariant = "default" | "primary" 
+
+
 type SidebarItemProps = {
   items: SidebarItem[]
+  variant?: SidebarVariant
+}
+
+const SidebarVariantOption = {
+  primary: "shadow-md h-[100vh]",
+  default: "h-[90vh]"
+
 }
 
 
-
-export const Sidebar = ({items}:SidebarItemProps) => {
+export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
   const location = useLocation();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
 
@@ -40,7 +49,7 @@ export const Sidebar = ({items}:SidebarItemProps) => {
   
 
   return (
-    <aside className="xl:block hidden w-70 h-[92vh] scroll-auto sticky top-0 overflow-auto px-4 py-4 space-y-2">
+    <aside className={`xl:block hidden w-70 ${SidebarVariantOption[variant]} scroll-auto sticky top-0 overflow-auto px-4 py-4 space-y-2`}>
       {items.map((item, index) => {
         if (item.type === 'separator') {
           return item.label ? (

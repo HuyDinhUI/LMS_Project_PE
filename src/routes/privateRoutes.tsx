@@ -1,9 +1,11 @@
+import ClassLayout from "@/layouts/classLayout";
 import MainLayout from "@/layouts/mainLayout";
 import {
   SidebarAdminData,
   SidebarStudentData,
   SidebarTeacherData,
 } from "@/mock/sidebar-data";
+import ClassCourseManagementHome from "@/pages/Teacher/ClassCourseManagement/ClassCourseManagementHome";
 import Guard from "@/routes/guard";
 
 import { lazy } from "react";
@@ -139,6 +141,16 @@ export const privateRoutes = [
         </MainLayout>
       </Guard>
     ),
+  },
+  {
+    path: "/teacher/classcourse/:id",
+    element: (
+      <Guard>
+        <ClassLayout sidebarMainItems={SidebarTeacherData}>
+          <ClassCourseManagementHome/>
+        </ClassLayout>
+      </Guard>
+    )
   },
 
   /////////////  Student  ////////////////

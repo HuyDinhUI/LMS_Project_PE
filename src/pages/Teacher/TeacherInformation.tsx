@@ -62,13 +62,13 @@ const TeacherInformation = () => {
     getOneTeacher();
   };
   return (
-    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md relative">
+    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Hồ sơ cá nhân</h2>
       </div>
-      <div className="flex flex-col mt-5 gap-5 px-2">
+      <div className="flex flex-col gap-5 px-2 py-3 h-full">
         {/* Thông tin giảng dạy*/}
-        <form onSubmit={handleSubmit(handleUpdateInformation)}>
+        <form onSubmit={handleSubmit(handleUpdateInformation)} className="relative h-full">
           <h1 className="text-orange-400 font-bold uppercase pb-3 border-b">
             I. Thông tin cá nhân
           </h1>

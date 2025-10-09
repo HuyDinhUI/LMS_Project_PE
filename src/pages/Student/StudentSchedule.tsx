@@ -29,7 +29,7 @@ const StudentSchedule = () => {
   
     
   return (
-    <div className="py-5 px-10 w-full bg-white dark:bg-card rounded-md">
+    <div className="py-5 px-10 w-full bg-white dark:bg-card">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Lịch học</h2>
       </div>

@@ -18,7 +18,7 @@ import type { MenuItem } from "@/types/MenuItemType";
 import { useNavigate } from "react-router-dom";
 import API from "@/utils/axios";
 import { toast } from "react-toastify";
-import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
+import { AlertDialogLogout } from "@/mock/AlertDialog-MockData";
 import { DropdownMenu } from "../ui/dropdown";
 import logo from "@/assets/logo_lms.webp"
 
@@ -46,7 +46,7 @@ export const Header = () => {
       label: "Logout",
       icon: <LogOut size={16} />,
       onClick: () => Logout(),
-      dialog: AlertDialogDelete,
+      dialog: AlertDialogLogout,
     },
   ];
 

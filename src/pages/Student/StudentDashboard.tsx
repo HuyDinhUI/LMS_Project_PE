@@ -100,7 +100,7 @@ const StudentDashboard = () => {
   }, []);
 
   return (
-    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card rounded-md overflow-auto">
+    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card overflow-auto">
       <div className="flex items-center mt-3 gap-2 px-2">
         <div className="h-70 w-70 rounded-full">
           <img className="h-full rounded-full" src={bg_light}></img>
@@ -183,7 +183,7 @@ const StudentDashboard = () => {
             <div className="flex flex-col gap-4 p-4 rounded-md shadow-md">
               <h2 className="text-xl font-bold pb-3">Danh sách lớp học</h2>
               {ListClassCourse?.map((c,i) => (
-                <Link to={''} key={i} className="p-3 shadow-md rounded-md border-l-5 border-green-500 flex items-center justify-between">
+                <Link to={`/student/classcourse/${c.MaLop}`} key={i} className="p-3 shadow-md rounded-md border-l-5 border-green-500 flex items-center justify-between">
                   <div>
                     <span className="font-bold">{c.ten_lop} - {c.MaHP}</span>
                     <p className="flex items-center mt-2"><User size={18}/>{c.si_so}</p>

@@ -95,7 +95,7 @@ export const DropdownMenu = ({ trigger, items, size = 'md', side, align,label }:
 
                 >
                   {item.dialog ? <AlertDialogDemo label={item.dialog.label} description={item.dialog.description} onclick={item.onClick} trigger={<Button variant='item' className='w-full' icon={item.icon} title={item.label} size='sm' />} />
-                    : <Button onClick={item.onClick} variant='item' icon={item.icon} title={item.label} size='sm' />}
+                    : <Button onClick={item.onClick} variant='item' icon={item.icon} title={item.label} size='sm' className='w-full' />}
                   <ChevronRight size={15}/>
                   {item.shortcut && (
                     <span className="text-xs text-gray-500 ml-2">{item.shortcut}</span>
@@ -114,7 +114,7 @@ export const DropdownMenu = ({ trigger, items, size = 'md', side, align,label }:
 
                     >
                       {item.dialog ? <AlertDialogDemo label={item.dialog.label} description={item.dialog.description} onclick={item.onClick} trigger={<Button variant='item' className='w-full' icon={item.icon} title={item.label} size='sm' />} />
-                        : <Button onClick={item.onClick} variant='item' icon={item.icon} title={item.label} size='sm' />}
+                        : <Button onClick={item.onClick} variant='item' icon={item.icon} title={item.label} size='sm' className='w-full' />}
 
                       {item.shortcut && (
                         <span className="text-xs text-gray-500 ml-2">{item.shortcut}</span>
