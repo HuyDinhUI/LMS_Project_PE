@@ -194,7 +194,7 @@ const TeacherDashboard = () => {
               <h2 className="text-xl font-bold pb-3">Danh sách lớp học</h2>
               {ListClassCourse?.map((c, i) => (
                 <Link
-                  to={`/teacher/classcourse/${c.MaLop}`}
+                  to={`/classcourse/${c.MaLop}`}
                   key={i}
                   className="p-3 shadow-md rounded-md border-l-5 border-green-500 flex items-center justify-between"
                 >

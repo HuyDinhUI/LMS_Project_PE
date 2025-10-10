@@ -27,6 +27,7 @@ const Guard = ({ children }: Props) => {
             console.log(res.data)
             if (res.data){
                 localStorage.setItem('username',res.data.user[0].username)
+                localStorage.setItem('role',res.data.user[0].role)
                 setAuth(true)
             } else setAuth(false)
         } catch(error){

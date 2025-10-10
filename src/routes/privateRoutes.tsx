@@ -5,25 +5,24 @@ import {
   SidebarStudentData,
   SidebarTeacherData,
 } from "@/mock/sidebar-data";
-import ClassCourseManagementHome from "@/pages/Teacher/ClassCourseManagement/ClassCourseManagementHome";
 import Guard from "@/routes/guard";
-
+import path from "path";
 import { lazy } from "react";
 
 const ListTeacherPage = lazy(
-  () => import("@/pages/TeacherManagement/ListTeacher")
+  () => import("@/pages/admin/TeacherManagement/ListTeacher")
 );
 const ScheduleTeacherPage = lazy(
-  () => import("@/pages/TeacherManagement/ScheduleTeacher")
+  () => import("@/pages/admin/TeacherManagement/ScheduleTeacher")
 );
 const ListCoursePage = lazy(
-  () => import("@/pages/CourseManagement/ListCourse")
+  () => import("@/pages/admin/CourseManagement/ListCourse")
 );
 const ListClassCoursePage = lazy(
-  () => import("@/pages/ClassCourseManagement/ListClassCourse")
+  () => import("@/pages/admin/ClassCourseManagement/ListClassCourse")
 );
 const ListSchedulePage = lazy(
-  () => import("@/pages/ScheduleManagement/ListSchedule")
+  () => import("@/pages/admin/ScheduleManagement/ListSchedule")
 );
 
 const TeacherInformationPage = lazy(
@@ -38,7 +37,7 @@ const TeacherSchedulePage = lazy(
 );
 
 const ListStudentPage = lazy(
-  () => import("@/pages/StudentManagement/ListStudent")
+  () => import("@/pages/admin/StudentManagement/ListStudent")
 );
 
 const StudentDashboardPage = lazy(
@@ -57,13 +56,26 @@ const StudentInformationPage = lazy(
   () => import("@/pages/Student/StudentInformation")
 );
 
-const StudentGradesPage = lazy(() => import("@/pages/Student/StudentGrades"))
+const StudentGradesPage = lazy(() => import("@/pages/Student/StudentGrades"));
+
+const ClassCourseManagementAssignmentPage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseAssignment")
+);
+
+const ClassCourseManagementHomePage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseHome")
+);
+
+const ClassCourseAssignmentSubmitedPage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseAssignmentSubmited")
+);
+
 export const privateRoutes = [
   /////////////  Admin  /////////////////
   {
     path: "/teachermanagement/listteacher",
     element: (
-      <MainLayout sidebarItems={SidebarAdminData}>
+      <MainLayout>
         <ListTeacherPage />
       </MainLayout>
     ),
@@ -71,7 +83,7 @@ export const privateRoutes = [
   {
     path: "/teachermanagement/schedules",
     element: (
-      <MainLayout sidebarItems={SidebarAdminData}>
+      <MainLayout>
         <ScheduleTeacherPage />
       </MainLayout>
     ),
@@ -79,7 +91,7 @@ export const privateRoutes = [
   {
     path: "/coursemanagement/listcourse",
     element: (
-      <MainLayout sidebarItems={SidebarAdminData}>
+      <MainLayout>
         <ListCoursePage />
       </MainLayout>
     ),
@@ -87,7 +99,7 @@ export const privateRoutes = [
   {
     path: "/classcoursemanagement/listclasscourse",
     element: (
-      <MainLayout sidebarItems={SidebarAdminData}>
+      <MainLayout>
         <ListClassCoursePage />
       </MainLayout>
     ),
@@ -95,7 +107,7 @@ export const privateRoutes = [
   {
     path: "/schedulemanagement/listschedule",
     element: (
-      <MainLayout sidebarItems={SidebarAdminData}>
+      <MainLayout>
         <ListSchedulePage />
       </MainLayout>
     ),
@@ -104,7 +116,7 @@ export const privateRoutes = [
   {
     path: "/studentmanagement/liststudent",
     element: (
-      <MainLayout sidebarItems={SidebarAdminData}>
+      <MainLayout>
         <ListStudentPage />
       </MainLayout>
     ),
@@ -116,7 +128,7 @@ export const privateRoutes = [
     path: "/teacher/information/update",
     element: (
       <Guard>
-        <MainLayout sidebarItems={SidebarTeacherData}>
+        <MainLayout>
           <TeacherInformationPage />
         </MainLayout>
       </Guard>
@@ -126,7 +138,7 @@ export const privateRoutes = [
     path: "/teacher/dashboard",
     element: (
       <Guard>
-        <MainLayout sidebarItems={SidebarTeacherData}>
+        <MainLayout>
           <TeacherDashboardPage />
         </MainLayout>
       </Guard>
@@ -136,22 +148,46 @@ export const privateRoutes = [
     path: "/teacher/schedule",
     element: (
       <Guard>
-        <MainLayout sidebarItems={SidebarTeacherData}>
+        <MainLayout>
           <TeacherSchedulePage />
         </MainLayout>
       </Guard>
     ),
   },
+
+  /////////// ClassCourseManagement //////////////
+
   {
-    path: "/teacher/classcourse/:id",
+    path: "/classcourse/:id",
     element: (
       <Guard>
-        <ClassLayout sidebarMainItems={SidebarTeacherData}>
-          <ClassCourseManagementHome/>
+        <ClassLayout>
+          <ClassCourseManagementHomePage />
         </ClassLayout>
       </Guard>
-    )
+    ),
   },
+  {
+    path: "/classcourse/:id/assignments",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseManagementAssignmentPage />
+        </ClassLayout>
+      </Guard>
+    ),
+  },
+  {
+    path: "/classcourse/:id/submissions",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseAssignmentSubmitedPage />
+        </ClassLayout>
+      </Guard>
+    ),
+  },
+
 
   /////////////  Student  ////////////////
 
@@ -159,7 +195,7 @@ export const privateRoutes = [
     path: "/student/dashboard",
     element: (
       <Guard>
-        <MainLayout sidebarItems={SidebarStudentData}>
+        <MainLayout>
           <StudentDashboardPage />
         </MainLayout>
       </Guard>
@@ -169,7 +205,7 @@ export const privateRoutes = [
     path: "/student/information/update",
     element: (
       <Guard>
-        <MainLayout sidebarItems={SidebarStudentData}>
+        <MainLayout>
           <StudentInformationPage />
         </MainLayout>
       </Guard>
@@ -179,7 +215,7 @@ export const privateRoutes = [
     path: "/student/courses/enroll",
     element: (
       <Guard>
-        <MainLayout sidebarItems={SidebarStudentData}>
+        <MainLayout>
           <StudentEnrollClassCoursePage />
         </MainLayout>
       </Guard>
@@ -189,7 +225,7 @@ export const privateRoutes = [
     path: "/student/schedule",
     element: (
       <Guard>
-        <MainLayout sidebarItems={SidebarStudentData}>
+        <MainLayout>
           <StudentSchedulePage />
         </MainLayout>
       </Guard>
@@ -199,7 +235,7 @@ export const privateRoutes = [
     path: "/student/grades",
     element: (
       <Guard>
-        <MainLayout sidebarItems={SidebarStudentData}>
+        <MainLayout>
           <StudentGradesPage />
         </MainLayout>
       </Guard>

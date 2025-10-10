@@ -26,6 +26,7 @@ const get_icon: any = {
 };
 
 const ClassCourseManagementHome = () => {
+  const role = localStorage.getItem("role");
   const [contentData, setContentData] = useState<ContentType[]>([]);
   const { id } = useParams(); // MaLop
   const [preview, setPreview] = useState<any>(null);
@@ -39,11 +40,6 @@ const ClassCourseManagementHome = () => {
     reset,
     formState: { errors },
   } = useForm();
-
-  const ITEMS_ACTION_CONTENT_DATA: MenuItem[] = [
-    { label: "Sửa", icon: <Pen size={16} /> },
-    { label: "Xoá", icon: <Trash size={16} /> },
-  ];
 
   const getItemActionContent = (MaNoiDung: string) => {
     return [
@@ -79,6 +75,7 @@ const ClassCourseManagementHome = () => {
 
   const getFileUrl = (filename: string) =>
     `http://localhost:4180/contents/${filename}`;
+
   const getFileType = (mime: string) => {
     if (mime.includes("pdf")) return "pdf";
     if (mime.includes("image")) return "image";
@@ -265,7 +262,7 @@ const ClassCourseManagementHome = () => {
                   </div>
                 </div>
               )}
-              <div className="absolute top-3 right-3">
+              {role === "GV" && <div className="absolute top-3 right-3">
                 <DropdownMenu
                   trigger={
                     <Button variant="icon" size="ic" icon={<Ellipsis />} />
@@ -276,7 +273,7 @@ const ClassCourseManagementHome = () => {
                   side="bottom"
                   align="end"
                 />
-              </div>
+              </div>}
             </div>
           ))}
         </div>

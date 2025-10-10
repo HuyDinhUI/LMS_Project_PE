@@ -55,6 +55,7 @@ export const Header = () => {
       const res = await API.delete("/auth/logout");
       toast.success("Log out is success");
       localStorage.removeItem("username");
+      localStorage.removeItem("role");
       navigate("/auth/login");
     } catch (error: any) {
       toast.error(error?.response?.data?.message);

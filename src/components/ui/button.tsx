@@ -44,7 +44,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         },
         ref
     ) => {
-        const base = 'inline-flex items-center gap-2 transition duration-200';
+        const base = 'inline-flex items-center gap-2 transition duration-200 cursor-pointer';
         const finalClass = `${base} ${variantClass[variant]} ${sizeClass[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className ?? ''}`;
 
         return (
