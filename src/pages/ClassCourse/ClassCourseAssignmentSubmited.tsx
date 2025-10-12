@@ -1,22 +1,44 @@
+import { Input } from "@/components/ui/input";
 import type { SubmissionType } from "@/types/SubmissionType";
 import API from "@/utils/axios";
-import { useEffect, useState } from "react";
+import { File } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { set } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ClassCourseAssignmentSubmited = () => {
-  const { id } = useParams();
+  const { assignmentId } = useParams();
   const [submissions, setSubmissions] = useState<SubmissionType[]>([]);
-
+  const debounceRef = useRef<any>(null);
   const getAllSubmissions = async () => {
     try {
-      const res = await API.get(`/assignments/getListSubmited/${id}`);
+      const res = await API.get(`/assignments/getListSubmited/${assignmentId}`);
       setSubmissions(res.data.result.data);
     } catch (err: any) {
       toast.error(
         err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại"
       );
     }
+  };
+
+  const handleScoring = async (MaSV: string, e: any) => {
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(async () => {
+      try {
+        await API.post("/assignments/scoring", {
+          MaSV,
+          MaBaiTap: assignmentId,
+          Diem: e.target.value,
+        });
+        toast.success("Chấm điểm thành công");
+        getAllSubmissions();
+      } catch (err: any) {
+        toast.error(
+          err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại"
+        );
+      }
+    }, 500);
   };
 
   useEffect(() => {
@@ -32,8 +54,10 @@ const ClassCourseAssignmentSubmited = () => {
             key={item.MaSV}
             className="border border-gray-300 rounded-md p-4 mb-4 relative"
           >
-            <div className="font-semibold text-lg mb-2">{item.hoten}</div>
-            <div className="mb-2">
+            <div className="font-semibold text-lg mb-2">
+              {item.hoten} - {item.MaSV}
+            </div>
+            <div className="absolute top-4 right-4">
               Trạng thái:{" "}
               <span
                 className={`font-semibold ${
@@ -45,34 +69,47 @@ const ClassCourseAssignmentSubmited = () => {
                 {item.TrangThai}
               </span>
             </div>
-            {item.TrangThai === "Đã nộp" && (
-              <>
-                <div className="mb-2">
-                  Thời gian nộp:{" "}
-                  <span className="font-semibold">
-                    {new Date(item.ThoiGianNop!).toLocaleString()}
-                  </span>
-                </div>
-                <div className="mb-2">
-                  Điểm số:{" "}
-                  <span className="font-semibold">
-                    {item.DiemSo !== null ? item.DiemSo : "Chưa chấm"}
-                  </span>
-                </div>
-                {item.file_path && (
+            {(item.TrangThai === "Đã nộp" || item.TrangThai === "Nộp trễ") && (
+              <div className="flex justify-between">
+                <div>
                   <div className="mb-2">
-                    File nộp:{" "}
-                    <a
-                      href={item.file_path}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      {item.original_name}
-                    </a>
+                    Thời gian nộp:{" "}
+                    <span className="font-semibold">
+                      {new Date(item.thoigian_nop!).toLocaleString("vi-VN")}
+                    </span>
                   </div>
-                )}
-              </>
+
+                  {item.file_path && (
+                    <div className="mb-2 ring ring-gray-300 p-2 rounded-md w-fit flex flex-col items-center gap-2">
+                      <File />
+                      <a
+                        href={`${import.meta.env.VITE_BASE_STATIC_FILE}/${
+                          item.file_path
+                        }`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-600 underline"
+                      >
+                        {item.original_name}
+                      </a>
+                    </div>
+                  )}
+                </div>
+                <div>
+                  <div className="mb-2 mr-5 w-20 h-20 p-3 ring ring-gray-300 flex flex-col justify-center items-center rounded-full">
+                    <span className="font-semibold grid grid-cols-2">
+                      <Input
+                        onChange={(e) => handleScoring(item.MaSV, e)}
+                        defaultValue={item.DiemSo ?? ""}
+                        variant="borderBottom"
+                        className="outline-none mt-[3px] text-center"
+                        sizeOpt="sm"
+                      /> {" "}
+                      / 10
+                    </span>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         ))}

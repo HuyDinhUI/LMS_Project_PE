@@ -116,7 +116,7 @@ const TeacherDashboard = () => {
                 Giới tính: <strong>{dataTeach?.gioitinh}</strong>
               </p>
               <p>
-                Ngày sinh: <strong>{String(dataTeach?.ngaysinh)}</strong>
+                Ngày sinh: <strong>{new Date(dataTeach?.ngaysinh ?? '').toLocaleDateString("vi-VN")}</strong>
               </p>
               <p>
                 Trình độ: <strong>{dataTeach?.trinhdo}</strong>
@@ -135,7 +135,7 @@ const TeacherDashboard = () => {
               </p>
               <p>
                 Ngày tuyển dụng:{" "}
-                <strong>{String(dataTeach?.ngaytuyendung)}</strong>
+                <strong>{new Date(dataTeach?.ngaytuyendung ?? '').toLocaleDateString("vi-VN")}</strong>
               </p>
             </div>
           </div>

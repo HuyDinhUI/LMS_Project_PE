@@ -6,8 +6,8 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertDanger } from "@/components/ui/alert";
-import bg_dark from "@/assets/rm218-bb-07.jpg"
-import bg_light from "@/assets/v904-nunny-012.jpg"
+import bg_dark from "@/assets/10139763.jpg"
+import bg_light from "@/assets/7402282.jpg"
 import logo from "@/assets/logo_lms.webp"
 
 const Login = () => {

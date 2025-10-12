@@ -51,34 +51,41 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
   );
 };
 
-type InputVariant = "default" | "primary" | "danger";
+type InputVariant = "default" | "primary" | "danger" | "borderBottom";
 type InputSize = "sm" | "md" | "lg";
 
 type InputProps = {
   placeholder?: string;
   variant?: InputVariant;
-  size?: InputSize;
+  sizeOpt?: InputSize;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 const variantClass: Record<InputVariant, string> = {
-  default: "ring ring-gray-200 dark:ring-gray-500",
+  default: "ring ring-gray-200 dark:ring-gray-500 rounded-sm",
   primary: "",
   danger: "",
+  borderBottom: "rounded-none border-b border-gray-300 focus-within:border-green-500",
 };
 
 const sizeClass: Record<InputSize, string> = {
-  sm: "",
+  sm: "h-5 w-1",
   md: "p-2",
   lg: "",
 };
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { placeholder, variant = "default", size = "md", className, ...rest },
+    { 
+      placeholder, 
+      variant = 'default', 
+      sizeOpt = 'md', 
+      className, 
+      ...rest 
+    },
     ref
   ) => {
-    const base = "w-full rounded-sm";
-    const finalClass = `${base} ${variantClass[variant]} ${sizeClass[size]} ${className}`;
+    const base = "w-full";
+    const finalClass = `${base} ${variantClass[variant]} ${sizeClass[sizeOpt]} ${className}`;
 
     return (
       <input

@@ -70,6 +70,9 @@ const ClassCourseAssignmentSubmitedPage = lazy(
   () => import("@/pages/ClassCourse/ClassCourseAssignmentSubmited")
 );
 
+const ClassCourseAssignmentGuidance = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseAssignmentGuidance")
+);
 export const privateRoutes = [
   /////////////  Admin  /////////////////
   {
@@ -178,11 +181,21 @@ export const privateRoutes = [
     ),
   },
   {
-    path: "/classcourse/:id/submissions",
+    path: "/classcourse/:id/submissions/:assignmentId",
     element: (
       <Guard>
         <ClassLayout>
           <ClassCourseAssignmentSubmitedPage />
+        </ClassLayout>
+      </Guard>
+    ),
+  },
+  {
+    path: "/classcourse/:id/guidance/:assignmentId",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseAssignmentGuidance />
         </ClassLayout>
       </Guard>
     ),

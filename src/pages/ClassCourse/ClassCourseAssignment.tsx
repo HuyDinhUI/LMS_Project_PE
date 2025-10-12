@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 const ClassCourseManagementAssignment = () => {
   const role = localStorage.getItem("role");
   const { id } = useParams(); // MaLop
+  const MaSV = localStorage.getItem("username");
   const [assignmentsData, setAssignmentsData] = useState<AssignmentType[]>([]);
   const [opentFormCreate, setOpenFormCreate] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
@@ -40,8 +41,25 @@ const ClassCourseManagementAssignment = () => {
     }
   };
 
+  const getAssignmentsByStudent = async () => {
+    try {
+      const res = await API.get(
+        `/assignments/getAssignmentByStudent/${MaSV}/${id}`
+      );
+      setAssignmentsData(res.data.result.data);
+    } catch (err: any) {
+      toast.error(
+        err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại"
+      );
+    }
+  };
+
   useEffect(() => {
-    getAllAssignments();
+    if (role === "GV") {
+      getAllAssignments();
+    } else {
+      getAssignmentsByStudent();
+    }
   }, []);
 
   const handleCreateAssignment = async (data: any) => {
@@ -103,7 +121,7 @@ const ClassCourseManagementAssignment = () => {
           {/* Form tạo */}
           {role === "GV" && (
             <div
-              className={`p-4 col-span-2 ring ring-gray-200 rounded-md shadow-md ${
+              className={`p-4 col-span-2 ring ring-gray-200 rounded-md shadow-md overflow-scroll relative ${
                 opentFormCreate ? "h-120" : "h-15"
               } transition-all duration-300 ease-in-out`}
             >
@@ -114,85 +132,84 @@ const ClassCourseManagementAssignment = () => {
                 <Plus size={20} />
                 <h2>Thêm bài tập</h2>
               </div>
-              {opentFormCreate && (
-                <form
-                  onSubmit={handleSubmit(handleCreateAssignment)}
-                  className="flex flex-col gap-3 mt-5"
-                >
+
+              {opentFormCreate && <form
+                onSubmit={handleSubmit(handleCreateAssignment)}
+                className="flex flex-col gap-3 mt-7"
+              >
+                <Input
+                  {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
+                  placeholder="Tiêu đề"
+                />
+                <textarea
+                  placeholder="Nội dung"
+                  className="p-2 ring ring-gray-200 rounded-md"
+                  {...register("NoiDung")}
+                ></textarea>
+                <div className="grid grid-cols-4 gap-2">
                   <Input
-                    {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
-                    placeholder="Tiêu đề"
+                    {...register("HanNop")}
+                    type="date"
+                    placeholder="Hạn nộp"
                   />
-                  <textarea
-                    placeholder="Nội dung"
-                    className="p-2 ring ring-gray-200 rounded-md"
-                    {...register("NoiDung")}
-                  ></textarea>
+                  <Input
+                    {...register("GioNop")}
+                    type="time"
+                    placeholder="Giờ nộp"
+                  />
+                  <Input
+                    {...register("DiemToiDa")}
+                    type="number"
+                    placeholder="Điểm tối đa"
+                  />
+                  <Button
+                    onClick={() => fileInputRef.current?.click()}
+                    type="button"
+                    variant="icon"
+                    size="md"
+                    className="ring ring-gray-200"
+                    title="Thêm tệp đính kèm"
+                    icon={<Upload />}
+                  ></Button>
+                </div>
+                <Input
+                  {...register("file")}
+                  ref={(e) => {
+                    ref(e);
+                    fileInputRef.current = e;
+                  }}
+                  onChange={handleFileOnChange}
+                  hidden
+                  type="file"
+                />
+                {file && (
                   <div className="grid grid-cols-4 gap-2">
-                    <Input
-                      {...register("HanNop")}
-                      type="date"
-                      placeholder="Hạn nộp"
-                    />
-                    <Input
-                      {...register("GioNop")}
-                      type="time"
-                      placeholder="Giờ nộp"
-                    />
-                    <Input
-                      {...register("DiemToiDa")}
-                      type="number"
-                      placeholder="Điểm tối đa"
-                    />
-                    <Button
-                      onClick={() => fileInputRef.current?.click()}
-                      type="button"
-                      variant="icon"
-                      size="md"
-                      className="ring ring-gray-200"
-                      title="Thêm tệp đính kèm"
-                      icon={<Upload />}
-                    ></Button>
-                  </div>
-                  <Input
-                    {...register("file")}
-                    ref={(e) => {
-                      ref(e);
-                      fileInputRef.current = e;
-                    }}
-                    onChange={handleFileOnChange}
-                    hidden
-                    type="file"
-                  />
-                  {file && (
-                    <div className="grid grid-cols-4 gap-2">
-                      <div className="p-3 ring ring-gray-200 rounded-md">
-                        <label>
-                          <div className="flex justify-center items-center p-5">
-                            <File />
-                          </div>
-                          <label className="text-center w-full block">
-                            {file.name}
-                          </label>
+                    <div className="p-3 ring ring-gray-200 rounded-md">
+                      <label>
+                        <div className="flex justify-center items-center p-5">
+                          <File />
+                        </div>
+                        <label className="text-center w-full block">
+                          {file.name}
                         </label>
-                      </div>
+                      </label>
                     </div>
-                  )}
-                  <div className="flex justify-end gap-2 mt-4 border-t pt-4">
-                    <Button
-                      onClick={() => {
-                        reset();
-                        setFile(null);
-                        setOpenFormCreate(false);
-                      }}
-                      type="button"
-                      variant="outline"
-                      title="Huỷ"
-                    />
-                    <Button type="submit" variant="primary" title="Tạo" />
                   </div>
-                </form>
-              )}
+                )}
+                <div className={`flex justify-end gap-2 ${opentFormCreate ? 'absolute bottom-3 right-3' : 'hidden'}`}>
+                  <Button
+                    onClick={() => {
+                      reset();
+                      setFile(null);
+                      setOpenFormCreate(false);
+                    }}
+                    type="button"
+                    variant="outline"
+                    title="Huỷ"
+                  />
+                  <Button type="submit" variant="primary" title="Tạo" />
+                </div>
+              </form>}
             </div>
           )}
           {/* Danh sách bài tập */}
@@ -228,11 +245,13 @@ const ClassCourseManagementAssignment = () => {
                   </p>
                 ) : (
                   <p>
-                    Hạn nộp:{" "}
-                    {new Date(
+                    {item.TrangThai === "Đã nộp" || item.TrangThai === "Nộp trễ"
+                      ? item.TrangThai
+                      : `Hạn nộp:${" "}
+                    ${new Date(
                       item.HanNop ?? "Không có hạn nộp"
-                    ).toLocaleDateString()}{" "}
-                    {item.HanNop && " - "} {item.GioNop}
+                    ).toLocaleDateString("vi-VN")}${" "}
+                    ${item.HanNop && " - "} ${item.GioNop}`}
                   </p>
                 )}
 
@@ -253,9 +272,15 @@ const ClassCourseManagementAssignment = () => {
               </div>
               <div className="mt-7">
                 <Link
-                  to = {`${role === "GV" ? `/classcourse/${item.MaBaiTap}/submissions` : `/classcourse/${item.MaBaiTap}/guidance`}`}
+                  to={`${
+                    role === "GV"
+                      ? `/classcourse/${id}/submissions/${item.MaBaiTap}`
+                      : `/classcourse/${id}/guidance/${item.MaBaiTap}`
+                  }`}
                   className="p-2 ring ring-gray-200 rounded-md"
-                >{role === "GV" ? 'Xem danh sách nộp bài' : 'Xem hướng dẫn'}</Link>
+                >
+                  {role === "GV" ? "Xem danh sách nộp bài" : "Xem hướng dẫn"}
+                </Link>
               </div>
             </div>
           ))}

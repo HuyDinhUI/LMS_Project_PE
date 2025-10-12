@@ -10,7 +10,7 @@ import { GoFileZip } from "react-icons/go";
 import { FilePreview } from "@/components/ui/file-preview";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Ellipsis, File, Link2, Pen, Trash, Upload } from "lucide-react";
+import { Ellipsis, File, Link2, Pen, Plus, Trash, Upload } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import { DropdownMenu } from "@/components/ui/dropdown";
@@ -74,7 +74,7 @@ const ClassCourseManagementHome = () => {
   };
 
   const getFileUrl = (filename: string) =>
-    `http://localhost:4180/contents/${filename}`;
+    `${import.meta.env.VITE_BASE_STATIC_FILE}/contents/${filename}`;
 
   const getFileType = (mime: string) => {
     if (mime.includes("pdf")) return "pdf";
@@ -136,85 +136,85 @@ const ClassCourseManagementHome = () => {
       {/* content */}
       <div className="mt-5">
         {/* form tạo content */}
-        <div className="p-5 shadow-sm rounded-md">
+        <div className={`p-4 shadow-md rounded-md ring ring-gray-200 overflow-scroll transition-all duration-300 relative ${opentFormCreate ? "h-100" : "h-13"}`}>
           <h2
-            onClick={() => setOpenFormCreate(true)}
-            className="my-2 cursor-pointer"
+            onClick={() => setOpenFormCreate(!opentFormCreate)}
+            className="cursor-pointer flex gap-2"
           >
+            <Plus/>
             Thêm nội dung mới
           </h2>
-          {opentFormCreate && (
-            <form
-              onSubmit={handleSubmit(handleCreateContent)}
-              className="flex flex-col gap-3"
-            >
-              <Input
-                placeholder="Tiêu đề"
-                {...register("tieu_de", {
-                  required: "Tiêu đề không được để trống",
-                })}
-              />
-              <textarea
-                className="w-full ring ring-gray-200 rounded-md p-2"
-                placeholder="Mô tả"
-                {...register("mota")}
-              ></textarea>
-              <Input
-                {...register("file")}
-                ref={(e) => {
-                  ref(e); // Gắn ref của React Hook Form
-                  fileInputRef.current = e; // Lưu ref của bạn để trigger click
-                }}
-                hidden
-                type="file"
-                onChange={handleFileOnChange}
-              />
-              {/* Preview */}
-              {file && (
-                <div className="grid grid-cols-4">
-                  <div className="p-3 ring ring-gray-200 rounded-md">
-                    <label>
-                      <div className="flex justify-center items-center p-5">
-                        <File />
-                      </div>
-                      <label className="text-center w-full block">
-                        {file.name}
-                      </label>
+
+          {opentFormCreate && <form
+            onSubmit={handleSubmit(handleCreateContent)}
+            className="flex flex-col gap-3 mt-10"
+          >
+            <Input
+              placeholder="Tiêu đề"
+              {...register("tieu_de", {
+                required: "Tiêu đề không được để trống",
+              })}
+            />
+            <textarea
+              className="w-full ring ring-gray-200 rounded-md p-2"
+              placeholder="Mô tả"
+              {...register("mota")}
+            ></textarea>
+            <Input
+              {...register("file")}
+              ref={(e) => {
+                ref(e); // Gắn ref của React Hook Form
+                fileInputRef.current = e; // Lưu ref của bạn để trigger click
+              }}
+              hidden
+              type="file"
+              onChange={handleFileOnChange}
+            />
+            {/* Preview */}
+            {file && (
+              <div className="grid grid-cols-4">
+                <div className="p-3 ring ring-gray-200 rounded-md">
+                  <label>
+                    <div className="flex justify-center items-center p-5">
+                      <File />
+                    </div>
+                    <label className="text-center w-full block">
+                      {file.name}
                     </label>
-                  </div>
+                  </label>
                 </div>
-              )}
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => fileInputRef.current?.click()}
-                  type="button"
-                  variant="icon"
-                  size="lg"
-                  className="ring ring-gray-100"
-                  icon={<Upload />}
-                />
-                <Button
-                  type="button"
-                  variant="icon"
-                  size="lg"
-                  className="ring ring-gray-100"
-                  icon={<Link2 />}
-                />
               </div>
-              <div className="flex justify-end gap-2">
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setFile(null);
-                    reset();
-                    setOpenFormCreate(false);
-                  }}
-                  title="Huỷ"
-                />
-                <Button type="submit" variant="primary" title="Đăng" />
-              </div>
-            </form>
-          )}
+            )}
+            <div className="flex gap-2">
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                type="button"
+                variant="icon"
+                size="lg"
+                className="ring ring-gray-100"
+                icon={<Upload />}
+              />
+              <Button
+                type="button"
+                variant="icon"
+                size="lg"
+                className="ring ring-gray-100"
+                icon={<Link2 />}
+              />
+            </div>
+            <div className={`flex justify-end gap-2 ${opentFormCreate ? 'absolute bottom-3 right-3' : 'hidden'}`}>
+              <Button
+                type="button"
+                onClick={() => {
+                  setFile(null);
+                  reset();
+                  setOpenFormCreate(false);
+                }}
+                title="Huỷ"
+              />
+              <Button type="submit" variant="primary" title="Đăng" />
+            </div>
+          </form>}
         </div>
 
         {/* list content */}
@@ -233,7 +233,9 @@ const ClassCourseManagementHome = () => {
                 ></img>
                 <div>
                   <label>{c.hoten}</label>
-                  <p>{String(c.ngay_tao ?? "")}</p>
+                  <p className="text-sm text-gray-500">
+                    {new Date(c.ngay_tao).toLocaleDateString("vi-VN")}
+                  </p>
                 </div>
               </div>
               {/* content */}
@@ -262,18 +264,20 @@ const ClassCourseManagementHome = () => {
                   </div>
                 </div>
               )}
-              {role === "GV" && <div className="absolute top-3 right-3">
-                <DropdownMenu
-                  trigger={
-                    <Button variant="icon" size="ic" icon={<Ellipsis />} />
-                  }
-                  items={getItemActionContent(c.MaNoiDung)}
-                  size="sm"
-                  label="Tác vụ"
-                  side="bottom"
-                  align="end"
-                />
-              </div>}
+              {role === "GV" && (
+                <div className="absolute top-3 right-3">
+                  <DropdownMenu
+                    trigger={
+                      <Button variant="icon" size="ic" icon={<Ellipsis />} />
+                    }
+                    items={getItemActionContent(c.MaNoiDung)}
+                    size="sm"
+                    label="Tác vụ"
+                    side="bottom"
+                    align="end"
+                  />
+                </div>
+              )}
             </div>
           ))}
         </div>

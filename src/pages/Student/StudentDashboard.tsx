@@ -119,7 +119,7 @@ const StudentDashboard = () => {
                 Giới tính: <strong>{dataStudent?.gioitinh}</strong>
               </p>
               <p>
-                Ngày sinh: <strong>{String(dataStudent?.ngaysinh)}</strong>
+                Ngày sinh: <strong>{new Date(dataStudent?.ngaysinh ?? '').toLocaleDateString("vi-VN")}</strong>
               </p>
               <p>Nơi sinh: </p>
             </div>
