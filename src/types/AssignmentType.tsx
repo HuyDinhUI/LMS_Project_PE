@@ -13,4 +13,5 @@ export type AssignmentType = {
     file_path: string | null;
     original_name: string | null;
     TrangThai: string | null;
+    DiemSo: number | null;
 };

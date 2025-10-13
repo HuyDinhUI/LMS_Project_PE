@@ -2,13 +2,16 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import { Link } from "react-router-dom";
+import { Button } from "./button";
 
 export type EventType = {
   id: string;
+  MaLop: string;
   title: string;
   start: string;
   end: string;
-  status: string
+  status: string;
 };
 
 type props = {
@@ -16,6 +19,7 @@ type props = {
 };
 
 export const Calendar = ({ data }: props) => {
+  const role = localStorage.getItem("role");
   return (
     <FullCalendar
       eventContent={(arg) => {
@@ -28,8 +32,25 @@ export const Calendar = ({ data }: props) => {
             bgColor = "bg-gray-200 text-black";
         }
         return (
-          <div className={`${bgColor} px-1 rounded w-full h-full p-2 overflow-hidden`}>
+          <div
+            className={`${bgColor} px-1 rounded w-full h-full p-2 overflow-hidden`}
+          >
             {arg.event.title}
+            {new Date().toISOString() >=
+              new Date(arg.event.start ?? "").toISOString() &&
+              new Date().toISOString() <=
+                new Date(arg.event.end ?? "").toISOString() &&
+              role === "SV" && (
+                <Button
+                  onClick={() =>
+                    (location.href = `/student/attendance/${arg.event.extendedProps.MaLop}`)
+                  }
+                  variant="primary"
+                  size="sm"
+                  title="Điểm danh"
+                  className="mt-2"
+                />
+              )}
           </div>
         );
       }}
@@ -46,12 +67,12 @@ export const Calendar = ({ data }: props) => {
       slotMaxTime="20:00:00"
       locale="vi" // tiếng Việt
       allDaySlot={false}
-      
     />
   );
 };
 
 export const CalendarToday = ({ data }: props) => {
+  const role = localStorage.getItem("role");
   return (
     <FullCalendar
       eventContent={(arg) => {
@@ -64,8 +85,25 @@ export const CalendarToday = ({ data }: props) => {
             bgColor = "bg-gray-200 text-black";
         }
         return (
-          <div className={`${bgColor} px-1 rounded w-full h-full p-2 overflow-hidden`}>
+          <div
+            className={`${bgColor} px-1 rounded w-full h-full p-2 overflow-hidden`}
+          >
             {arg.event.title}
+            {new Date().toISOString() >=
+              new Date(arg.event.start ?? "").toISOString() &&
+              new Date().toISOString() <=
+                new Date(arg.event.end ?? "").toISOString() &&
+              role === "SV" && (
+                <Button
+                  onClick={() =>
+                    (location.href = `/student/attendance/${arg.event.extendedProps.MaLop}`)
+                  }
+                  variant="primary"
+                  size="sm"
+                  title="Điểm danh"
+                  className="mt-2"
+                />
+              )}
           </div>
         );
       }}
@@ -78,7 +116,6 @@ export const CalendarToday = ({ data }: props) => {
       slotMaxTime="20:00:00"
       locale="vi" // tiếng Việt
       allDaySlot={false}
-      
     />
   );
 };

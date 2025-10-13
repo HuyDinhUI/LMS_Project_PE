@@ -5,13 +5,6 @@ import { formatterDataEventCalendar } from "@/utils/formatters";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-type ParamsGetScheduleType = {
-  msgv: string;
-  from: string;
-  to: string;
-};
-
-
 
 const StudentSchedule = () => {
   const [events, setEvents] = useState<EventType[]>([]);

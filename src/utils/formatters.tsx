@@ -20,6 +20,7 @@ export const formatterDataEventCalendar = (data: any) =>{
 
         return {
             id: item.MaLichDay,
+            MaLop: item.MaLop,
             title: `${item.ten_lop} - ${item.MaLop} - ${item.hoten} (${item.phonghoc})`,
             start: `${item.ngay_day}T${startTime}`,
             end: `${item.ngay_day}T${endTime}`,

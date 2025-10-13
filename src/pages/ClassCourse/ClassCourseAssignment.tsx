@@ -268,7 +268,7 @@ const ClassCourseManagementAssignment = () => {
                 )}
               </div>
               <div className="absolute bottom-5 right-5 text-sm text-gray-500">
-                Điểm tối đa: {item.DiemToiDa}
+                {role === "GV" ? `Điểm tối đa: ${item.DiemToiDa}` : `Điểm của bạn: ${item.DiemSo ?? "Chưa chấm điểm"}`}
               </div>
               <div className="mt-7">
                 <Link

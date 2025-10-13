@@ -9,6 +9,7 @@ import Guard from "@/routes/guard";
 import path from "path";
 import { lazy } from "react";
 
+const AttendancePage = lazy(() => import("@/pages/Attendance"));
 const ListTeacherPage = lazy(
   () => import("@/pages/admin/TeacherManagement/ListTeacher")
 );
@@ -73,7 +74,13 @@ const ClassCourseAssignmentSubmitedPage = lazy(
 const ClassCourseAssignmentGuidance = lazy(
   () => import("@/pages/ClassCourse/ClassCourseAssignmentGuidance")
 );
+
+const ClassCourseManagementGrades = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseGrades")
+);
+
 export const privateRoutes = [
+  
   /////////////  Admin  /////////////////
   {
     path: "/teachermanagement/listteacher",
@@ -201,8 +208,30 @@ export const privateRoutes = [
     ),
   },
 
+  {
+    path: "/classcourse/:id/grades",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseManagementGrades />
+        </ClassLayout>
+      </Guard>
+    ),
+  },
+
 
   /////////////  Student  ////////////////
+
+  {
+    path: "student/attendance/:id",
+    element: (
+      <Guard>
+        <MainLayout>
+          <AttendancePage />
+        </MainLayout>
+      </Guard>
+    ),
+  },
 
   {
     path: "/student/dashboard",

@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate, Link } from "react-router-dom";
 
 import API from "@/utils/axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertDanger } from "@/components/ui/alert";
@@ -44,6 +44,11 @@ const Login = () => {
 
   };
 
+  useEffect(() => {
+    document.title = "Login - LMS"
+    
+  }, [])
+
   return (
     <div 
     className="h-[100vh] shadow-lg flex items-center justify-center bg-cover"
@@ -71,10 +76,10 @@ const Login = () => {
                 required
                 type="password"
                 {...register("password", { required: "Password cannot be blank" })} />
-              <Link className="absolute top-0 right-0" to={'/restpassword'}>Quên mật khẩu ?</Link>
+              <Link className="absolute top-0 right-0" to={'/resetpassword'}>Quên mật khẩu ?</Link>
             </div>
           </div>
-          <Button type="submit" className="w-full justify-center rounded-sm" variant="dark" size="md" title="Login" />
+          <Button type="submit" className="w-full justify-center rounded-sm" variant="primary" size="md" title="Login" />
           
         </form>
         
