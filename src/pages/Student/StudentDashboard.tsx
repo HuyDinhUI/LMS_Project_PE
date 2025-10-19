@@ -99,6 +99,10 @@ const StudentDashboard = () => {
     getSchedule();
   }, []);
 
+  useEffect(() => {
+    document.title = dataStudent?.hoten ?? 'Dashboard'
+  }, [dataStudent]);
+
   return (
     <div className="py-5 px-10 w-full h-full bg-white dark:bg-card overflow-auto">
       <div className="flex items-center mt-3 gap-2 px-2">
@@ -143,28 +147,28 @@ const StudentDashboard = () => {
       </div>
       <div className="mt-5 px-2">
         <div className="grid grid-cols-4 gap-4 mt-3">
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
+          <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Điểm trung bình</label>
               <p className="text-x font-bold">8.5/10</p>
             </div>
             <div className="flex justify-center p-2 bg-blue-50 rounded-full"><ChartColumn color="blue" size={30}/></div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
+          <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Tín chỉ hoàn thành</label>
               <p className="text-xl font-bold">0/120</p>
             </div>
             <div className="flex justify-center p-2 bg-green-50 rounded-full"><GraduationCap color="green" size={30}/></div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
+          <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Môn học hiện tại</label>
               <p className="text-xl font-bold">{ListClassCourse?.length}</p>
             </div>
             <div className="flex justify-center p-2 bg-violet-50 rounded-full"><BookText color="purple" size={30}/></div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
+          <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Bài tập chưa nộp</label>
               <p className="text-xl font-bold">0</p>

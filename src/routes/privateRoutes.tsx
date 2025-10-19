@@ -79,8 +79,15 @@ const ClassCourseManagementGrades = lazy(
   () => import("@/pages/ClassCourse/ClassCourseGrades")
 );
 
+const ClassCourseAssignmentQuiz = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseAssignmentQuiz")
+);
+
+const ClassCourseAssignmentQuizPlay = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseAssignmentPlayQuiz")
+)
+
 export const privateRoutes = [
-  
   /////////////  Admin  /////////////////
   {
     path: "/teachermanagement/listteacher",
@@ -217,6 +224,28 @@ export const privateRoutes = [
         </ClassLayout>
       </Guard>
     ),
+  },
+
+  {
+    path: "/classcourse/:id/quiz",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseAssignmentQuiz />
+        </ClassLayout>
+      </Guard>
+    ),
+  },
+
+  {
+    path: "/classcourse/:id/quiz/:matn/play",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseAssignmentQuizPlay/>
+        </ClassLayout>
+      </Guard>
+    )
   },
 
 

@@ -37,6 +37,10 @@ const ClassLayout = ({ children }: Props) => {
       href: `/classcourse/${id}/assignments`,
     },
     {
+      title: "Trắc nghiệm",
+      href: `/classcourse/${id}/quiz`,
+    },
+    {
       title: "Điểm",
       href: `/classcourse/${id}/grades`,
     },
@@ -47,7 +51,7 @@ const ClassLayout = ({ children }: Props) => {
   ];
   return (
     <div className="h-full dark:bg-background">
-      <div className="flex max-h-[100vh]">
+      <div className="flex h-[100vh]">
         <Sidebar items={getSidebarItems()} />
         <div className="dark:bg-background flex-1 h-[100vh]">
           <Header />
@@ -67,7 +71,7 @@ const ClassLayout = ({ children }: Props) => {
                 </Link>
               ))}
             </div>
-            {children}
+            <div className="max-h-150 overflow-auto">{children}</div>
           </div>
         </div>
       </div>

@@ -1,0 +1,344 @@
+import type { Question, QuizType } from "@/types/QuizType";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+
+/**
+ * Props types
+ */
+
+type QuizPlayerProps = {
+  quiz: QuizType;
+  userId?: string; // optional, for submit
+  autoShuffle?: boolean; // shuffle questions & answers at start
+  onSubmit?: (result: { score: number; total: number; details: any }) => void; // callback after submit
+  submitUrl?: string; // if provided, component will POST results to this url
+};
+
+/**
+ * Utils
+ */
+function shuffleArray<T>(arr: T[], seed?: number): T[] {
+  // Fisher-Yates shuffle (non-deterministic)
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function formatTimeLeft(totalSeconds: number) {
+  const mm = Math.floor(totalSeconds / 60)
+    .toString()
+    .padStart(2, "0");
+  const ss = Math.floor(totalSeconds % 60)
+    .toString()
+    .padStart(2, "0");
+  return `${mm}:${ss}`;
+}
+
+/**
+ * Main component
+ */
+export default function QuizPlayer({
+  quiz,
+  userId,
+  autoShuffle = true,
+  onSubmit,
+  submitUrl,
+}: QuizPlayerProps) {
+  // shuffle at mount once
+  const initialData = useMemo(() => {
+    // deep copy
+    const questionsCopy = quiz.CauHoi.map((q) => ({
+      ...q,
+      DapAn: q.DapAn.map((a) => ({ ...a })),
+    }));
+
+    if (autoShuffle) {
+      // shuffle answers inside each question, preserve mapping by index
+      const qsh = shuffleArray(questionsCopy);
+      const withShuffledAnswers = qsh.map((q) => ({
+        ...q,
+        DapAn: shuffleArray(q.DapAn),
+      }));
+      return withShuffledAnswers;
+    }
+
+    return questionsCopy;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quiz.MaTN]); // re-run if quiz changes
+
+  const [questions, setQuestions] = useState<Question[]>(initialData);
+  const [current, setCurrent] = useState<number>(0);
+  const [answers, setAnswers] = useState<(number | null)[]>(() =>
+    Array(initialData.length).fill(null)
+  ); // index of answer chosen per question
+  const [startedAt] = useState<number>(() => Date.now());
+  const totalTimeSeconds = (quiz.ThoiGianLam ?? 15) * 60;
+  const [timeLeft, setTimeLeft] = useState<number>(totalTimeSeconds);
+  const timerRef = useRef<number | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [result, setResult] = useState<{ score: number; total: number } | null>(
+    null
+  );
+
+  // Start countdown
+  useEffect(() => {
+    if (submitted) return;
+    timerRef.current = window.setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          window.clearInterval(timerRef.current!);
+          autoSubmit();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) window.clearInterval(timerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitted]);
+
+  // Auto-submit handler
+  async function autoSubmit() {
+    if (submitted) return;
+    await handleSubmit(true);
+  }
+
+  // choose answer (single choice)
+  const chooseAnswer = (qIndex: number, ansIndex: number) => {
+    if (submitted) return;
+    setAnswers((prev) => {
+      const next = prev.slice();
+      next[qIndex] = next[qIndex] === ansIndex ? null : ansIndex; // toggle
+      return next;
+    });
+  };
+
+  // navigation helpers
+  const goNext = () => setCurrent((c) => Math.min(c + 1, questions.length - 1));
+  const goPrev = () => setCurrent((c) => Math.max(c - 1, 0));
+  const jumpTo = (i: number) => setCurrent(i);
+
+  // progress
+  const answeredCount = answers.filter((a) => a !== null).length;
+  const progressPercent = Math.round((answeredCount / questions.length) * 100);
+
+  // compute score locally if needed (requires CorrectIndex stored in quiz.CauHoi)
+  const computeScore = () => {
+    let score = 0;
+    let total = 0;
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      const chosen = answers[i];
+      const pts = q.Diem ?? 1;
+      total += pts;
+      // We don't have mapping of correct index after shuffle — assume quiz has CorrectIndex pointing to original order.
+      // If backend supplies correct answers in quiz.CauHoi (CorrectIndex relative to supplied DapAn), you can use that.
+      // Here we cannot grade without correct index; we'll skip local grading unless CorrectIndex exists in question.
+      if (typeof q.CorrectIndex === "number") {
+        // find original answer text at CorrectIndex? However we shuffled answers.
+        // We'll compare by answer content if possible:
+        const correctAnswerContent =
+          quiz.CauHoi[i]?.DapAn[q.CorrectIndex ?? -1]?.NoiDung ?? null;
+        if (correctAnswerContent !== null) {
+          const chosenContent =
+            chosen != null ? q.DapAn[chosen]?.NoiDung : null;
+          if (chosenContent && chosenContent === correctAnswerContent) {
+            score += pts;
+          }
+        }
+      }
+    }
+    return { score, total };
+  };
+
+  // Submit handler
+  const handleSubmit = async (auto = false) => {
+    if (submitted) return;
+    setSubmitting(true);
+
+    // prepare payload: send choices as index relative to questions' current DapAn order
+    const payload = {
+      MaQuiz: quiz.MaTN,
+      MaSV: userId ?? null,
+      ThoiGianThucTe: totalTimeSeconds - timeLeft, // seconds used
+      ChiTiet: questions.map((q, i) => ({
+        MaCauHoi: q.MaCauHoi ?? i,
+        ChoiceIndex: answers[i], // may be null
+        AnswerText:
+          answers[i] != null && q.DapAn[answers[i]]
+            ? q.DapAn[answers[i]].NoiDung
+            : null,
+      })),
+    };
+
+    try {
+      // If submitUrl provided, POST to server
+      //   if (submitUrl) {
+      //     const res = await fetch(submitUrl, {
+      //       method: "POST",
+      //       headers: { "Content-Type": "application/json" },
+      //       body: JSON.stringify(payload),
+      //     });
+      //     if (!res.ok) {
+      //       const txt = await res.text();
+      //       throw new Error(txt || "Submit failed");
+      //     }
+      //   }
+
+      // compute local score if possible
+      const local = computeScore();
+      setResult(local);
+      setSubmitted(true);
+      if (timerRef.current) window.clearInterval(timerRef.current);
+      if (onSubmit)
+        onSubmit({ score: local.score, total: local.total, details: payload });
+    } catch (err) {
+      console.error("Submit error", err);
+      if (!auto) alert("Nộp bài thất bại: " + (err as any).message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  // UI render
+  return (
+    <div className="quiz-player max-w-3xl mx-auto p-4">
+      <header className="mb-4">
+        <h2 className="text-xl font-semibold">{quiz.TieuDe}</h2>
+        {quiz.MoTa && <p className="text-sm text-gray-600">{quiz.MoTa}</p>}
+      </header>
+
+      <div className="flex items-center justify-between mb-3 gap-4">
+        <div className="w-full">
+          <div className="h-2 bg-gray-200 rounded overflow-hidden">
+            <div
+              className="h-2 bg-green-500"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          <div className="text-sm mt-1">
+            <strong>{answeredCount}</strong> / {questions.length} câu đã trả lời
+          </div>
+        </div>
+
+        <div className="text-right min-w-[120px]">
+          <div className="text-sm">Thời gian còn lại</div>
+          <div className="font-mono text-lg">{formatTimeLeft(timeLeft)}</div>
+        </div>
+      </div>
+
+      {/* Question pager */}
+      <div className="border rounded p-4 mb-4">
+        <div className="flex justify-between items-start mb-2">
+          <div>
+            <div className="text-sm text-gray-500">
+              Câu {current + 1} / {questions.length}
+            </div>
+            <div className="font-medium mt-1">
+              {questions[current]?.NoiDung}
+            </div>
+          </div>
+          <div className="text-sm text-gray-500">
+            {questions[current]?.Diem ?? 1} điểm
+          </div>
+        </div>
+
+        <div className="mt-3 space-y-2">
+          {questions[current]?.DapAn?.map((ans, ai) => {
+            const chosen = answers[current] === ai;
+            return (
+              <label
+                key={ai}
+                className={`block p-3 border rounded cursor-pointer hover:shadow ${
+                  chosen ? "bg-blue-50 border-blue-400" : "bg-white"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name={`q-${current}`}
+                  checked={chosen}
+                  onChange={() => chooseAnswer(current, ai)}
+                  className="mr-2"
+                />
+                <span>{ans.NoiDung}</span>
+              </label>
+            );
+          })}
+        </div>
+
+        <div className="flex justify-between items-center mt-4">
+          <div className="flex gap-2">
+            <button
+              onClick={goPrev}
+              disabled={current === 0}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Trước
+            </button>
+            <button
+              onClick={goNext}
+              disabled={current === questions.length - 1}
+              className="px-3 py-1 border rounded disabled:opacity-50"
+            >
+              Sau
+            </button>
+            <button
+              onClick={() => {
+                // jump to unanswered
+                const nextUnanswered = answers.findIndex((a) => a === null);
+                if (nextUnanswered >= 0) setCurrent(nextUnanswered);
+              }}
+              className="px-3 py-1 border rounded"
+            >
+              Tới câu chưa trả lời
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <div className="text-sm text-gray-600 mr-2">
+              Câu:{" "}
+              {questions.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => jumpTo(i)}
+                  className={`inline-block w-8 h-8 mr-1 rounded ${
+                    answers[i] != null ? "bg-green-200" : "bg-gray-100"
+                  }`}
+                  aria-label={`Câu ${i + 1}`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => {
+                if (confirm("Bạn có chắc muốn nộp bài?")) handleSubmit(false);
+              }}
+              disabled={submitting || submitted}
+              className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-60"
+            >
+              {submitting ? "Đang nộp..." : submitted ? "Đã nộp" : "Nộp bài"}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Result */}
+      {submitted && result && (
+        <div className="p-4 border rounded bg-gray-50">
+          <h3 className="font-semibold">Kết quả (tạm tính)</h3>
+          <p>
+            Điểm: <strong>{result.score}</strong> / {result.total}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}

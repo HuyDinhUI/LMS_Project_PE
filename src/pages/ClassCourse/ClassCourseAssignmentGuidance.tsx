@@ -118,7 +118,7 @@ const ClassCourseAssignmentGuidance = () => {
           </div>
           <div className="pt-5">
             <div className="mb-5">
-              <p>{assignmentsData?.NoiDung}</p>
+              <div dangerouslySetInnerHTML={{ __html: assignmentsData?.NoiDung ?? ''}}></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col items-center justify-center gap-2 p-3 ring ring-gray-200 rounded-md">

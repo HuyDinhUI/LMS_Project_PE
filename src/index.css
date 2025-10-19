@@ -127,6 +127,10 @@
   width: 100vw;
 }
 
+body {
+  overflow: hidden
+}
+
 
 
 
@@ -136,7 +140,8 @@
   --animate-fadeIn: fadeIn 300ms ease-out;
   --animate-fadeOut: fadeOut 300ms ease-in;
   --animate-zoomIn: zoomIn 300ms ease-out;
-
+  --animate-slideInRight: SlideIn 300ms ease-out;
+  --animate-slideOutRight: SlideOut 300ms ease-out;
   @keyframes fade {
 
     0%,
@@ -180,7 +185,27 @@
       transform: scale(1);
     }
   }
+
+  @keyframes SlideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to{
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes SlideOut {
+    from {
+      transform: translateX(0);
+    }
+    to{
+      transform: translateX(100%);
+    }
+  }
 }
+
+
 
 .fc .fc-toolbar-title {
   font-size: 20px;

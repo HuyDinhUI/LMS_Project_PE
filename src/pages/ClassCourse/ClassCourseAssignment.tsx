@@ -9,6 +9,8 @@ import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 const ClassCourseManagementAssignment = () => {
   const role = localStorage.getItem("role");
@@ -18,17 +20,15 @@ const ClassCourseManagementAssignment = () => {
   const [opentFormCreate, setOpenFormCreate] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [description, setDescription] = useState<string>("");
+  const [isDragging, setIsDragging] = useState(false);
+  const dropRef = useRef<any>(null);
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm();
-  const { ref, onChange } = register("file");
-
-  const handleFileOnChange = (e: any) => {
-    setFile(e.target.files[0]);
-  };
 
   const getAllAssignments = async () => {
     try {
@@ -54,6 +54,38 @@ const ClassCourseManagementAssignment = () => {
     }
   };
 
+  // Khi kéo file vào vùng
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  // Khi rời file khỏi vùng
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  // Khi thả file vào vùng
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
+    }
+  };
+
+  // Khi chọn file bằng click
+  const handleFileChange = (e: any) => {
+    setFile(e.target.files[0]);
+  };
+
+  // Click để mở file picker
+  const handleClick = () => {
+    dropRef.current.click();
+  };
+
   useEffect(() => {
     if (role === "GV") {
       getAllAssignments();
@@ -65,7 +97,7 @@ const ClassCourseManagementAssignment = () => {
   const handleCreateAssignment = async (data: any) => {
     const formData = new FormData();
     formData.append("TieuDe", data.TieuDe);
-    formData.append("NoiDung", data.NoiDung);
+    formData.append("NoiDung", description);
     formData.append("HanNop", data.HanNop);
     formData.append("GioNop", data.GioNop);
     formData.append("DiemToiDa", data.DiemToiDa);
@@ -114,7 +146,7 @@ const ClassCourseManagementAssignment = () => {
   };
 
   return (
-    <div className="flex-1 overflow-auto max-h-170 p-2">
+    <div className="flex-1 overflow-auto max-h-165 p-2">
       {/* content */}
       <div className="flex flex-col justify-center px-20">
         <div className="flex flex-col gap-3">
@@ -122,7 +154,7 @@ const ClassCourseManagementAssignment = () => {
           {role === "GV" && (
             <div
               className={`p-4 col-span-2 ring ring-gray-200 rounded-md shadow-md overflow-scroll relative ${
-                opentFormCreate ? "h-120" : "h-15"
+                opentFormCreate ? "h-130" : "h-15"
               } transition-all duration-300 ease-in-out`}
             >
               <div
@@ -133,83 +165,96 @@ const ClassCourseManagementAssignment = () => {
                 <h2>Thêm bài tập</h2>
               </div>
 
-              {opentFormCreate && <form
-                onSubmit={handleSubmit(handleCreateAssignment)}
-                className="flex flex-col gap-3 mt-7"
-              >
-                <Input
-                  {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
-                  placeholder="Tiêu đề"
-                />
-                <textarea
+              {opentFormCreate && (
+                <form
+                  onSubmit={handleSubmit(handleCreateAssignment)}
+                  className="flex flex-col gap-3 mt-7"
+                >
+                  <Input
+                    {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
+                    placeholder="Tiêu đề"
+                  />
+                  {/* <textarea
                   placeholder="Nội dung"
                   className="p-2 ring ring-gray-200 rounded-md"
                   {...register("NoiDung")}
-                ></textarea>
-                <div className="grid grid-cols-4 gap-2">
-                  <Input
-                    {...register("HanNop")}
-                    type="date"
-                    placeholder="Hạn nộp"
-                  />
-                  <Input
-                    {...register("GioNop")}
-                    type="time"
-                    placeholder="Giờ nộp"
-                  />
-                  <Input
-                    {...register("DiemToiDa")}
-                    type="number"
-                    placeholder="Điểm tối đa"
-                  />
-                  <Button
-                    onClick={() => fileInputRef.current?.click()}
-                    type="button"
-                    variant="icon"
-                    size="md"
-                    className="ring ring-gray-200"
-                    title="Thêm tệp đính kèm"
-                    icon={<Upload />}
-                  ></Button>
-                </div>
-                <Input
-                  {...register("file")}
-                  ref={(e) => {
-                    ref(e);
-                    fileInputRef.current = e;
-                  }}
-                  onChange={handleFileOnChange}
-                  hidden
-                  type="file"
-                />
-                {file && (
-                  <div className="grid grid-cols-4 gap-2">
-                    <div className="p-3 ring ring-gray-200 rounded-md">
-                      <label>
-                        <div className="flex justify-center items-center p-5">
-                          <File />
-                        </div>
-                        <label className="text-center w-full block">
-                          {file.name}
-                        </label>
-                      </label>
+                ></textarea> */}
+                  <ReactQuill value={description} onChange={setDescription} />
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="flex flex-col gap-2">
+                      <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-gray-50">Ngày</label>
+                        <Input
+                          {...register("HanNop")}
+                          type="date"
+                          variant="primary"
+                          placeholder="Hạn nộp"
+                        />
+                      </div>
+                      <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-gray-50">Giờ</label>
+                        <Input
+                          {...register("GioNop")}
+                          type="time"
+                          variant="primary"
+                          placeholder="Giờ nộp"
+                        />
+                      </div>
+                      <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-gray-50">Điểm</label>
+                        <Input
+                          {...register("DiemToiDa")}
+                          type="number"
+                          variant="primary"
+                          placeholder="Điểm tối đa"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <div
+                        onClick={handleClick}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                        className={`border-1 h-full flex items-center justify-center border-dashed rounded-xl p-10 cursor-pointer transition-colors ${
+                          isDragging
+                            ? "border-blue-500 bg-blue-50"
+                            : "border-gray-400"
+                        }`}
+                      >
+                        {file ? (
+                          <p className="">{file.name}</p>
+                        ) : (
+                          <p>Kéo thả file vào đây hoặc nhấn để chọn</p>
+                        )}
+                      </div>
+                      <input
+                        type="file"
+                        hidden
+                        ref={dropRef}
+                        onChange={handleFileChange}
+                      />
                     </div>
                   </div>
-                )}
-                <div className={`flex justify-end gap-2 ${opentFormCreate ? 'absolute bottom-3 right-3' : 'hidden'}`}>
-                  <Button
-                    onClick={() => {
-                      reset();
-                      setFile(null);
-                      setOpenFormCreate(false);
-                    }}
-                    type="button"
-                    variant="outline"
-                    title="Huỷ"
-                  />
-                  <Button type="submit" variant="primary" title="Tạo" />
-                </div>
-              </form>}
+                  <div
+                    className={`flex justify-end gap-2 ${
+                      opentFormCreate ? "absolute bottom-3 right-3" : "hidden"
+                    }`}
+                  >
+                    <Button
+                      onClick={() => {
+                        reset();
+                        setFile(null);
+                        setOpenFormCreate(false);
+                      }}
+                      type="button"
+                      variant="outline"
+                      title="Huỷ"
+                    />
+                    <Button type="submit" variant="primary" title="Tạo" />
+                  </div>
+                </form>
+              )}
             </div>
           )}
           {/* Danh sách bài tập */}
@@ -268,7 +313,9 @@ const ClassCourseManagementAssignment = () => {
                 )}
               </div>
               <div className="absolute bottom-5 right-5 text-sm text-gray-500">
-                {role === "GV" ? `Điểm tối đa: ${item.DiemToiDa}` : `Điểm của bạn: ${item.DiemSo ?? "Chưa chấm điểm"}`}
+                {role === "GV"
+                  ? `Điểm tối đa: ${item.DiemToiDa}`
+                  : `Điểm của bạn: ${item.DiemSo ?? "Chưa chấm điểm"}`}
               </div>
               <div className="mt-7">
                 <Link

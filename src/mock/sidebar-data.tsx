@@ -107,7 +107,7 @@ export const SidebarTeacherData: SidebarItem[] = [
   { type: "separator" },
   {
     type: "item",
-    label: "Quản lý lớp học",
+    label: "Danh sách lớp",
     icon: <Presentation size={18}/>
   },
   {
@@ -124,7 +124,7 @@ export const SidebarTeacherData: SidebarItem[] = [
   },
   {
     type: "item",
-    label: "Quản lý điểm",
+    label: "Nhập điểm",
     href: "/teacher/gradesmanagement",
     icon: <GraduationCap size={18}/>
   }

@@ -1,5 +1,6 @@
 export type SubmissionType = {
-  MaBaiTap: number;
+  MaNopBai: string
+  MaBaiTap: string;
   MaSV: string;
   hoten: string;
   thoigian_nop: string | null;

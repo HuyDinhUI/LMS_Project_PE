@@ -10,11 +10,12 @@ import { GoFileZip } from "react-icons/go";
 import { FilePreview } from "@/components/ui/file-preview";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Ellipsis, File, Link2, Pen, Plus, Trash, Upload } from "lucide-react";
+import { Ellipsis, File, Link2, Pen, Plus, Trash, Upload, Youtube } from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import { DropdownMenu } from "@/components/ui/dropdown";
-import type { MenuItem } from "@/types/MenuItemType";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 
 const get_icon: any = {
@@ -34,6 +35,7 @@ const ClassCourseManagementHome = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [classCourseData, setClassCourseData] = useState<ClassCourseType>();
+  const [description,setDescription] = useState<string>("")
   const {
     register,
     handleSubmit,
@@ -92,7 +94,7 @@ const ClassCourseManagementHome = () => {
     const formData = new FormData();
     formData.append("tieu_de", data.tieu_de);
     formData.append("MaLop", id!);
-    formData.append("mota", data.mota);
+    formData.append("mota", description);
     formData.append("file", file!);
 
     console.log(formData);
@@ -126,9 +128,14 @@ const ClassCourseManagementHome = () => {
   useEffect(() => {
     getClassCourse();
     getContent();
+    
   }, []);
+
+  useEffect(() => {
+    document.title = classCourseData?.ten_lop + '-' + classCourseData?.MaLop || 'Lớp học'
+  },[classCourseData])
   return (
-    <div className="flex-1 overflow-auto max-h-150 p-2">
+    <div className="flex-1 overflow-auto max-h-165 p-2">
       {/* cover */}
       <div className="w-full h-40 p-3 flex flex-col justify-end rounded-md bg-[url('https://www.gstatic.com/classroom/themes/img_graduation.jpg')] bg-cover">
         <h1 className="text-white text-3xl">{classCourseData?.ten_lop}</h1>
@@ -155,11 +162,12 @@ const ClassCourseManagementHome = () => {
                 required: "Tiêu đề không được để trống",
               })}
             />
-            <textarea
+            {/* <textarea
               className="w-full ring ring-gray-200 rounded-md p-2"
               placeholder="Mô tả"
               {...register("mota")}
-            ></textarea>
+            ></textarea> */}
+            <ReactQuill value={description} onChange={setDescription}/>
             <Input
               {...register("file")}
               ref={(e) => {
@@ -191,15 +199,22 @@ const ClassCourseManagementHome = () => {
                 type="button"
                 variant="icon"
                 size="lg"
-                className="ring ring-gray-100"
+                className=""
                 icon={<Upload />}
               />
               <Button
                 type="button"
                 variant="icon"
                 size="lg"
-                className="ring ring-gray-100"
+                className=""
                 icon={<Link2 />}
+              />
+               <Button
+                type="button"
+                variant="icon"
+                size="lg"
+                className=""
+                icon={<Youtube />}
               />
             </div>
             <div className={`flex justify-end gap-2 ${opentFormCreate ? 'absolute bottom-3 right-3' : 'hidden'}`}>
@@ -218,7 +233,7 @@ const ClassCourseManagementHome = () => {
         </div>
 
         {/* list content */}
-        <div className="flex flex-col gap-3 mt-5">
+        <div className="flex flex-col gap-3 mt-5 h-150">
           {contentData.map((c, i) => (
             <div
               key={i}
@@ -232,7 +247,7 @@ const ClassCourseManagementHome = () => {
                   className="rounded-full bg-amber-200"
                 ></img>
                 <div>
-                  <label>{c.hoten}</label>
+                  <h2>{c.hoten}</h2>
                   <p className="text-sm text-gray-500">
                     {new Date(c.ngay_tao).toLocaleDateString("vi-VN")}
                   </p>
@@ -240,8 +255,8 @@ const ClassCourseManagementHome = () => {
               </div>
               {/* content */}
               <div className="mt-3">
-                <label>{c.tieu_de}</label>
-                <p>{c.mota}</p>
+                <h2 className="font-bold">{c.tieu_de}</h2>
+                <div dangerouslySetInnerHTML={{ __html: c.mota }}></div>
               </div>
               {/* file */}
               {c.file_name && (

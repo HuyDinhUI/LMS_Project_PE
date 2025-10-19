@@ -18,5 +18,6 @@ export default defineConfig({
       '127.0.0.1',
       '2d32d8a9cad8.ngrok-free.app' // thêm domain ngrok vào đây
     ]
-  }
+  },
+  
 })
