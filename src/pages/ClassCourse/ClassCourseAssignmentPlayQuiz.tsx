@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 const PlayQuiz = () => {
   const [dataQuestion, setDataQuestion] = useState<QuizType>();
   const { malop, matn } = useParams();
+  const MaSV = localStorage.getItem("username");
   const getQuestion = async () => {
     try {
       const res = await API.get(`/quiz/getQuestionById/${matn}`);
@@ -23,14 +24,15 @@ const PlayQuiz = () => {
   }, []);
   return (
     <div>
-      {dataQuestion && <QuizPlayer
-        quiz={dataQuestion}
-        userId={"SV001"}
-        submitUrl={"http://localhost:4180/quiz/submit"} // optional
-        onSubmit={(r) => console.log("submit callback", r)}
-        
-      />}
-      
+      {dataQuestion && (
+        <QuizPlayer
+          quiz={dataQuestion}
+          userId={MaSV ?? ""}
+          submitUrl={"/quiz/submitQuiz"} // optional
+          onSubmit={(r) => console.log("submit callback", r)}
+          autoShuffle={dataQuestion.isRandom}
+        />
+      )}
     </div>
   );
 };

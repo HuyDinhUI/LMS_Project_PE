@@ -4,12 +4,13 @@ import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import type { QuizType } from "@/types/QuizType";
 import {
   ChevronLeft,
   Clock,
   Ellipsis,
+  ListStart,
   Lock,
   LockOpen,
   Pen,
@@ -25,13 +26,25 @@ import CheckboxDemo from "@/components/ui/checkbox";
 
 const Quiz = () => {
   const { id } = useParams();
+  const MaSV = localStorage.getItem("username");
   const role = localStorage.getItem("role");
   const [dataQuiz, setDataQuiz] = useState<QuizType[]>();
   const [openFormCreate, setOpenFormCreate] = useState<boolean>(false);
+  const navigator = useNavigate()
 
   const getQuiz = async () => {
     try {
       const res = await API.get(`/quiz/getQuizByClass/${id}`);
+      console.log(res.data.result.data);
+      setDataQuiz(res.data.result.data);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
+  const getQuizByStudent = async () => {
+    try {
+      const res = await API.get(`/quiz/getQuizByStudent/${MaSV}/${id}`);
       console.log(res.data.result.data);
       setDataQuiz(res.data.result.data);
     } catch (err: any) {
@@ -58,12 +71,15 @@ const Quiz = () => {
   };
 
   useEffect(() => {
-    getQuiz();
+    if (role === "SV") {
+      getQuizByStudent();
+    } else {
+      getQuiz();
+    }
   }, []);
   return (
     <div className="flex-1 overflow-auto max-h-150 p-2">
       <div className="flex flex-col justify-center px-20">
-        
         <div className="flex items-center justify-end gap-2 mb-10">
           {role === "GV" && (
             <Button
@@ -74,25 +90,24 @@ const Quiz = () => {
             />
           )}
         </div>
-        <div className="h-140 overflow-auto">
-          {openFormCreate && <QuizCreate handleGetQuiz={getQuiz} />}
-        </div>
+
+        {openFormCreate && (
+          <div className="h-140 overflow-auto">
+            <QuizCreate handleGetQuiz={getQuiz} />
+          </div>
+        )}
+
         {!openFormCreate && (
           <div className="grid grid-cols-3 gap-3">
             {/* list quiz */}
             {dataQuiz?.map((q) => (
               <div
                 key={q.MaTN}
-                className="w-full h-50 p-5 ring ring-gray-200 rounded-md relative"
+                className="w-full h-55 p-5 ring ring-gray-200 rounded-md relative"
               >
                 <h2 className="text-lg font-semibold">{q.TieuDe}</h2>
                 <p className="h-5 overflow-ellipsis">{q.MoTa}</p>
-                <div className="absolute left-5 bottom-2 flex gap-3 items-center">
-                  <div className="flex items-center gap-1">
-                    <Clock size={18} />
-                    {q.ThoiGianLam}
-                    {"'"}
-                  </div>
+                <div className="absolute left-5 bottom-3 flex gap-3 items-center">
                   {q.isRandom ? (
                     <div className="flex items-center gap-1">
                       <Shuffle size={18} />
@@ -100,7 +115,13 @@ const Quiz = () => {
                   ) : (
                     ""
                   )}
-                  {q.SoLanChoPhep && (
+                  <div className="flex items-center gap-1">
+                    <Clock size={18} />
+                    {q.ThoiGianLam}
+                    {"'"}
+                  </div>
+
+                  {!q.SoLanChoPhep && (
                     <div className="flex items-center gap-1">
                       <Repeat size={18} />
                       {q.SoLanChoPhep}
@@ -126,28 +147,39 @@ const Quiz = () => {
                   )}
                 </div>
                 {role === "SV" && q.TrangThai === "Mo" && (
-                  <Link
-                    className="p-2 ring ring-gray-200 shadow-sm rounded-md flex item-center mt-5"
-                    to={`/classcourse/${id}/quiz/${q.MaTN}/play`}
+                  <Button
+                    variant="dark"
+                    title={q.TrangThai === 'Mo' ? 'Làm bài' : 'Chưa mở'}
+                    icon={<Play size={18} />}
+                    className="p-2 bg-black/90 cursor-pointer hover:bg-black/80 text-white rounded-md flex items-center gap-2 mt-5"
+                    onClick={() => navigator(`/classcourse/${id}/quiz/${q.MaTN}/play`)}
+                    disabled = {q.TrangThaiNopBai && q.SoLanChoPhep > 0 ? true : false}
                   >
-                    <Play size={18} />
-                    Làm bài
-                  </Link>
+                    
+                  </Button>
+                )}
+                {role === "GV" && (
+                  <Button variant="outline"
+                  title="Xem danh sách nộp bài"
+                  className="p-2 cursor-pointer rounded-md flex items-center gap-2 mt-5"
+                  />
+                  
                 )}
                 <div
-                  className={`w-20 text-center absolute bottom-2 right-4 ${
-                    q.TrangThai === "Mo"
+                  className={`w-20 text-center absolute bottom-3 right-5 ${
+                    q.TrangThai === "Mo" && q.TrangThaiNopBai != "Chưa nộp"
                       ? "bg-green-100 ring ring-green-400 text-green-600 text-sm px-2 rounded-md"
                       : "bg-rose-100 ring ring-rose-400 text-rose-600 text-sm px-2 rounded-md"
                   }`}
                 >
-                  <p>{q.TrangThai === "Mo" ? "Đang mở" : "Chưa mở"}</p>
+                  {role === "GV" && <p>{q.TrangThai === "Mo" ? "Đang mở" : "Chưa mở"}</p>}
+                  {role === "SV" && <p>{q.TrangThaiNopBai}</p>}
                 </div>
+                
               </div>
             ))}
           </div>
         )}
-        
       </div>
     </div>
   );
@@ -230,6 +262,7 @@ function QuizCreate({ handleGetQuiz }: props) {
   const [tieuDe, setTieuDe] = useState("");
   const [moTa, setMoTa] = useState("");
   const [thoiGian, setThoiGian] = useState<number>();
+  const [type,setType] = useState<string>()
   const [questions, dispatch] = useReducer(quizReducer, [
     {
       id: uuidv4(),
@@ -253,8 +286,10 @@ function QuizCreate({ handleGetQuiz }: props) {
       CauHoi: questions.map((q: any) => ({
         NoiDung: q.NoiDung,
         Diem: q.Diem,
-        CorrectIndex: q.CorrectIndex,
-        DapAn: q.DapAn.map((a: any) => ({ NoiDung: a.NoiDung })),
+        DapAn: q.DapAn.map((a: any) => ({
+          NoiDung: a.NoiDung,
+          LaDapAnDung: a.LaDapAnDung,
+        })),
       })),
     };
 
@@ -285,13 +320,20 @@ function QuizCreate({ handleGetQuiz }: props) {
         onChange={(e) => setMoTa(e.target.value)}
         className="w-full border rounded-md p-2 mb-3"
       />
-      <Input
-        type="number"
-        placeholder="Thời gian (phút)"
-        value={thoiGian}
-        onChange={(e) => setThoiGian(Number(e.target.value))}
-        className="mb-5"
-      />
+      <div className="grid grid-cols-2 gap-2">
+        <Input
+          type="number"
+          placeholder="Thời gian (phút)"
+          value={thoiGian}
+          onChange={(e) => setThoiGian(Number(e.target.value))}
+          className="mb-5"
+        />
+        <select onChange={(e) => setType(String(e.target.value))} className="p-2 h-10 ring ring-gray-200 rounded-md">
+          <option value="" disabled selected>Loại trắc nghiệm</option>
+          <option value="test">Bài kiểm tra</option>
+          <option value="review">Ôn tập</option>
+        </select>
+      </div>
 
       {questions.map((q: any, qi: number) => (
         <div key={q.id} className="p-4 border rounded-lg mb-4">

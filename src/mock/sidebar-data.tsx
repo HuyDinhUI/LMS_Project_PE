@@ -6,6 +6,7 @@ import {
   FileUser,
   GraduationCap,
   Home,
+  Inbox,
   LayoutDashboard,
   Library,
   Presentation,
@@ -124,9 +125,9 @@ export const SidebarTeacherData: SidebarItem[] = [
   },
   {
     type: "item",
-    label: "Nhập điểm",
-    href: "/teacher/gradesmanagement",
-    icon: <GraduationCap size={18}/>
+    label: "Inbox",
+    href: "",
+    icon: <Inbox size={18}/>
   }
 ];
 
@@ -164,8 +165,8 @@ export const SidebarStudentData: SidebarItem[] = [
   },
   {
     type: "item",
-    label: "Kết quả học tập",
-    href: "/student/grades",
-    icon: <GraduationCap size={18}/>
-  },
+    label: "Inbox",
+    href: "",
+    icon: <Inbox size={18}/>
+  }
 ];

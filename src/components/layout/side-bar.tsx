@@ -4,6 +4,7 @@ import {
   ChevronDown,
   ChevronRight,
 } from "lucide-react";
+import logo from "@/assets/logo_lms.webp"
 
 export type SidebarItem =
   | {
@@ -49,7 +50,11 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
   
 
   return (
-    <aside className={`xl:block hidden w-70 ${SidebarVariantOption[variant]} scroll-auto overflow-auto px-4 py-4 space-y-2`}>
+    <aside className={`xl:block hidden w-70 ${SidebarVariantOption[variant]} sticky scroll-auto overflow-auto px-4 py-4 space-y-2`}>
+      <div className="flex items-center justify-center">
+        <img width={100} src={logo}></img>
+        <h1 className="font-bold text-[10px]">Learning Management System</h1>
+      </div>
       {items.map((item, index) => {
         if (item.type === 'separator') {
           return item.label ? (

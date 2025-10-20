@@ -63,14 +63,9 @@ export const Header = () => {
   };
 
   return (
-    <div className="flex px-3 py-2 items-center">
+    <div className="flex px-3 py-2 items-center justify-between border-b border-gray-100">
       <div className="w-[20%] ms-4">
         <Menu />
-      </div>
-
-      <div className="flex-1 flex justify-center items-center">
-        <img width={50} src={logo}></img>
-        
       </div>
 
       <div className="w-[25%] flex justify-end items-center">

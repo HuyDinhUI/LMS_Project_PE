@@ -97,8 +97,8 @@ const TeacherDashboard = () => {
   return (
     <div className="py-5 px-10 w-full h-full bg-white dark:bg-card overflow-auto">
       <div className="flex items-center mt-3 gap-2 px-2">
-        <div className="h-70 w-70 rounded-full">
-          <img className="h-full rounded-full" src={bg_light}></img>
+        <div className="h-70 w-70 rounded-md">
+          <img className="h-full rounded-md" src={bg_light}></img>
         </div>
         <div className="flex-1 flex-col gap-2 ms-10">
           <h1 className="text-2xl mb-5 font-bold uppercase text-green-600">
@@ -143,7 +143,7 @@ const TeacherDashboard = () => {
       </div>
       <div className="mt-5 px-2">
         <div className="grid grid-cols-4 gap-4 mt-3">
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
+          <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Tổng số lớp</label>
               <p className="text-xl font-bold">
@@ -154,7 +154,7 @@ const TeacherDashboard = () => {
               <School color="blue" size={30} />
             </div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
+          <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Tổng tiết dạy</label>
               <p className="text-xl font-bold">0</p>
@@ -163,7 +163,7 @@ const TeacherDashboard = () => {
               <ChartColumn color="green" size={30} />
             </div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
+          <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Bài tập chờ chấm</label>
               <p className="text-xl font-bold">0</p>
@@ -172,7 +172,7 @@ const TeacherDashboard = () => {
               <ScrollText color="purple" size={30} />
             </div>
           </div>
-          <div className="shadow-md p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
+          <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">
             <div>
               <label className="font-light">Điểm trung bình</label>
               <p className="text-xl font-bold">0</p>

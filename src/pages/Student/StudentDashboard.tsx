@@ -106,8 +106,8 @@ const StudentDashboard = () => {
   return (
     <div className="py-5 px-10 w-full h-full bg-white dark:bg-card overflow-auto">
       <div className="flex items-center mt-3 gap-2 px-2">
-        <div className="h-70 w-70 rounded-full">
-          <img className="h-full rounded-full" src={bg_light}></img>
+        <div className="h-70 w-70 rounded-md">
+          <img className="h-full rounded-md" src={bg_light}></img>
         </div>
         <div className="flex-1 flex-col gap-2 ms-10">
           <h1 className="text-2xl mb-5 font-bold uppercase text-green-600">Thông tin học vấn</h1>

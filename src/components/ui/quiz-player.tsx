@@ -1,5 +1,8 @@
 import type { Question, QuizType } from "@/types/QuizType";
+import API from "@/utils/axios";
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import CheckboxDemo from "./checkbox";
 
 /**
  * Props types
@@ -42,7 +45,7 @@ function formatTimeLeft(totalSeconds: number) {
 export default function QuizPlayer({
   quiz,
   userId,
-  autoShuffle = true,
+  autoShuffle = false,
   onSubmit,
   submitUrl,
 }: QuizPlayerProps) {
@@ -70,7 +73,7 @@ export default function QuizPlayer({
 
   const [questions, setQuestions] = useState<Question[]>(initialData);
   const [current, setCurrent] = useState<number>(0);
-  const [answers, setAnswers] = useState<(number | null)[]>(() =>
+  const [answers, setAnswers] = useState<(string | null)[]>(() =>
     Array(initialData.length).fill(null)
   ); // index of answer chosen per question
   const [startedAt] = useState<number>(() => Date.now());
@@ -79,7 +82,7 @@ export default function QuizPlayer({
   const timerRef = useRef<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const [result, setResult] = useState<{ score: number; total: number } | null>(
+  const [result, setResult] = useState<{ score: number; total: 10 } | null>(
     null
   );
 
@@ -110,11 +113,11 @@ export default function QuizPlayer({
   }
 
   // choose answer (single choice)
-  const chooseAnswer = (qIndex: number, ansIndex: number) => {
+  const chooseAnswer = (qIndex: number, ansId: string) => {
     if (submitted) return;
     setAnswers((prev) => {
       const next = prev.slice();
-      next[qIndex] = next[qIndex] === ansIndex ? null : ansIndex; // toggle
+      next[qIndex] = next[qIndex] === ansId ? null : ansId; // toggle
       return next;
     });
   };
@@ -128,35 +131,6 @@ export default function QuizPlayer({
   const answeredCount = answers.filter((a) => a !== null).length;
   const progressPercent = Math.round((answeredCount / questions.length) * 100);
 
-  // compute score locally if needed (requires CorrectIndex stored in quiz.CauHoi)
-  const computeScore = () => {
-    let score = 0;
-    let total = 0;
-    for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
-      const chosen = answers[i];
-      const pts = q.Diem ?? 1;
-      total += pts;
-      // We don't have mapping of correct index after shuffle — assume quiz has CorrectIndex pointing to original order.
-      // If backend supplies correct answers in quiz.CauHoi (CorrectIndex relative to supplied DapAn), you can use that.
-      // Here we cannot grade without correct index; we'll skip local grading unless CorrectIndex exists in question.
-      if (typeof q.CorrectIndex === "number") {
-        // find original answer text at CorrectIndex? However we shuffled answers.
-        // We'll compare by answer content if possible:
-        const correctAnswerContent =
-          quiz.CauHoi[i]?.DapAn[q.CorrectIndex ?? -1]?.NoiDung ?? null;
-        if (correctAnswerContent !== null) {
-          const chosenContent =
-            chosen != null ? q.DapAn[chosen]?.NoiDung : null;
-          if (chosenContent && chosenContent === correctAnswerContent) {
-            score += pts;
-          }
-        }
-      }
-    }
-    return { score, total };
-  };
-
   // Submit handler
   const handleSubmit = async (auto = false) => {
     if (submitted) return;
@@ -164,43 +138,35 @@ export default function QuizPlayer({
 
     // prepare payload: send choices as index relative to questions' current DapAn order
     const payload = {
-      MaQuiz: quiz.MaTN,
+      MaTN: quiz.MaTN,
       MaSV: userId ?? null,
       ThoiGianThucTe: totalTimeSeconds - timeLeft, // seconds used
-      ChiTiet: questions.map((q, i) => ({
+      Answers: questions.map((q, i) => ({
         MaCauHoi: q.MaCauHoi ?? i,
-        ChoiceIndex: answers[i], // may be null
-        AnswerText:
-          answers[i] != null && q.DapAn[answers[i]]
-            ? q.DapAn[answers[i]].NoiDung
-            : null,
+        SelectedMaDapAn: answers[i], // may be null
+        
       })),
     };
 
     try {
-      // If submitUrl provided, POST to server
-      //   if (submitUrl) {
-      //     const res = await fetch(submitUrl, {
-      //       method: "POST",
-      //       headers: { "Content-Type": "application/json" },
-      //       body: JSON.stringify(payload),
-      //     });
-      //     if (!res.ok) {
-      //       const txt = await res.text();
-      //       throw new Error(txt || "Submit failed");
-      //     }
-      //   }
+
+      console.log(payload)
+
+      if (submitUrl) {
+        const res = await API.post(submitUrl,payload)
+        toast.success('Nộp bài thành công')
+        setResult({score: Number(res.data.result.data.TongDiem),total:10})
+      }
 
       // compute local score if possible
-      const local = computeScore();
-      setResult(local);
+      // const local = computeScore();
+      // setResult(local);
       setSubmitted(true);
       if (timerRef.current) window.clearInterval(timerRef.current);
-      if (onSubmit)
-        onSubmit({ score: local.score, total: local.total, details: payload });
-    } catch (err) {
-      console.error("Submit error", err);
-      if (!auto) alert("Nộp bài thất bại: " + (err as any).message);
+      // if (onSubmit)
+      //   onSubmit({ score: local.score, total: local.total, details: payload });
+    } catch (err: any) {
+      if (!auto) toast.error(err?.response?.data?.message)
     } finally {
       setSubmitting(false);
     }
@@ -251,20 +217,18 @@ export default function QuizPlayer({
 
         <div className="mt-3 space-y-2">
           {questions[current]?.DapAn?.map((ans, ai) => {
-            const chosen = answers[current] === ai;
+            const chosen = answers[current] === ans.MaDapAn;
             return (
               <label
                 key={ai}
-                className={`block p-3 border rounded cursor-pointer hover:shadow ${
+                className={`flex items-center gap-2 p-3 border rounded cursor-pointer hover:shadow ${
                   chosen ? "bg-blue-50 border-blue-400" : "bg-white"
                 }`}
               >
-                <input
-                  type="radio"
-                  name={`q-${current}`}
+                <CheckboxDemo
                   checked={chosen}
-                  onChange={() => chooseAnswer(current, ai)}
-                  className="mr-2"
+                  onCheckedChange={() => chooseAnswer(current, ans.MaDapAn)}
+                  
                 />
                 <span>{ans.NoiDung}</span>
               </label>
