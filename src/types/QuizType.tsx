@@ -26,3 +26,16 @@ type Answer = {
     MaDapAn: string
     NoiDung: string
 }
+
+export type Submissions = {
+    MaSV: string,
+    hoten: string,
+    ThoiGianNop: string,
+    MaBaiLam: string,
+    MaTN: string,
+    TieuDe: string,
+    MoTa: string,
+    HanNop: Date,
+    DiemSo: number,
+    TrangThaiNopBai: string
+}

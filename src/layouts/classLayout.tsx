@@ -71,7 +71,7 @@ const ClassLayout = ({ children }: Props) => {
                 </Link>
               ))}
             </div>
-            <div className="max-h-150 overflow-auto">{children}</div>
+            <div className="max-h-165 overflow-auto">{children}</div>
           </div>
         </div>
       </div>

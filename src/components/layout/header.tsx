@@ -63,7 +63,7 @@ export const Header = () => {
   };
 
   return (
-    <div className="flex px-3 py-2 items-center justify-between border-b border-gray-100">
+    <div className="flex px-3 py-2 items-center justify-between">
       <div className="w-[20%] ms-4">
         <Menu />
       </div>

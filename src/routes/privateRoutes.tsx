@@ -80,12 +80,14 @@ const ClassCourseManagementGrades = lazy(
 );
 
 const ClassCourseAssignmentQuiz = lazy(
-  () => import("@/pages/ClassCourse/ClassCourseAssignmentQuiz")
+  () => import("@/pages/ClassCourse/ClassCourseQuiz")
 );
 
 const ClassCourseAssignmentQuizPlay = lazy(
-  () => import("@/pages/ClassCourse/ClassCourseAssignmentPlayQuiz")
+  () => import("@/pages/ClassCourse/ClassCoursePlayQuiz")
 )
+
+const ClassCourseQuizSubmissionsPage = lazy(() => import("@/pages/ClassCourse/ClassCourseQuizSubmited"))
 
 export const privateRoutes = [
   /////////////  Admin  /////////////////
@@ -243,6 +245,17 @@ export const privateRoutes = [
       <Guard>
         <ClassLayout>
           <ClassCourseAssignmentQuizPlay/>
+        </ClassLayout>
+      </Guard>
+    )
+  },
+
+  {
+    path: "/classcourse/:id/quiz/:matn/submissions",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseQuizSubmissionsPage/>
         </ClassLayout>
       </Guard>
     )

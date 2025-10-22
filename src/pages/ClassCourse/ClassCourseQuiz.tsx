@@ -78,7 +78,7 @@ const Quiz = () => {
     }
   }, []);
   return (
-    <div className="flex-1 overflow-auto max-h-150 p-2">
+    <div className="flex-1 overflow-auto max-h-160 p-2">
       <div className="flex flex-col justify-center px-20">
         <div className="flex items-center justify-end gap-2 mb-10">
           {role === "GV" && (
@@ -92,9 +92,9 @@ const Quiz = () => {
         </div>
 
         {openFormCreate && (
-          <div className="h-140 overflow-auto">
+          
             <QuizCreate handleGetQuiz={getQuiz} />
-          </div>
+          
         )}
 
         {!openFormCreate && (
@@ -162,6 +162,7 @@ const Quiz = () => {
                   <Button variant="outline"
                   title="Xem danh sách nộp bài"
                   className="p-2 cursor-pointer rounded-md flex items-center gap-2 mt-5"
+                  onClick={() => navigator(`/classcourse/${id}/quiz/${q.MaTN}/submissions`)}
                   />
                   
                 )}
