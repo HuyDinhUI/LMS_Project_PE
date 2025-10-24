@@ -63,7 +63,7 @@ export const DropdownMenu = ({
         <Dropdown.Content
           className={clsx(
             sizeClass[size],
-            "bg-white dark:bg-gray-800 rounded shadow-lg z-999"
+            "bg-black text-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg z-999 p-3" 
           )}
           side={side}
           align={align}
@@ -99,7 +99,7 @@ export const DropdownMenu = ({
                     onSelect={(e) => e.preventDefault()}
                     key={index}
                     className={clsx(
-                      "flex items-center justify-between px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700",
+                      "flex items-center justify-between px-2 py-1.5 text-sm",
                       item.disabled && "opacity-50 pointer-events-none"
                     )}
                   >
@@ -140,7 +140,7 @@ export const DropdownMenu = ({
                     onSelect={(e) => e.preventDefault()}
                     key={index}
                     className={clsx(
-                      "flex items-center px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700",
+                      "flex items-center px-2 py-1.5 text-sm",
                       item.disabled && "opacity-50 pointer-events-none"
                     )}
                   >

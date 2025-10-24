@@ -122,9 +122,9 @@ const ClassCourseManagementAssignment = () => {
 
   const getItemActionAssignment = (MaBaiTap: string) => {
     return [
-      { label: "Sửa", icon: <Pen size={16} /> },
+      { label: "Edit", icon: <Pen size={16} /> },
       {
-        label: "Xoá",
+        label: "Delete",
         icon: <Trash size={16} />,
         dialog: AlertDialogDelete,
         onClick: () => handleDeleteAssignment(MaBaiTap),
@@ -153,7 +153,7 @@ const ClassCourseManagementAssignment = () => {
           {/* Form tạo */}
           {role === "GV" && (
             <div
-              className={`p-4 col-span-2 ring ring-gray-200 rounded-md shadow-md overflow-scroll relative ${
+              className={`p-4 col-span-2 bg-black/3 rounded-md overflow-scroll relative ${
                 opentFormCreate ? "h-130" : "h-15"
               } transition-all duration-300 ease-in-out`}
             >
@@ -162,7 +162,7 @@ const ClassCourseManagementAssignment = () => {
                 onClick={() => setOpenFormCreate(!opentFormCreate)}
               >
                 <Plus size={20} />
-                <h2>Thêm bài tập</h2>
+                <h2>Add Assigment</h2>
               </div>
 
               {opentFormCreate && (
@@ -172,7 +172,7 @@ const ClassCourseManagementAssignment = () => {
                 >
                   <Input
                     {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
-                    placeholder="Tiêu đề"
+                    placeholder="Title"
                   />
                   {/* <textarea
                   placeholder="Nội dung"
@@ -183,7 +183,7 @@ const ClassCourseManagementAssignment = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-2">
                       <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-gray-50">Ngày</label>
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">Date</label>
                         <Input
                           {...register("HanNop")}
                           type="date"
@@ -192,7 +192,7 @@ const ClassCourseManagementAssignment = () => {
                         />
                       </div>
                       <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-gray-50">Giờ</label>
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">Time</label>
                         <Input
                           {...register("GioNop")}
                           type="time"
@@ -201,12 +201,12 @@ const ClassCourseManagementAssignment = () => {
                         />
                       </div>
                       <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-gray-50">Điểm</label>
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">Grade</label>
                         <Input
                           {...register("DiemToiDa")}
                           type="number"
                           variant="primary"
-                          placeholder="Điểm tối đa"
+                          placeholder="Maximum grade"
                         />
                       </div>
                     </div>
@@ -225,7 +225,7 @@ const ClassCourseManagementAssignment = () => {
                         {file ? (
                           <p className="">{file.name}</p>
                         ) : (
-                          <p>Kéo thả file vào đây hoặc nhấn để chọn</p>
+                          <p>Drag and Drop or Click</p>
                         )}
                       </div>
                       <input
@@ -248,10 +248,10 @@ const ClassCourseManagementAssignment = () => {
                         setOpenFormCreate(false);
                       }}
                       type="button"
-                      variant="outline"
-                      title="Huỷ"
+                      variant="transparent"
+                      title="Cancle"
                     />
-                    <Button type="submit" variant="primary" title="Tạo" />
+                    <Button type="submit" variant="primary" title="Create" />
                   </div>
                 </form>
               )}
@@ -261,7 +261,7 @@ const ClassCourseManagementAssignment = () => {
           {assignmentsData.map((item) => (
             <div
               key={item.MaBaiTap}
-              className="w-full p-5 ring ring-gray-200 rounded-md relative"
+              className="w-full p-5 bg-black/3 rounded-md relative"
             >
               <h2 className="text-lg font-semibold">{item.TieuDe}</h2>
               {item.file_name && (
@@ -284,7 +284,7 @@ const ClassCourseManagementAssignment = () => {
               <div className="absolute top-5 right-5 text-sm text-gray-500 flex items-center gap-2">
                 {role === "GV" ? (
                   <p>
-                    Ngày tạo: {new Date(item.NgayTao).toLocaleDateString()}{" "}
+                    Created at: {new Date(item.NgayTao).toLocaleDateString()}{" "}
                     {item.NgayTao && " - "}{" "}
                     {new Date(item.NgayTao).toLocaleTimeString()}
                   </p>
@@ -292,9 +292,9 @@ const ClassCourseManagementAssignment = () => {
                   <p>
                     {item.TrangThai === "Đã nộp" || item.TrangThai === "Nộp trễ"
                       ? item.TrangThai
-                      : `Hạn nộp:${" "}
+                      : `Dealine:${" "}
                     ${new Date(
-                      item.HanNop ?? "Không có hạn nộp"
+                      item.HanNop ?? "No dealine"
                     ).toLocaleDateString("vi-VN")}${" "}
                     ${item.HanNop && " - "} ${item.GioNop}`}
                   </p>
@@ -314,8 +314,8 @@ const ClassCourseManagementAssignment = () => {
               </div>
               <div className="absolute bottom-5 right-5 text-sm text-gray-500">
                 {role === "GV"
-                  ? `Điểm tối đa: ${item.DiemToiDa}`
-                  : `Điểm của bạn: ${item.DiemSo ?? "Chưa chấm điểm"}`}
+                  ? `Maximum grade: ${item.DiemToiDa}`
+                  : `Grade: ${item.DiemSo ?? "Chưa chấm điểm"}`}
               </div>
               <div className="mt-7">
                 <Link
@@ -324,9 +324,9 @@ const ClassCourseManagementAssignment = () => {
                       ? `/classcourse/${id}/submissions/${item.MaBaiTap}`
                       : `/classcourse/${id}/guidance/${item.MaBaiTap}`
                   }`}
-                  className="p-2 ring ring-gray-200 rounded-md"
+                  className="p-2 bg-yellow-brand rounded-md"
                 >
-                  {role === "GV" ? "Xem danh sách nộp bài" : "Xem hướng dẫn"}
+                  {role === "GV" ? "View submission" : "View guide"}
                 </Link>
               </div>
             </div>

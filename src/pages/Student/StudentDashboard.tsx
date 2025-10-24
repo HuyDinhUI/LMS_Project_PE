@@ -28,7 +28,7 @@ import {
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import bg_light from "@/assets/v904-nunny-012.jpg";
+
 import type { StudentEducation, StudentType } from "@/types/StudentType";
 import { Process } from "@/components/ui/process";
 
@@ -105,46 +105,7 @@ const StudentDashboard = () => {
 
   return (
     <div className="py-5 px-10 w-full h-full bg-white dark:bg-card overflow-auto">
-      <div className="flex items-center mt-3 gap-2 px-2">
-        <div className="h-70 w-70 rounded-md">
-          <img className="h-full rounded-md" src={bg_light}></img>
-        </div>
-        <div className="flex-1 flex-col gap-2 ms-10">
-          <h1 className="text-2xl mb-5 font-bold uppercase text-green-600">Thông tin học vấn</h1>
-          <div className="flex gap-20 text-md">
-            <div className="flex flex-col gap-2">
-              <p>
-                MSSV: <strong>{dataStudent?.MaSV}</strong>
-              </p>
-              <p>
-                Họ tên: <strong>{dataStudent?.hoten}</strong>
-              </p>
-              <p>
-                Giới tính: <strong>{dataStudent?.gioitinh}</strong>
-              </p>
-              <p>
-                Ngày sinh: <strong>{new Date(dataStudent?.ngaysinh ?? '').toLocaleDateString("vi-VN")}</strong>
-              </p>
-              <p>Nơi sinh: </p>
-            </div>
-            <div className="flex flex-col gap-2">
-              <p>
-                Khoa: <strong>{dataStudent?.ten_khoa}</strong>
-              </p>
-              <p>Hệ đào tạo:</p>
-              <p>
-                Ngành: <strong>{dataStudent?.ten_nganh}</strong>
-              </p>
-              <p>
-                Lớp: <strong>{dataStudent?.MaLopHC}</strong>
-              </p>
-              <p>
-                Ngày nhập học: <strong></strong>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      
       <div className="mt-5 px-2">
         <div className="grid grid-cols-4 gap-4 mt-3">
           <div className="shadow-sm ring ring-gray-200 p-4 flex justify-between items-center rounded-md gap-5 hover:scale-105 transition-transform">

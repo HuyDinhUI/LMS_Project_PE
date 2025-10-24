@@ -274,7 +274,7 @@ const ClassCourseManagementGrades = () => {
                   <td className="border px-4 py-2">
                     {parseFloat(row.DiemSo) !== null ? parseFloat(row.DiemSo) : "-"}
                   </td>
-                  <td className="border px-4 py-2">{row.TrangThai}</td>
+                  <td className="border px-4 py-2">{row.TrangThaiNopBai}</td>
                 </tr>
               ))}
               <tr className="border-t font-semibold">

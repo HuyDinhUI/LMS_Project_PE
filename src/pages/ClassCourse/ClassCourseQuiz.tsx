@@ -78,7 +78,7 @@ const Quiz = () => {
     }
   }, []);
   return (
-    <div className="flex-1 overflow-auto max-h-160 p-2">
+    <div className="flex-1 overflow-auto max-h-165 p-2">
       <div className="flex flex-col justify-center px-20">
         <div className="flex items-center justify-end gap-2 mb-10">
           {role === "GV" && (

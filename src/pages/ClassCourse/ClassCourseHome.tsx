@@ -45,9 +45,9 @@ const ClassCourseManagementHome = () => {
 
   const getItemActionContent = (MaNoiDung: string) => {
     return [
-      { label: "Sửa", icon: <Pen size={16} /> },
+      { label: "Edit", icon: <Pen size={16} /> },
       {
-        label: "Xoá",
+        label: "Delete",
         icon: <Trash size={16} />,
         dialog: AlertDialogDelete,
         onClick: () => handleDeleteContent(MaNoiDung),
@@ -137,19 +137,19 @@ const ClassCourseManagementHome = () => {
   return (
     <div className="flex-1 overflow-auto max-h-165 p-2">
       {/* cover */}
-      <div className="w-full h-40 p-3 flex flex-col justify-end rounded-md bg-[url('https://www.gstatic.com/classroom/themes/img_graduation.jpg')] bg-cover">
-        <h1 className="text-white text-3xl">{classCourseData?.ten_lop}</h1>
+      <div className="w-full h-40 p-3 flex flex-col justify-end rounded-md bg-[url('https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149008068.jpg?uid=R40278496&ga=GA1.1.12754122.1753975824&semt=ais_hybrid&w=740&q=80')] bg-cover">
+        <h1 className="text-3xl">{classCourseData?.ten_lop}</h1>
       </div>
       {/* content */}
       <div className="mt-5">
         {/* form tạo content */}
-        <div className={`p-4 shadow-md rounded-md ring ring-gray-200 overflow-scroll transition-all duration-300 relative ${opentFormCreate ? "h-100" : "h-13"}`}>
+        <div className={`p-4 rounded-md bg-black/3 overflow-scroll transition-all duration-300 relative ${opentFormCreate ? "h-100" : "h-15"}`}>
           <h2
             onClick={() => setOpenFormCreate(!opentFormCreate)}
             className="cursor-pointer flex gap-2"
           >
             <Plus/>
-            Thêm nội dung mới
+            Add content
           </h2>
 
           {opentFormCreate && <form
@@ -157,7 +157,7 @@ const ClassCourseManagementHome = () => {
             className="flex flex-col gap-3 mt-10"
           >
             <Input
-              placeholder="Tiêu đề"
+              placeholder="Title"
               {...register("tieu_de", {
                 required: "Tiêu đề không được để trống",
               })}
@@ -225,9 +225,10 @@ const ClassCourseManagementHome = () => {
                   reset();
                   setOpenFormCreate(false);
                 }}
-                title="Huỷ"
+                title="Cancle"
+                variant="transparent"
               />
-              <Button type="submit" variant="primary" title="Đăng" />
+              <Button type="submit" variant="primary" title="Post" />
             </div>
           </form>}
         </div>
@@ -237,14 +238,15 @@ const ClassCourseManagementHome = () => {
           {contentData.map((c, i) => (
             <div
               key={i}
-              className="w-full p-5 ring ring-gray-200 rounded-md relative"
+              className="w-full p-5 bg-black/3 rounded-md relative"
             >
               {/* header */}
               <div className="flex gap-2">
                 <img
                   width={50}
                   height={50}
-                  className="rounded-full bg-amber-200"
+                  src="https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149008068.jpg?uid=R40278496&ga=GA1.1.12754122.1753975824&semt=ais_hybrid&w=740&q=80"
+                  className="rounded-full"
                 ></img>
                 <div>
                   <h2>{c.hoten}</h2>
@@ -268,12 +270,12 @@ const ClassCourseManagementHome = () => {
                         getFileType(c.mime_type)
                       )
                     }
-                    className="p-3 ring ring-gray-200 rounded-md"
+                    className="p-3 bg-green-brand text-white rounded-md flex gap-2"
                   >
-                    <div className="flex justify-center items-center p-5">
+                    <div className="flex items-center">
                       {get_icon[`${getFileType(c.mime_type)}`]}
                     </div>
-                    <label className="text-center w-full block">
+                    <label className="w-full block">
                       {c.original_name}
                     </label>
                   </div>

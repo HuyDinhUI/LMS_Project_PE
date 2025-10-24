@@ -132,6 +132,11 @@ body {
 }
 
 
+@theme {
+  --color-green-brand: #606c38;
+  --color-pink-brand: #edafb8;
+  --color-yellow-brand: #e9c46a;
+}
 
 
 
@@ -224,7 +229,7 @@ body {
 }
 
 .fc .fc-button{
-  background-color: oklch(0.696 0.17 162.48) !important;
+  background-color: black !important;
   border: none;
 }
 

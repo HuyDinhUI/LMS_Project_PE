@@ -29,7 +29,7 @@ type SidebarItemProps = {
 }
 
 const SidebarVariantOption = {
-  primary: "shadow-md h-[100vh]",
+  primary: "bg-[#0c0f0a] h-full",
   default: "h-[90vh]"
 
 }
@@ -50,15 +50,14 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
   
 
   return (
-    <aside className={`xl:block hidden w-70 ${SidebarVariantOption[variant]} sticky scroll-auto overflow-auto px-4 py-4 space-y-2`}>
+    <aside className={`xl:block hidden w-60 ${SidebarVariantOption[variant]} sticky scroll-auto overflow-auto px-4 py-4 space-y-2 text-white rounded-2xl`}>
       <div className="flex items-center justify-center">
-        <img width={100} src={logo}></img>
-        <h1 className="font-bold text-[10px]">Learning Management System</h1>
+        
       </div>
       {items.map((item, index) => {
         if (item.type === 'separator') {
           return item.label ? (
-            <div key={index} className="px-3 py-1 text-xs font-bold tracking-wide">
+            <div key={index} className="px-3 py-1 text-xs text-gray-300 tracking-wide">
               {item.label}
             </div>
           ) : (
@@ -73,7 +72,7 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
           <div key={item.label} className="">
             <button
               onClick={() => hasSub && toggleMenu(item.label)}
-              className={`cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-md text-sm transition ${isActive ? "bg-green-300/30 text-green-800 dark:bg-green-700/20 dark:text-green-500" : "hover:bg-gray-800/10 dark:hover:bg-white/10"
+              className={`cursor-pointer w-full flex items-center justify-between px-3 mt-5 text-sm transition ${isActive ? "ms-3 border-l text-gray-400" : ""
                 }`}
             >
               <span className="flex items-center gap-2 flex-1">
@@ -110,7 +109,7 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
                     <Link
                       key={sub.label}
                       to={sub.href!}
-                      className={`flex items-center gap-2 ps-10 px-2 py-2 text-sm rounded-md ${isSubActive ? "bg-green-300/20 text-green-500 dark:bg-green-700/20" : "hover:bg-gray-200 dark:hover:bg-white/10"
+                      className={`flex items-center gap-2 ps-10 px-2 py-2 text-sm rounded-md ${isSubActive ? "ms-3 border-l text-gray-400" : ""
                         }`}
                     >
                       {sub.icon}

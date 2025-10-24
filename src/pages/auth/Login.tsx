@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertDanger } from "@/components/ui/alert";
 import bg_dark from "@/assets/10139763.jpg"
-import bg_light from "@/assets/school-supplies-still-life-view.jpg"
+import bg_light from "@/assets/5624339.jpg"
 import logo from "@/assets/logo_lms.webp"
 
 const Login = () => {

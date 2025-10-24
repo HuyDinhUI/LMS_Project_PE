@@ -29,7 +29,7 @@ export const Calendar = ({ data }: props) => {
             bgColor = "bg-red-500 text-white";
             break;
           default:
-            bgColor = "bg-gray-200 text-black";
+            bgColor = "bg-black text-white";
         }
         return (
           <div
@@ -82,7 +82,7 @@ export const CalendarToday = ({ data }: props) => {
             bgColor = "bg-red-500 text-white";
             break;
           default:
-            bgColor = "bg-gray-200 text-black";
+            bgColor = "bg-black text-white";
         }
         return (
           <div

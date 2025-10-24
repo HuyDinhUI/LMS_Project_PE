@@ -9,6 +9,7 @@ import {
   LogOut,
   Settings,
   User,
+  CircleUser,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
@@ -20,12 +21,12 @@ import API from "@/utils/axios";
 import { toast } from "react-toastify";
 import { AlertDialogLogout } from "@/mock/AlertDialog-MockData";
 import { DropdownMenu } from "../ui/dropdown";
-import logo from "@/assets/logo_lms.webp"
 
 export const Header = () => {
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") ?? "light"
   );
+  const role = localStorage.getItem("role");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,8 +39,13 @@ export const Header = () => {
   }, [theme]);
 
   const AccountItems: MenuItem[] = [
-    
-    { label: "Settings", icon: <Settings size={16} /> },
+    {
+      label: "Information",
+      icon: <CircleUser size={16} />,
+      onClick: () =>
+        navigate(`/${role === "GV" ? "teacher" : "student"}/information`),
+    },
+    { label: "Setting", icon: <Settings size={16} /> },
     { label: "Help", icon: <HelpCircle size={16} /> },
     { separator: true },
     {
@@ -65,10 +71,10 @@ export const Header = () => {
   return (
     <div className="flex px-3 py-2 items-center justify-between">
       <div className="w-[20%] ms-4">
-        <Menu />
+        
       </div>
 
-      <div className="w-[25%] flex justify-end items-center">
+      <div className="w-[25%] flex justify-end items-center gap-2">
         {theme === "light" ? (
           <Button
             variant="icon"
@@ -85,12 +91,13 @@ export const Header = () => {
           />
         )}
         <Button variant="icon" size="ic" icon={<Bell size={20} />} />
-        <Button variant="icon" size="ic" icon={<HelpCircle size={20} />} />
         <DropdownMenu
           label="Account"
           side="bottom"
           align="end"
-          trigger={<Button variant="icon" size="ic" icon={<User size={20}/>}/>}
+          trigger={
+            <Button variant="icon" size="ic" icon={<User size={20} />} />
+          }
           items={AccountItems}
           size="md"
         />

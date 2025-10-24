@@ -29,41 +29,41 @@ const ClassLayout = ({ children }: Props) => {
   const location = useLocation();
   const navbarClassItems = [
     {
-      title: "Trang chủ",
+      title: "Home",
       href: `/classcourse/${id}`,
     },
     {
-      title: "Bài tập",
+      title: "Assignment",
       href: `/classcourse/${id}/assignments`,
     },
     {
-      title: "Trắc nghiệm",
+      title: "Quiz",
       href: `/classcourse/${id}/quiz`,
     },
     {
-      title: "Điểm",
+      title: "Grade",
       href: `/classcourse/${id}/grades`,
     },
     {
-      title: "Thành viên",
-      href: `/classcourse/${id}/users`,
+      title: "Member",
+      href: `/classcourse/${id}/members`,
     },
   ];
   return (
-    <div className="h-full dark:bg-background">
-      <div className="flex h-[100vh]">
+    <div className="h-full dark:bg-background bg-amber-50 p-5">
+      <div className="flex h-full items-center">
         <Sidebar items={getSidebarItems()} />
-        <div className="dark:bg-background flex-1 h-[100vh]">
+        <div className="dark:bg-background flex-1 h-full overflow-hidden">
           <Header />
-          <div className="flex flex-col px-3 gap-5">
-            <div className="flex gap-2 border-b border-gray-200">
+          <div className="flex flex-col px-5 gap-5">
+            <div className="flex gap-2">
               {navbarClassItems.map((c, i) => (
                 <Link
                   key={i}
                   to={c.href}
-                  className={`p-3 hover:bg-gray-100 ${
+                  className={`p-2 rounded-xl ${
                     location.pathname === c.href
-                      ? "border-b-2 border-green-600"
+                      ? "bg-pink-brand text-white"
                       : ""
                   }`}
                 >

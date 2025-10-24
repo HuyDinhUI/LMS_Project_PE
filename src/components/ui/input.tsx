@@ -61,7 +61,7 @@ type InputProps = {
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 const variantClass: Record<InputVariant, string> = {
-  default: "ring ring-gray-200 dark:ring-gray-500 rounded-sm",
+  default: "ring ring-gray-400 dark:ring-gray-500 rounded-sm",
   primary: "",
   danger: "",
   borderBottom: "rounded-none border-b border-gray-300 focus-within:border-green-500",
@@ -84,7 +84,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const base = "w-full";
+    const base = "w-full outline-none";
     const finalClass = `${base} ${variantClass[variant]} ${sizeClass[sizeOpt]} ${className}`;
 
     return (

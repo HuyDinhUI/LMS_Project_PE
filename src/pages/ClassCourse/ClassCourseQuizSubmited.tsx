@@ -29,7 +29,7 @@ const ClassCourseQuizSubmited = () => {
         {submissions.map((item) => (
           <div
             key={item.MaSV}
-            className="border border-gray-300 rounded-md p-4 mb-4 relative h-30"
+            className="border border-gray-300 rounded-md p-4 mb-4 relative"
           >
             <div className="font-semibold text-lg mb-2">
               {item.hoten} - {item.MaSV}
@@ -69,7 +69,8 @@ const ClassCourseQuizSubmited = () => {
                 </div>
               </div>
             )}
-            <Button title="Xem chi tiết" className="rounded-md"/>
+            {(item.TrangThaiNopBai === "Đã nộp" ||
+              item.TrangThaiNopBai === "Nộp trễ") && (<Button title="Xem chi tiết" className="rounded-md"/>)}
           </div>
         ))}
       </div>

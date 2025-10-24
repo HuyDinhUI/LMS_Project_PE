@@ -1,13 +1,15 @@
-import {Header} from "@/components/layout/header";
+import { Header } from "@/components/layout/header";
 import { Sidebar, type SidebarItem } from "@/components/layout/side-bar";
-import { SidebarAdminData, SidebarStudentData, SidebarTeacherData } from "@/mock/sidebar-data";
+import {
+  SidebarAdminData,
+  SidebarStudentData,
+  SidebarTeacherData,
+} from "@/mock/sidebar-data";
 import type { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
 };
-
-
 
 const MainLayout = ({ children }: Props) => {
   const role = localStorage.getItem("role");
@@ -20,15 +22,15 @@ const MainLayout = ({ children }: Props) => {
     } else {
       return SidebarAdminData;
     }
-  }
+  };
   return (
-    <div className="h-full dark:bg-background">
-      <div className="flex max-h-[100vh]">
+    <div className="h-full dark:bg-background bg-[#fefae0] p-5">
+      <div className="flex h-full items-center">
         <Sidebar items={getSidebarItems()} />
-        <div className="dark:bg-background flex-1 h-[90vh]">
-          <Header/>
+        <div className="dark:bg-background flex-1 h-full overflow-hidden">
+          <Header />
           {children}
-          </div>
+        </div>
       </div>
     </div>
   );

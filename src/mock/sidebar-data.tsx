@@ -98,30 +98,25 @@ export const SidebarAdminData: SidebarItem[] = [
 ];
 
 export const SidebarTeacherData: SidebarItem[] = [
-  { type: "item", label: "Trang chủ", icon: <Home size={18} />, href: "/" },
+  { type: "separator", label: "General" },
+  { type: "item", label: "Home", icon: <Home size={18} />, href: "/" },
   {
     type: "item",
     label: "Dashboard",
     icon: <LayoutDashboard size={18} />,
     href: `/teacher/dashboard`,
   },
-  { type: "separator" },
   {
     type: "item",
-    label: "Danh sách lớp",
+    label: "Course",
+    href: "/classcourse/list",
     icon: <Presentation size={18}/>
   },
   {
     type: "item",
-    label: "Lịch dạy",
+    label: "Schedule",
     href: "/teacher/schedule",
     icon: <Calendar size={18}/>
-  },
-  {
-    type: "item",
-    label: "Cập nhật hồ sơ",
-    href: "/teacher/information/update",
-    icon: <FileUser size={18}/>
   },
   {
     type: "item",
@@ -143,7 +138,8 @@ export const SidebarStudentData: SidebarItem[] = [
   {
     type: "item",
     label: "Danh sách lớp học",
-    icon: <BookUser size={18}/>
+    href: "/classcourse/list",
+    icon: <Presentation size={18}/>
   },
   {
     type: "item",
@@ -156,12 +152,6 @@ export const SidebarStudentData: SidebarItem[] = [
     label: "Đăng ký học phần",
     href: "/student/courses/enroll",
     icon: <Library size={18}/>
-  },
-  {
-    type: "item",
-    label: "Cập nhật hồ sơ",
-    href: "/student/information/update",
-    icon: <BookUser size={18}/>
   },
   {
     type: "item",
