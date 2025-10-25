@@ -49,13 +49,13 @@ const ClassCourseAssignmentSubmited = () => {
   }, []);
 
   return (
-    <div className="flex-1 overflow-auto max-h-170 p-2">
+    <div className="flex-1 overflow-auto max-h-170">
       <div className="flex flex-col justify-center px-20">
         {/* Danh sách nộp bài */}
         {submissions.map((item) => (
           <div
             key={item.MaSV}
-            className="border border-gray-300 rounded-md p-4 mb-4 relative"
+            className="bg-black/5 rounded-xl p-4 mb-4 relative"
           >
             <div className="font-semibold text-lg mb-2">
               {item.hoten} - {item.MaSV}
@@ -68,7 +68,7 @@ const ClassCourseAssignmentSubmited = () => {
                     : "text-red-600 bg-rose-200 ring ring-rose-500 px-2 text-sm rounded-md"
                 }`}
               >
-                {item.TrangThai}
+                {item.TrangThai === 'Đã nộp' ? 'Submited' : 'Unsubmit'}
               </span>
               {(item.TrangThai === "Đã nộp" || item.TrangThai === "Nộp trễ") && <span
                 className={`${
@@ -124,7 +124,7 @@ const ClassCourseAssignmentSubmited = () => {
 
                 <Button
                   onClick={() => setSelected(item.MaNopBai)}
-                  title="Chấm điểm"
+                  title="Scoring"
                   variant="primary"
                   className="rounded-md"
                 />
@@ -141,24 +141,24 @@ const ClassCourseAssignmentSubmited = () => {
                         : "animate-slideOutRight"
                     } `}
                   >
-                    <h2>Chấm điểm cho {item.hoten}</h2>
-                    <p>Trạng thái: {item.TrangThai}</p>
+                    <h2>Scoring for {item.hoten}</h2>
+                    <p>Status: {item.TrangThai}</p>
                     <Input
                       onChange={(e) => setGrade(parseFloat(e.target.value))}
                       defaultValue={item.DiemSo ?? ""}
                       variant="default"
                       className="outline-none"
                       sizeOpt="md"
-                      placeholder="Điểm"
+                      placeholder="Grade"
                       type="number"
                     />
                     <textarea
-                      className="p-2 ring ring-gray-200 rounded-md"
-                      placeholder="Nhận xét"
+                      className="p-2 ring ring-gray-500 rounded-xl"
+                      placeholder="Comment"
                     ></textarea>
                     <div className="flex gap-2">
-                      <Button title="Lưu" variant="dark" onClick={() => handleScoring(item.MaSV,grade)} />
-                      <Button onClick={() => setSelected("")} title="Huỷ" />
+                      <Button title="Save" variant="dark" onClick={() => handleScoring(item.MaSV,grade)} />
+                      <Button onClick={() => setSelected("")} title="Cancle" />
                     </div>
                   </div>
                 </div>

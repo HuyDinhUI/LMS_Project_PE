@@ -53,13 +53,13 @@ const Login = () => {
     <div 
     className="h-[100vh] shadow-lg flex items-center justify-center bg-cover"
     style={theme === 'dark' ? {backgroundImage:`url("${bg_dark}")`}:{backgroundImage:`url("${bg_light}")`}}>
-      <div className="w-100 min-h-[100px] rounded-xl bg-white dark:bg-transparent dark:backdrop-blur-md dark:ring dark:ring-gray-500 shadow-md flex overflow-hidden">
+      <div className="w-100 min-h-[100px] rounded-xl bg-white/25 backdrop-blur-2xl dark:bg-transparent dark:backdrop-blur-md dark:ring dark:ring-gray-500 shadow-md flex overflow-hidden">
         <form className="w-full p-5" onSubmit={handleSubmit(submitLogin)}>
-          <div className="text-center mb-5">
-            <div className="flex justify-center">
-              <img width={100} src={logo}></img>
+          <div className="text-center mb-5 mt-4">
+            <div className="flex flex-col justify-center">
+              <h1 className="font-brand-logo text-4xl font-bold">henry</h1>
+              <p>Learning machine system</p>
             </div>
-            <p className="font-light m-0">Learning Management System</p>
           </div>
           {error && <AlertDanger title={error} />}
           <div className="mt-10">
@@ -79,7 +79,7 @@ const Login = () => {
               <Link className="absolute top-0 right-0" to={'/resetpassword'}>Quên mật khẩu ?</Link>
             </div>
           </div>
-          <Button type="submit" className="w-full justify-center rounded-sm" variant="primary" size="md" title="Login" />
+          <Button type="submit" className="w-full justify-center rounded-sm bg-pink-brand hover:bg-pink-brand/80" size="md" title="Login" />
           
         </form>
         

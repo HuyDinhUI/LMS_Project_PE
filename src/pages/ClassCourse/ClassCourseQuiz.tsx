@@ -30,7 +30,7 @@ const Quiz = () => {
   const role = localStorage.getItem("role");
   const [dataQuiz, setDataQuiz] = useState<QuizType[]>();
   const [openFormCreate, setOpenFormCreate] = useState<boolean>(false);
-  const navigator = useNavigate()
+  const navigator = useNavigate();
 
   const getQuiz = async () => {
     try {
@@ -56,15 +56,15 @@ const Quiz = () => {
 
   const getItemActionQuiz = (MaTN: string, status: string) => {
     return [
-      { label: "Sửa", icon: <Pen size={16} /> },
+      { label: "Edit", icon: <Pen size={16} /> },
       {
-        label: "Xoá",
+        label: "Delete",
         icon: <Trash size={16} />,
         dialog: AlertDialogDelete,
         onClick: () => handleDeleteQuiz(MaTN),
       },
       {
-        label: `${status === "Mo" ? "Đóng" : "Mở"}`,
+        label: `${status === "Mo" ? "Close" : "Open"}`,
         icon: status === "Mo" ? <Lock size={16} /> : <LockOpen size={16} />,
       },
     ];
@@ -80,22 +80,18 @@ const Quiz = () => {
   return (
     <div className="flex-1 overflow-auto max-h-165 p-2">
       <div className="flex flex-col justify-center px-20">
-        <div className="flex items-center justify-end gap-2 mb-10">
+        <div className="flex items-center gap-2 mb-10">
           {role === "GV" && (
             <Button
               onClick={() => setOpenFormCreate(!openFormCreate)}
-              title={openFormCreate ? "Quay lại" : "Quiz"}
+              title={openFormCreate ? "Return" : "Quiz"}
               icon={openFormCreate ? <ChevronLeft /> : <Plus />}
-              variant={openFormCreate ? "default" : "primary"}
+              variant={openFormCreate ? "transparent" : "primary"}
             />
           )}
         </div>
 
-        {openFormCreate && (
-          
-            <QuizCreate handleGetQuiz={getQuiz} />
-          
-        )}
+        {openFormCreate && <QuizCreate handleGetQuiz={getQuiz} />}
 
         {!openFormCreate && (
           <div className="grid grid-cols-3 gap-3">
@@ -103,7 +99,7 @@ const Quiz = () => {
             {dataQuiz?.map((q) => (
               <div
                 key={q.MaTN}
-                className="w-full h-55 p-5 ring ring-gray-200 rounded-md relative"
+                className="w-full h-55 p-5 bg-[url('https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149017540.jpg?uid=R40278496&ga=GA1.1.12754122.1753975824&semt=ais_hybrid&w=740&q=80')] bg-cover rounded-xl relative"
               >
                 <h2 className="text-lg font-semibold">{q.TieuDe}</h2>
                 <p className="h-5 overflow-ellipsis">{q.MoTa}</p>
@@ -149,22 +145,26 @@ const Quiz = () => {
                 {role === "SV" && q.TrangThai === "Mo" && (
                   <Button
                     variant="dark"
-                    title={q.TrangThai === 'Mo' ? 'Làm bài' : 'Chưa mở'}
+                    title={q.TrangThai === "Mo" ? "Play" : "Close"}
                     icon={<Play size={18} />}
                     className="p-2 bg-black/90 cursor-pointer hover:bg-black/80 text-white rounded-md flex items-center gap-2 mt-5"
-                    onClick={() => navigator(`/classcourse/${id}/quiz/${q.MaTN}/play`)}
-                    disabled = {q.TrangThaiNopBai && q.SoLanChoPhep > 0 ? true : false}
-                  >
-                    
-                  </Button>
+                    onClick={() =>
+                      navigator(`/classcourse/${id}/quiz/${q.MaTN}/play`)
+                    }
+                    disabled={
+                      q.TrangThaiNopBai && q.SoLanChoPhep > 0 ? true : false
+                    }
+                  ></Button>
                 )}
                 {role === "GV" && (
-                  <Button variant="outline"
-                  title="Xem danh sách nộp bài"
-                  className="p-2 cursor-pointer rounded-md flex items-center gap-2 mt-5"
-                  onClick={() => navigator(`/classcourse/${id}/quiz/${q.MaTN}/submissions`)}
+                  <Button
+                    variant="transparent"
+                    title="Xem danh sách nộp bài"
+                    className="p-2 cursor-pointer backdrop-blur-md rounded-md flex items-center gap-2 mt-5"
+                    onClick={() =>
+                      navigator(`/classcourse/${id}/quiz/${q.MaTN}/submissions`)
+                    }
                   />
-                  
                 )}
                 <div
                   className={`w-20 text-center absolute bottom-3 right-5 ${
@@ -173,10 +173,15 @@ const Quiz = () => {
                       : "bg-rose-100 ring ring-rose-400 text-rose-600 text-sm px-2 rounded-md"
                   }`}
                 >
-                  {role === "GV" && <p>{q.TrangThai === "Mo" ? "Đang mở" : "Chưa mở"}</p>}
-                  {role === "SV" && <p>{q.TrangThaiNopBai}</p>}
+                  {role === "GV" && (
+                    <p>{q.TrangThai === "Mo" ? "Openning" : "Close"}</p>
+                  )}
+                  {role === "SV" && (
+                    <p>
+                      {q.TrangThaiNopBai === "Đã nộp" ? "Submited" : "Unsubmit"}
+                    </p>
+                  )}
                 </div>
-                
               </div>
             ))}
           </div>
@@ -263,7 +268,7 @@ function QuizCreate({ handleGetQuiz }: props) {
   const [tieuDe, setTieuDe] = useState("");
   const [moTa, setMoTa] = useState("");
   const [thoiGian, setThoiGian] = useState<number>();
-  const [type,setType] = useState<string>()
+  const [type, setType] = useState<string>();
   const [questions, dispatch] = useReducer(quizReducer, [
     {
       id: uuidv4(),
@@ -306,41 +311,46 @@ function QuizCreate({ handleGetQuiz }: props) {
   };
 
   return (
-    <div className="px-30">
-      <h1 className="text-2xl font-semibold mb-4">Tạo Quiz mới</h1>
+    <div className="px-30 pb-10">
+      <h1 className="text-2xl font-semibold mb-4">Create Quiz</h1>
 
       <Input
-        placeholder="Tiêu đề quiz"
+        placeholder="Title"
         value={tieuDe}
         onChange={(e) => setTieuDe(e.target.value)}
         className="mb-3"
       />
       <textarea
-        placeholder="Mô tả"
+        placeholder="Description"
         value={moTa}
         onChange={(e) => setMoTa(e.target.value)}
-        className="w-full border rounded-md p-2 mb-3"
+        className="w-full border border-gray-500 rounded-md p-2 mb-3"
       />
       <div className="grid grid-cols-2 gap-2">
         <Input
           type="number"
-          placeholder="Thời gian (phút)"
+          placeholder="Time (minute)"
           value={thoiGian}
           onChange={(e) => setThoiGian(Number(e.target.value))}
           className="mb-5"
         />
-        <select onChange={(e) => setType(String(e.target.value))} className="p-2 h-10 ring ring-gray-200 rounded-md">
-          <option value="" disabled selected>Loại trắc nghiệm</option>
-          <option value="test">Bài kiểm tra</option>
-          <option value="review">Ôn tập</option>
+        <select
+          onChange={(e) => setType(String(e.target.value))}
+          className="p-2 h-10 ring ring-gray-500 rounded-md"
+        >
+          <option value="" disabled selected>
+            Type quiz
+          </option>
+          <option value="test">Test</option>
+          <option value="review">Review</option>
         </select>
       </div>
 
       {questions.map((q: any, qi: number) => (
-        <div key={q.id} className="p-4 border rounded-lg mb-4">
-          <label className="font-semibold">Câu {qi + 1}:</label>
+        <div key={q.id} className="p-4 bg-black/3 rounded-xl mb-4">
+          <label className="font-semibold">Question {qi + 1}:</label>
           <Input
-            placeholder="Nội dung câu hỏi"
+            placeholder="Content"
             value={q.NoiDung}
             onChange={(e) =>
               dispatch({
@@ -354,7 +364,7 @@ function QuizCreate({ handleGetQuiz }: props) {
           />
           <Input
             type="number"
-            placeholder="Điểm"
+            placeholder="Point"
             value={q.Diem}
             onChange={(e) =>
               dispatch({
@@ -367,7 +377,7 @@ function QuizCreate({ handleGetQuiz }: props) {
             className="mb-3"
           />
 
-          <h4 className="font-medium mt-2 mb-2">Đáp án:</h4>
+          <h4 className="font-medium mt-2 mb-2">Answer:</h4>
           {q.DapAn.map((a: any, i: number) => (
             <div key={a.id} className="flex items-center gap-2 mb-2">
               <CheckboxDemo
@@ -381,7 +391,7 @@ function QuizCreate({ handleGetQuiz }: props) {
                 }
               />
               <Input
-                placeholder={`Đáp án ${i + 1}`}
+                placeholder={`Answer ${i + 1}`}
                 value={a.NoiDung}
                 onChange={(e) =>
                   dispatch({
@@ -398,25 +408,24 @@ function QuizCreate({ handleGetQuiz }: props) {
           ))}
 
           <Button
-            title="Thêm đáp án"
+            title="Add answer"
             icon={<Plus size={18} />}
             type="button"
-            variant="dark"
             onClick={() => dispatch({ type: "ADD_ANSWER", qid: q.id })}
-            className="mt-3"
+            className="mt-3 bg-pink-brand text-white hover:bg-pink-brand/80"
           ></Button>
         </div>
       ))}
 
       <div className="flex gap-3 mt-5">
         <Button
-          title="Thêm câu hỏi"
+          title="Add question"
           icon={<Plus size={18} />}
           onClick={() => dispatch({ type: "ADD_QUESTION" })}
+          className="bg-green-brand text-white hover:bg-green-brand/80"
         ></Button>
         <Button
-          title="Tạo quiz"
-          icon={<Plus size={18} />}
+          title="Create"
           onClick={handleSubmit}
           variant="primary"
         ></Button>

@@ -146,15 +146,15 @@ const ClassCourseManagementAssignment = () => {
   };
 
   return (
-    <div className="flex-1 overflow-auto max-h-165 p-2">
+    <div className="flex-1 overflow-auto max-h-165">
       {/* content */}
-      <div className="flex flex-col justify-center px-20">
-        <div className="flex flex-col gap-3">
+      <div className="flex flex-col justify-center px-20 w-full">
+        <div className="flex flex-col gap-3 w-full">
           {/* Form tạo */}
           {role === "GV" && (
             <div
-              className={`p-4 col-span-2 bg-black/3 rounded-md overflow-scroll relative ${
-                opentFormCreate ? "h-130" : "h-15"
+              className={`p-4 col-span-2 bg-black/3 rounded-xl overflow-scroll relative ${
+                opentFormCreate ? "h-130" : "h-13"
               } transition-all duration-300 ease-in-out`}
             >
               <div
@@ -261,7 +261,7 @@ const ClassCourseManagementAssignment = () => {
           {assignmentsData.map((item) => (
             <div
               key={item.MaBaiTap}
-              className="w-full p-5 bg-black/3 rounded-md relative"
+              className="w-full p-5 bg-black/3 rounded-xl relative"
             >
               <h2 className="text-lg font-semibold">{item.TieuDe}</h2>
               {item.file_name && (

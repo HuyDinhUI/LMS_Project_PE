@@ -21,6 +21,7 @@ import API from "@/utils/axios";
 import { toast } from "react-toastify";
 import { AlertDialogLogout } from "@/mock/AlertDialog-MockData";
 import { DropdownMenu } from "../ui/dropdown";
+import { SearchForm } from "../ui/search-form";
 
 export const Header = () => {
   const [theme, setTheme] = useState<string>(
@@ -68,10 +69,14 @@ export const Header = () => {
     }
   };
 
+  const handleSearch = () => {
+
+  }
+
   return (
     <div className="flex px-3 py-2 items-center justify-between">
-      <div className="w-[20%] ms-4">
-        
+      <div className="w-[40%] ms-4">
+        <SearchForm handleSearch={handleSearch}/>
       </div>
 
       <div className="w-[25%] flex justify-end items-center gap-2">
@@ -99,7 +104,7 @@ export const Header = () => {
             <Button variant="icon" size="ic" icon={<User size={20} />} />
           }
           items={AccountItems}
-          size="md"
+          size="sm"
         />
       </div>
     </div>

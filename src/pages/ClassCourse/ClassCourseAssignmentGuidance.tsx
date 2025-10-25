@@ -114,14 +114,14 @@ const ClassCourseAssignmentGuidance = () => {
             <p className="text-gray-500 text-sm">
               {new Date(assignmentsData?.NgayTao ?? "").toLocaleDateString("vi-VN")}{" "}
             </p>
-            <p>{assignmentsData?.DiemToiDa} điểm</p>
+            <p>{assignmentsData?.DiemToiDa} Point</p>
           </div>
           <div className="pt-5">
             <div className="mb-5">
               <div dangerouslySetInnerHTML={{ __html: assignmentsData?.NoiDung ?? ''}}></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="flex flex-col items-center justify-center gap-2 p-3 ring ring-gray-200 rounded-md">
+              <div className="flex flex-col items-center justify-center gap-2 p-3 bg-black/5 rounded-md">
                 <File size={20} />
                 <a
                   href={`http://localhost:4180/contents/${assignmentsData?.file_name}`}
@@ -135,12 +135,12 @@ const ClassCourseAssignmentGuidance = () => {
         </div>
         {/* Upload */}
         <div className="col-span-2 flex justify-center items-center">
-          <div className="w-80 p-5 ring ring-gray-200 rounded-md">
+          <div className="w-80 p-5 bg-black/3 rounded-md">
             {!dataSubmission ? (
               <div className="flex flex-col gap-3">
-                <h2 className="text-lg font-medium">Nộp bài tập</h2>
+                <h2 className="text-lg font-medium">Submission</h2>
                 <p className="text-sm">
-                  Nộp bài tập trễ sẽ bị trừ điểm theo quy định của giảng viên
+                  Points will be deducted for late assignment submission according to the instructor's regulations
                 </p>
                 <div>
                   <div
@@ -157,7 +157,7 @@ const ClassCourseAssignmentGuidance = () => {
                     {file ? (
                       <p className="">{file.name}</p>
                     ) : (
-                      <p>Kéo thả file vào đây hoặc nhấn để chọn</p>
+                      <p>Drag and Drop or Click</p>
                     )}
                   </div>
                   <input
@@ -178,12 +178,11 @@ const ClassCourseAssignmentGuidance = () => {
               </div>
             ) : (
               <div className="flex flex-col gap-3">
-                <h2 className="text-lg font-medium">Bài đã nộp</h2>
+                <h2 className="text-lg font-medium">Submited</h2>
                 <p className="text-sm">
-                  Bạn đã nộp bài tập này. Nếu muốn thay đổi, vui lòng liên hệ
-                  giảng viên.
+                  You have submitted this assignment. If you want to change, please contact your instructor.
                 </p>
-                <div className="flex flex-col items-center justify-center gap-2 p-3 ring ring-gray-200 rounded-md">
+                <div className="flex flex-col items-center justify-center gap-2 p-3 bg-green-brand text-white rounded-md">
                   <File size={20} />
                   <a
                     href={`http://localhost:4180/contents/${dataSubmission?.file_name}`}
@@ -193,7 +192,7 @@ const ClassCourseAssignmentGuidance = () => {
                   </a>
                 </div>
                 <p className="text-sm text-gray-500">
-                  Nộp vào lúc:{" "}
+                  Submit at:{" "}
                   {new Date(
                     dataSubmission?.thoigian_nop ?? ""
                   ).toLocaleString("vi-VN")}

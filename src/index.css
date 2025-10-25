@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+
+
 @custom-variant dark (&:is(.dark *));
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -136,6 +138,10 @@ body {
   --color-green-brand: #606c38;
   --color-pink-brand: #edafb8;
   --color-yellow-brand: #e9c46a;
+  --color-green-dark-brand: #283618;
+  --color-orange-brand: #f4a261;
+
+  --font-brand-logo: 'Gluten', sans-serif;
 }
 
 

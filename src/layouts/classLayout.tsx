@@ -55,15 +55,15 @@ const ClassLayout = ({ children }: Props) => {
         <Sidebar items={getSidebarItems()} />
         <div className="dark:bg-background flex-1 h-full overflow-hidden">
           <Header />
-          <div className="flex flex-col px-5 gap-5">
-            <div className="flex gap-2">
+          <div className="flex px-5 gap-5 mt-5">
+            <div className="flex flex-col gap-5">
               {navbarClassItems.map((c, i) => (
                 <Link
                   key={i}
                   to={c.href}
-                  className={`p-2 rounded-xl ${
+                  className={`px-2 ${
                     location.pathname === c.href
-                      ? "bg-pink-brand text-white"
+                      ? "border-l border-black text-black/60 ms-2"
                       : ""
                   }`}
                 >
@@ -71,7 +71,7 @@ const ClassLayout = ({ children }: Props) => {
                 </Link>
               ))}
             </div>
-            <div className="max-h-165 overflow-auto">{children}</div>
+            <div className="max-h-165 overflow-auto flex-1">{children}</div>
           </div>
         </div>
       </div>

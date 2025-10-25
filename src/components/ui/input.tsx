@@ -25,9 +25,9 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
   return (
     <div
       ref={ref}
-      className="flex items-center ring ring-gray-400 flex-1 rounded-sm relative"
+      className="flex items-center flex-1 rounded-sm relative gap-2"
     >
-      <div className="p-2">
+      <div className="p-2 bg-pink-brand rounded-full">
         <Search size={15} />
       </div>
       <input
@@ -37,7 +37,7 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
           handleSearch(e.target.value);
         }}
         onFocus={() => setOnSearch(true)}
-        className="outline-none w-full"
+        className="outline-none w-full ring ring-gray-400 rounded-full px-2 py-1"
         placeholder="Search"
       ></input>
       {/* {onSearch && (
@@ -61,7 +61,7 @@ type InputProps = {
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 const variantClass: Record<InputVariant, string> = {
-  default: "ring ring-gray-400 dark:ring-gray-500 rounded-sm",
+  default: "ring ring-gray-500 dark:ring-gray-500 rounded-xl",
   primary: "",
   danger: "",
   borderBottom: "rounded-none border-b border-gray-300 focus-within:border-green-500",

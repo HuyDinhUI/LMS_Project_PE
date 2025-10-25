@@ -138,7 +138,7 @@ const ClassCourseManagementGrades = () => {
     },
   ];
   return (
-    <div className="flex-1 overflow-auto max-h-170 p-2">
+    <div className="flex-1 overflow-auto max-h-170 px-20">
       {/* header */}
       <div className="flex items-center gap-2">
         <div className="flex-1 flex gap-2 items-center">
@@ -148,7 +148,7 @@ const ClassCourseManagementGrades = () => {
         <div>
           <Button
             variant="primary"
-            title={role === "GV" ? "Xuất bảng điểm" : "In bảng điểm"}
+            title={role === "GV" ? "Export" : "Print"}
             className="rounded-md"
             icon={role === "GV" ? <FolderOutput /> : <PrinterCheck />}
             onClick={() => exportToExcel()}
@@ -158,13 +158,13 @@ const ClassCourseManagementGrades = () => {
       {/* table */}
       {role === "GV" && (
         <div className="mt-4">
-          <table className="min-w-full border border-gray-300 table-auto">
-            <thead className="bg-gray-100 text-left">
+          <table className="min-w-full border border-gray-500 table-auto">
+            <thead className="text-left">
               <tr>
-                <th className="px-4 py-2">Mã sinh viên</th>
-                <th className="px-4 py-2 border-l">Họ tên</th>
+                <th className="px-4 py-2">ID</th>
+                <th className="px-4 py-2 border-l border-gray-500">Full name</th>
                 {columnsAssignment.map((col) => (
-                  <th className="px-4 py-2 border-l" key={col}>
+                  <th className="px-4 py-2 border-l border-gray-500" key={col}>
                     {col}
                   </th>
                 ))}
@@ -172,11 +172,11 @@ const ClassCourseManagementGrades = () => {
             </thead>
             <tbody>
               {dataGradesAssignment.map((row, index) => (
-                <tr key={index} className="border-t">
-                  <td className="border px-4 py-2">{row.MaSV}</td>
-                  <td className="border px-4 py-2">{row.hoten}</td>
+                <tr key={index} className="border-t border-gray-500">
+                  <td className="border border-gray-500 px-4 py-2">{row.MaSV}</td>
+                  <td className="border border-gray-500 px-4 py-2">{row.hoten}</td>
                   {columnsAssignment.map((col) => (
-                    <td key={col} className="border px-4 py-2">
+                    <td key={col} className="border border-gray-500 px-4 py-2">
                       {row[col] !== null && row[col] !== undefined
                         ? row[col]
                         : "-"}
@@ -186,13 +186,13 @@ const ClassCourseManagementGrades = () => {
               ))}
             </tbody>
           </table>
-          <table className="mt-5 min-w-full border border-gray-300 table-auto">
-            <thead className="bg-gray-100 text-left">
+          <table className="mt-5 min-w-full border border-gray-500 table-auto">
+            <thead className="text-left">
               <tr>
-                <th className="px-4 py-2">Mã sinh viên</th>
-                <th className="px-4 py-2 border-l">Họ tên</th>
+                <th className="px-4 py-2">ID</th>
+                <th className="px-4 py-2 border-l border-gray-500">Full name</th>
                 {columnsTest.map((col) => (
-                  <th className="px-4 py-2 border-l" key={col}>
+                  <th className="px-4 py-2 border-l border-gray-500" key={col}>
                     {col}
                   </th>
                 ))}
@@ -200,11 +200,11 @@ const ClassCourseManagementGrades = () => {
             </thead>
             <tbody>
               {dataGradesTest.map((row, index) => (
-                <tr key={index} className="border-t">
-                  <td className="border px-4 py-2">{row.MaSV}</td>
-                  <td className="border px-4 py-2">{row.hoten}</td>
+                <tr key={index} className="border-t border-gray-500">
+                  <td className="border border-gray-500 px-4 py-2">{row.MaSV}</td>
+                  <td className="border border-gray-500 px-4 py-2">{row.hoten}</td>
                   {columnsTest.map((col) => (
-                    <td key={col} className="border px-4 py-2">
+                    <td key={col} className="border border-gray-500 px-4 py-2">
                       {row[col] !== null && row[col] !== undefined
                         ? row[col]
                         : "-"}
@@ -218,34 +218,34 @@ const ClassCourseManagementGrades = () => {
       )}
       {role === "SV" && (
         <div className="mt-4">
-          <table className="min-w-full border border-gray-300 table-auto">
-            <thead className="bg-gray-100 text-left">
+          <table className="min-w-full border border-gray-500 table-auto">
+            <thead className="text-left">
               <tr>
-                <th className="px-4 py-2">Tên bài tập</th>
-                <th className="px-4 py-2 border-l">Hạn nộp</th>
-                <th className="px-4 py-2 border-l">Điểm</th>
-                <th className="px-4 py-2 border-l">Trạng thái</th>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2 border-l border-gray-500">Dealine</th>
+                <th className="px-4 py-2 border-l border-gray-500">Grade</th>
+                <th className="px-4 py-2 border-l border-gray-500">Status</th>
               </tr>
             </thead>
             <tbody>
               {dataGradesAssignment.map((row, index) => (
-                <tr key={index} className="border-t">
-                  <td className="border px-4 py-2">{row.TieuDe}</td>
-                  <td className="border px-4 py-2">
+                <tr key={index} className="border-t border-gray-500">
+                  <td className="border border-gray-500 px-4 py-2">{row.TieuDe}</td>
+                  <td className="border border-gray-500 px-4 py-2">
                     {new Date(row.HanNop).toLocaleDateString("vi-VN")}{" "}
                     {row.GioNop}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="border border-gray-500 px-4 py-2">
                     {row.DiemSo !== null ? row.DiemSo : "-"}
                   </td>
-                  <td className="border px-4 py-2">{row.TrangThai}</td>
+                  <td className="border border-gray-500 px-4 py-2">{row.TrangThai === 'Đã nộp' ? 'Submited' : 'Unsubmit'}</td>
                 </tr>
               ))}
-              <tr className="border-t font-semibold">
-                <td className="border px-4 py-2" colSpan={2}>
-                  Điểm trung bình
+              <tr className="border-t border-gray-500 font-semibold">
+                <td className="border border-gray-500 px-4 py-2" colSpan={2}>
+                  Average score
                 </td>
-                <td className="border px-4 py-2" colSpan={2}>
+                <td className="border border-gray-500 px-4 py-2" colSpan={2}>
                   {dataGradesAssignment.reduce(
                     (acc, row) => acc + (row.DiemSo || acc),
                     0
@@ -254,34 +254,34 @@ const ClassCourseManagementGrades = () => {
               </tr>
             </tbody>
           </table>
-          <table className="mt-5 min-w-full border border-gray-300 table-auto">
-            <thead className="bg-gray-100 text-left">
+          <table className="mt-5 min-w-full border border-gray-500 table-auto">
+            <thead className="text-left">
               <tr>
-                <th className="px-4 py-2">Tên bài tập</th>
-                <th className="px-4 py-2 border-l">Hạn nộp</th>
-                <th className="px-4 py-2 border-l">Điểm</th>
-                <th className="px-4 py-2 border-l">Trạng thái</th>
+                <th className="px-4 py-2">Name</th>
+                <th className="px-4 py-2 border-l border-gray-500">Dealine</th>
+                <th className="px-4 py-2 border-l border-gray-500">Grade</th>
+                <th className="px-4 py-2 border-l border-gray-500">Status</th>
               </tr>
             </thead>
             <tbody>
               {dataGradesTest.map((row, index) => (
-                <tr key={index} className="border-t">
-                  <td className="border px-4 py-2">{row.TieuDe}</td>
-                  <td className="border px-4 py-2">
+                <tr key={index} className="border-t border-gray-500">
+                  <td className="border border-gray-500 px-4 py-2">{row.TieuDe}</td>
+                  <td className="border border-gray-500 px-4 py-2">
                     {new Date(row.HanNop).toLocaleDateString("vi-VN")}{" "}
                     {row.GioNop}
                   </td>
-                  <td className="border px-4 py-2">
+                  <td className="border border-gray-500 px-4 py-2">
                     {parseFloat(row.DiemSo) !== null ? parseFloat(row.DiemSo) : "-"}
                   </td>
-                  <td className="border px-4 py-2">{row.TrangThaiNopBai}</td>
+                  <td className="border border-gray-500 px-4 py-2">{row.TrangThaiNopBai === 'Đã nộp' ? 'Submited' : 'Unsubmit'}</td>
                 </tr>
               ))}
-              <tr className="border-t font-semibold">
-                <td className="border px-4 py-2" colSpan={2}>
-                  Điểm trung bình
+              <tr className="border-t border-gray-500 font-semibold">
+                <td className="border border-gray-500 px-4 py-2" colSpan={2}>
+                  Average score
                 </td>
-                <td className="border px-4 py-2" colSpan={2}>
+                <td className="border border-gray-500 px-4 py-2" colSpan={2}>
                   {dataGradesTest.reduce(
                     (acc, row) => acc + (parseFloat(row.DiemSo) || acc),
                     0
@@ -292,8 +292,7 @@ const ClassCourseManagementGrades = () => {
           </table>
           <div>
             <p className="mt-4 italic">
-              * Lưu ý: Điểm trung bình được tính dựa trên các bài tập đã chấm
-              điểm.
+              * Note: The average score is calculated based on graded assignments.
             </p>
           </div>
         </div>

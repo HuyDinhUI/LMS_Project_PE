@@ -2,9 +2,11 @@ import { useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown,
+  ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 import logo from "@/assets/logo_lms.webp"
+import { Button } from "../ui/button";
 
 export type SidebarItem =
   | {
@@ -38,6 +40,7 @@ const SidebarVariantOption = {
 export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
   const location = useLocation();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
+  const [isHidden, setIsHidden] = useState<boolean>(false)
 
   const toggleMenu = (label: string) => {
     setOpenMenus((prev) =>
@@ -50,18 +53,18 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
   
 
   return (
-    <aside className={`xl:block hidden w-60 ${SidebarVariantOption[variant]} sticky scroll-auto overflow-auto px-4 py-4 space-y-2 text-white rounded-2xl`}>
-      <div className="flex items-center justify-center">
-        
+    <aside className={`xl:block hidden ${isHidden ? 'w-20' : 'w-60'} ${SidebarVariantOption[variant]} sticky px-4 py-4 space-y-2 text-white rounded-2xl transition-all duration-150`}>
+      <div className="flex items-center justify-center mt-5 mb-5">
+        {!isHidden && <h1 className="font-brand-logo text-5xl">henry</h1>}
       </div>
       {items.map((item, index) => {
         if (item.type === 'separator') {
           return item.label ? (
             <div key={index} className="px-3 py-1 text-xs text-gray-300 tracking-wide">
-              {item.label}
+              {isHidden ? '' : item.label}
             </div>
           ) : (
-            <hr key={index} className="my-3 border-gray-200" />
+            <div key={index} className="my-3" />
           );
         }
 
@@ -69,18 +72,20 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
         const hasSub = item.subItems && item.subItems.length > 0;
 
         return (
-          <div key={item.label} className="">
+          <div key={item.label} className="transition-all">
             <button
               onClick={() => hasSub && toggleMenu(item.label)}
-              className={`cursor-pointer w-full flex items-center justify-between px-3 mt-5 text-sm transition ${isActive ? "ms-3 border-l text-gray-400" : ""
+              className={`cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-full transition ${isActive && !isHidden ? "bg-pink-brand text-white py-2" : ""
+                } ${isActive && isHidden ? "bg-pink-brand rounded-full text-white p-3 hover:bg-pink-brand/30" : ""
                 }`}
             >
-              <span className="flex items-center gap-2 flex-1">
-                {item.icon}
+              <span className={`flex-1 ${isHidden ? 'text-4xl' : 'text-sm'}`}>
+                
                 {item.href ? (
-                  <Link to={item.href} className="w-full text-left">{item.label}</Link>
+                  <Link to={item.href} className="w-full flex items-center gap-2 text-left">
+                    {item.icon} {isHidden ? '' : item.label}</Link>
                 ) : (
-                  <span>{item.label}</span>
+                  <span>{isHidden ? '' : item.label}</span>
                 )}
               </span>
               {hasSub &&
@@ -97,11 +102,11 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
                 {item.subItems!.map((sub) => {
                   if (sub.type === 'separator') {
                     return item.label ? (
-                      <div key={index} className="px-3 py-1 text-xs text-gray-500 uppercase tracking-wide">
+                      <div key={index} className="px-3 py-1 text-gray-500 uppercase tracking-wide">
                         {item.label}
                       </div>
                     ) : (
-                      <hr key={index} className="my-3 border-gray-700" />
+                      <div key={index} className="my-3" />
                     );
                   }
                   const isSubActive = location.pathname === sub.href;
@@ -109,7 +114,7 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
                     <Link
                       key={sub.label}
                       to={sub.href!}
-                      className={`flex items-center gap-2 ps-10 px-2 py-2 text-sm rounded-md ${isSubActive ? "ms-3 border-l text-gray-400" : ""
+                      className={`flex items-center gap-2 ps-10 px-2 py-2 rounded-full ${isHidden ? 'text-4xl' : 'text-md'} ${isSubActive ? "ms-3 border-l text-gray-400" : ""
                         }`}
                     >
                       {sub.icon}
@@ -122,6 +127,7 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
           </div>
         );
       })}
+      <Button onClick={() => setIsHidden(!isHidden)} variant="icon" size="ic" icon={isHidden ? <ChevronRight size={13}/> : <ChevronLeft size={13}/>} className="absolute -right-3 bottom-20"/>
     </aside>
   );
 };

@@ -13,7 +13,7 @@ const CheckboxDemo = ({checked,onCheckedChange, classname}: CheckboxProps) => (
 	<form>
 		<div className="flex items-center">
 			<Checkbox.Root
-				className={`${classname} ${checked ? 'bg-green-500' : 'bg-transparent'} flex size-[17px] ring-1 ring-gray-300 dark:ring-gray-50 cursor-pointer items-center justify-center rounded-full outline-none hover:bg-violet3`}
+				className={`${classname} ${checked ? 'bg-green-brand' : 'bg-transparent'} flex size-[17px] ring-1 ring-black dark:ring-gray-50 cursor-pointer items-center justify-center rounded-full outline-none hover:bg-violet3`}
 				defaultChecked
                 checked={checked}
                 onCheckedChange={onCheckedChange}

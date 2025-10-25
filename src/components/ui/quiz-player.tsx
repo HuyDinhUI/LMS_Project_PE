@@ -182,36 +182,36 @@ export default function QuizPlayer({
 
       <div className="flex items-center justify-between mb-3 gap-4">
         <div className="w-full">
-          <div className="h-2 bg-gray-200 rounded overflow-hidden">
+          <div className="h-2 bg-gray-200/50 rounded overflow-hidden">
             <div
-              className="h-2 bg-green-500"
+              className="h-2 bg-green-brand"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
           <div className="text-sm mt-1">
-            <strong>{answeredCount}</strong> / {questions.length} câu đã trả lời
+            <strong>{answeredCount}</strong> / {questions.length} Answered
           </div>
         </div>
 
         <div className="text-right min-w-[120px]">
-          <div className="text-sm">Thời gian còn lại</div>
+          <div className="text-sm">Reamining time</div>
           <div className="font-mono text-lg">{formatTimeLeft(timeLeft)}</div>
         </div>
       </div>
 
       {/* Question pager */}
-      <div className="border rounded p-4 mb-4">
+      <div className="bg-black/3 rounded p-4 mb-4">
         <div className="flex justify-between items-start mb-2">
           <div>
             <div className="text-sm text-gray-500">
-              Câu {current + 1} / {questions.length}
+              Question {current + 1} / {questions.length}
             </div>
             <div className="font-medium mt-1">
               {questions[current]?.NoiDung}
             </div>
           </div>
           <div className="text-sm text-gray-500">
-            {questions[current]?.Diem ?? 1} điểm
+            {questions[current]?.Diem ?? 1} Point
           </div>
         </div>
 
@@ -221,8 +221,8 @@ export default function QuizPlayer({
             return (
               <label
                 key={ai}
-                className={`flex items-center gap-2 p-3 border rounded cursor-pointer hover:shadow ${
-                  chosen ? "bg-blue-50 border-blue-400" : "bg-white"
+                className={`flex items-center gap-2 p-3 rounded cursor-pointer hover:shadow ${
+                  chosen ? "bg-green-brand/50 text-white" : "bg-black/3"
                 }`}
               >
                 <CheckboxDemo
@@ -243,14 +243,14 @@ export default function QuizPlayer({
               disabled={current === 0}
               className="px-3 py-1 border rounded disabled:opacity-50"
             >
-              Trước
+              Prev
             </button>
             <button
               onClick={goNext}
               disabled={current === questions.length - 1}
               className="px-3 py-1 border rounded disabled:opacity-50"
             >
-              Sau
+              Next
             </button>
             <button
               onClick={() => {
@@ -260,21 +260,21 @@ export default function QuizPlayer({
               }}
               className="px-3 py-1 border rounded"
             >
-              Tới câu chưa trả lời
+              Unanswer
             </button>
           </div>
 
           <div className="flex items-center gap-2">
             <div className="text-sm text-gray-600 mr-2">
-              Câu:{" "}
+              Question:{" "}
               {questions.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => jumpTo(i)}
                   className={`inline-block w-8 h-8 mr-1 rounded ${
-                    answers[i] != null ? "bg-green-200" : "bg-gray-100"
+                    answers[i] != null ? "bg-green-brand text-white" : "bg-green-brand/50"
                   }`}
-                  aria-label={`Câu ${i + 1}`}
+                  aria-label={`Question ${i + 1}`}
                 >
                   {i + 1}
                 </button>
@@ -286,9 +286,9 @@ export default function QuizPlayer({
                 if (confirm("Bạn có chắc muốn nộp bài?")) handleSubmit(false);
               }}
               disabled={submitting || submitted}
-              className="px-4 py-2 bg-blue-600 text-white rounded disabled:opacity-60"
+              className="px-4 py-2 bg-green-dark-brand text-white rounded disabled:opacity-60"
             >
-              {submitting ? "Đang nộp..." : submitted ? "Đã nộp" : "Nộp bài"}
+              {submitting ? "Đang nộp..." : submitted ? "Submited" : "Submit"}
             </button>
           </div>
         </div>

@@ -20,11 +20,11 @@ const ClassCourseMembers = () => {
         getMembers()
     },[])
     return (
-        <div className="flex-1 overflow-auto max-h-165 p-2">
-            <div className="flex flex-col justify-center px-50">
+        <div className="flex-1 overflow-auto max-h-165 px-20">
+            <div className="flex flex-col justify-center">
                 <div className="flex flex-col gap-3">
                     {members.map(m => (
-                        <div key={m.MaSV} className="w-full p-5 ring ring-gray-200 rounded-md relative flex gap-5">
+                        <div key={m.MaSV} className="w-full p-5 bg-black/5 rounded-xl relative flex gap-5">
                             <img src="/" width={30} height={30} className="rounded-full"></img>
                             <div className="flex flex-col">
                                 <span className="font-bold">{m.sinhvien}</span>

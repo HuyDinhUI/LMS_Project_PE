@@ -180,6 +180,7 @@ export const DropdownMenu = ({
               </>
             );
           })}
+          <Dropdown.Arrow className="fill-black"/>
         </Dropdown.Content>
       </Dropdown.Portal>
     </Dropdown.Root>

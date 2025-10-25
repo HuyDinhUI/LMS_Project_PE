@@ -11,7 +11,7 @@ export type DataSelect = {
 
 export const Select = ({select, handleSelect, keySelect}: DataSelect) => {
     return (
-        <div className="p-1 ring ring-gray-200 rounded-md">
+        <div className="p-1 ring ring-gray-500 rounded-xl">
             <select onChange={(e) => handleSelect(e.target.value,keySelect)} className="w-20 outline-none">
                 {select.map((s:SelectType,i) => (
                     <option key={i} value={s.value}>{s.name}</option>

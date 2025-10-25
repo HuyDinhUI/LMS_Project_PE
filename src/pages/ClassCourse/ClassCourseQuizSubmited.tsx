@@ -23,13 +23,13 @@ const ClassCourseQuizSubmited = () => {
     getSubmissions()
   },[])
   return (
-    <div className="flex-1 overflow-auto max-h-170 p-2">
+    <div className="flex-1 overflow-auto max-h-170">
       <div className="flex flex-col justify-center px-20">
         {/* Danh sách nộp bài */}
         {submissions.map((item) => (
           <div
             key={item.MaSV}
-            className="border border-gray-300 rounded-md p-4 mb-4 relative"
+            className="bg-black/5 rounded-xl p-4 mb-4 relative"
           >
             <div className="font-semibold text-lg mb-2">
               {item.hoten} - {item.MaSV}
@@ -42,7 +42,7 @@ const ClassCourseQuizSubmited = () => {
                     : "text-red-600 bg-rose-200 ring ring-rose-500 px-2 text-sm rounded-md"
                 }`}
               >
-                {item.TrangThaiNopBai}
+                {item.TrangThaiNopBai === 'Đã nộp' ? 'Submited' : 'Unsubmit'}
               </span>
               {(item.TrangThaiNopBai === "Đã nộp" ||
                 item.TrangThaiNopBai === "Nộp trễ") && (
@@ -70,7 +70,7 @@ const ClassCourseQuizSubmited = () => {
               </div>
             )}
             {(item.TrangThaiNopBai === "Đã nộp" ||
-              item.TrangThaiNopBai === "Nộp trễ") && (<Button title="Xem chi tiết" className="rounded-md"/>)}
+              item.TrangThaiNopBai === "Nộp trễ") && (<Button variant="dark" title="Xem chi tiết" className="rounded-md"/>)}
           </div>
         ))}
       </div>
