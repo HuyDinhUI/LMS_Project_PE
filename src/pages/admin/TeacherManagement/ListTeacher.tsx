@@ -186,12 +186,12 @@ const ListTeacherPage = () => {
   };
 
   return (
-    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card">
+    <div className="py-5 px-10 w-full h-full dark:bg-card">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Quản lý giảng viên</h2>
       </div>
       {/* Content */}
-      <div className="p-3 ring ring-gray-100 max-h-[550px] dark:ring-gray-700 rounded-md mt-5">
+      <div className="p-3 max-h-[550px] dark:ring-gray-700 rounded-md mt-5">
         <div className="flex justify-between items-center gap-2 my-5">
           <div className="flex gap-2">
             <SearchForm handleSearch={handleSearch} />
@@ -214,7 +214,7 @@ const ListTeacherPage = () => {
         <div className="w-full h-[350px] overflow-y-auto">
           <table className="table-auto w-full">
             <thead>
-              <tr className="text-left border-b">
+              <tr className="text-left border-b border-gray-500">
                 {headerTableTeacher.map((h) => (
                   <th className="py-2">{h}</th>
                 ))}
@@ -222,7 +222,7 @@ const ListTeacherPage = () => {
             </thead>
             <tbody>
               {dataTeacher?.map((t: any, i) => (
-                <tr className="border-b text-left">
+                <tr className="border-b text-left border-gray-500">
                   {/* 2  */}
                   <td className="py-3">{i + 1}</td>
                   <td>{t.MSGV}</td>
@@ -231,7 +231,7 @@ const ListTeacherPage = () => {
                   <td>{t.email}</td>
                   <td>{t.trangthai}</td>
                   <td>
-                    <div className="flex">
+                    <div className="flex gap-2">
                       <Dialog
                         trigger={
                           <Button

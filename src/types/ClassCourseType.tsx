@@ -12,4 +12,5 @@ export type ClassCourseType = {
     giangvien: number
     sl_dangky: number
     MaHP: string
+    cover: string
 }

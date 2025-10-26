@@ -25,12 +25,12 @@ const AlertDialogDemo = ({trigger,label,description,onclick}:AlertDialogProps) =
 				<div className="flex justify-end gap-2">
 					<AlertDialog.Cancel asChild>
 						<button className="inline-flex h-[35px] items-center justify-center rounded px-[15px] font-medium leading-none outline-none outline-offset-1  select-none cursor-pointer hover:bg-black/5 dark:hover:bg-white/10">
-							Huỷ
+							Cancle
 						</button>
 					</AlertDialog.Cancel>
 					<AlertDialog.Action asChild>
-						<button onClick={onclick} className="inline-flex h-[35px] text-white dark:text-white items-center justify-center rounded bg-red-700 hover:bg-red-800 px-[15px] font-medium leading-none  outline-none outline-offset-1 select-none cursor-pointer">
-							Đồng ý
+						<button onClick={onclick} className="inline-flex h-[35px] text-white dark:text-white items-center justify-center rounded-xl bg-red-700 hover:bg-red-800 px-[15px] font-medium leading-none  outline-none outline-offset-1 select-none cursor-pointer">
+							Yes, I sure
 						</button>
 					</AlertDialog.Action>
 				</div>

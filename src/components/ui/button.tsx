@@ -15,9 +15,9 @@ type ButtonProps = {
 const variantClass: Record<ButtonVariant, string> = {
     default: 'bg-gray-100 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-200/50',
     primary: 'bg-[#0c0f0a] rounded-xl hover:bg-[#0c0f0a]/90 text-white dark:border dark:border-white dark:hover:border-green-500 dark:hover:bg-transparent dark:bg-transparent',
-    danger: 'bg-red-500 rounded hover:bg-red-600 text-white',
+    danger: 'bg-red-500 rounded-xl hover:bg-red-600 text-white',
     dark: 'bg-[#0c0f0a] rounded-xl hover:bg-[#0c0f0a]/80 text-white dark:bg-gray-200 dark:text-black dark:hover:bg-white',
-    outline: 'rounded-xl ring ring-gray-200 dark:ring-gray-500 hover:bg-white/10',
+    outline: 'rounded-xl ring ring-gray-500 dark:ring-gray-500 hover:bg-white/10',
     icon: 'rounded-full bg-[#0c0f0a] text-white hover:bg-[#0c0f0a]/90',
     transparent: 'bg-transparent rounded-xl text-black',
     item: 'bg-transparent dark:text-gray-300'
@@ -45,7 +45,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref
     ) => {
         const base = 'inline-flex items-center gap-2 transition duration-200 cursor-pointer';
-        const finalClass = `${base} ${variantClass[variant]} ${sizeClass[size]} ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'} ${className ?? ''}`;
+        const finalClass = `${base} ${variantClass[variant]} ${sizeClass[size]} ${disabled ? 'opacity-30 cursor-not-allowed' : 'cursor-pointer'} ${className ?? ''}`;
 
         return (
             <button ref={ref} className={finalClass} disabled={disabled} {...rest}>

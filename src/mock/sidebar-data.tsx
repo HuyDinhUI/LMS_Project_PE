@@ -1,16 +1,16 @@
 import type { SidebarItem } from "@/components/layout/side-bar";
 import {
+  Baby,
   BookUser,
   Calendar,
   ChartArea,
   CircleUser,
-  FileUser,
   GraduationCap,
   HelpCircle,
-  Home,
   Inbox,
   LayoutDashboard,
   Library,
+  PersonStanding,
   Presentation,
   Settings,
   Shield,
@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 
 export const SidebarAdminData: SidebarItem[] = [
-  { type: "item", label: "Trang chủ", icon: <Home />, href: "/" },
   {
     type: "item",
     label: "Dashboard",
@@ -26,83 +25,61 @@ export const SidebarAdminData: SidebarItem[] = [
     href: "/management/dashboard",
   },
   { type: "separator" },
-  { type: "separator", label: "Người dùng" },
+  { type: "separator", label: "User" },
   {
     type: "item",
-    label: "Quản lý giảng viên",
-    icon: <SquareKanban />,
-    href: "#",
-    subItems: [
-      {
-        type: "item",
-        label: "Quản lý hồ sơ giảng viên",
-        href: "/teachermanagement/listteacher",
-      },
-      {
-        type: "item",
-        label: "Quản lý lịch dạy",
-        href: "/teachermanagement/schedules",
-      },
-    ],
+    label: "Teachers",
+    icon: <PersonStanding />,
+    href: "/teachermanagement/listteacher",
   },
   {
     type: "item",
-    label: "Quản lý sinh viên",
-    icon: <SquareKanban />,
-    subItems: [
-      { type: "item", label: "Quản lý hồ sơ sinh viên", href: "/studentmanagement/liststudent" },
-      { type: "item", label: "Quản lý điểm", href: "#" },
-    ],
+    label: "Students",
+    icon: <Baby />,
+    href:'/studentmanagement/liststudent',
   },
 
   { type: "separator" },
-  { type: "separator", label: "Đào tạo" },
+  { type: "separator", label: "Education" },
 
   {
     type: "item",
-    label: "Quản lý học phần",
+    label: "Courses",
     href: "/coursemanagement/listcourse",
     icon: <BookUser />,
   },
   {
     type: "item",
-    label: "Quản lý lớp học phần",
+    label: "Class",
     href: "/classcoursemanagement/listclasscourse",
     icon: <Presentation />,
   },
 
   {
     type: "item",
-    label: "Danh sách lịch dạy & học",
+    label: "Schedule",
     href: "/schedulemanagement/listschedule",
     icon: <Calendar />,
   },
 
   { type: "separator" },
-  { type: "separator", label: "Tài khoản" },
+  { type: "separator", label: "Account" },
   {
     type: "item",
-    label: "Quản lý tài khoản giảng viên",
+    label: "User account",
+    href: '/',
     icon: <CircleUser />,
   },
   {
     type: "item",
-    label: "Quản lý tài khoản sinh viên",
-    icon: <CircleUser />,
-  },
-
-  { type: "separator" },
-  { type: "separator", label: "Quyền" },
-  {
-    type: "item",
-    label: "Danh sách quyền",
+    label: "Permission",
+    href: '/',
     icon: <Shield />,
   },
 ];
 
 export const SidebarTeacherData: SidebarItem[] = [
   { type: "separator", label: "General" },
-  { type: "item", label: "Home", icon: <Home />, href: "/" },
   {
     type: "item",
     label: "Dashboard",
@@ -113,7 +90,7 @@ export const SidebarTeacherData: SidebarItem[] = [
     type: "item",
     label: "Course",
     href: "/classcourse/list",
-    icon: <Presentation/>
+    icon: <GraduationCap/>
   },
   {
     type: "item",
@@ -131,7 +108,7 @@ export const SidebarTeacherData: SidebarItem[] = [
   { type: "separator",label: "Tools" },
   {
     type: "item",
-    label: "Statistical",
+    label: "Analytics",
     href: "/",
     icon: <ChartArea/>
   },
@@ -151,7 +128,6 @@ export const SidebarTeacherData: SidebarItem[] = [
 
 export const SidebarStudentData: SidebarItem[] = [
   { type: "separator",label: "General" },
-  { type: "item", label: "Trang chủ", icon: <Home />, href: "/" },
   {
     type: "item",
     label: "Dashboard",
@@ -162,7 +138,7 @@ export const SidebarStudentData: SidebarItem[] = [
     type: "item",
     label: "Course",
     href: "/classcourse/list",
-    icon: <Presentation/>
+    icon: <GraduationCap/>
   },
   {
     type: "item",
@@ -179,27 +155,27 @@ export const SidebarStudentData: SidebarItem[] = [
   {
     type: "item",
     label: "Inbox",
-    href: "",
+    href: "/",
     icon: <Inbox/>
   },
   { type: "separator" },
   { type: "separator",label: "Tools" },
   {
     type: "item",
-    label: "Statistical",
-    href: "",
+    label: "Analytics",
+    href: "/",
     icon: <ChartArea/>
   },
   {
     type: "item",
     label: "Setting",
-    href: "",
+    href: "/",
     icon: <Settings/>
   },
   {
     type: "item",
     label: "Help center",
-    href: "",
+    href: "/",
     icon: <HelpCircle/>
   },
 ];

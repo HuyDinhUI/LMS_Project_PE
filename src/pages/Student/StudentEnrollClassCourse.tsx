@@ -124,23 +124,23 @@ const StudentEnrollClassCourse = () => {
     getEnrolledCourse();
   }, []);
   return (
-    <div className="py-5 px-5 w-full h-ful overflow-auto">
+    <div className="py-5 px-10 w-full h-175 overflow-auto">
       <div className="w-full px-2">
-        <h1 className="text-2xl uppercase text-amber-400 text-center font-bold">
-          Đăng ký học phần
+        <h1 className="text-2xl uppercase text-center font-bold">
+          Enroll course
         </h1>
       </div>
       <div className="w-full p-2">
         {/* Bảng danh sách học phần */}
-        <h2 className="py-3 border-b text-xl text-green-600 uppercase">
-          Danh sách học phần
+        <h2 className="py-3 text-xl uppercase">
+          COURSES
         </h2>
-        <div className="w-full">
-          <table className="table-auto w-full">
+        <div className="w-full p-4 shadow-sm rounded-xl">
+          <table className="table-auto w-full bg-black/3">
             <thead>
-              <tr className="text-left border-b bg-gray-100">
+              <tr className="text-left bg-green-brand text-white">
                 {headerTableCourse.map((h) => (
-                  <th className="py-2">{h}</th>
+                  <th className="py-2 px-2">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -149,11 +149,11 @@ const StudentEnrollClassCourse = () => {
                 <tr
                   onClick={() => getClassCourseByPrograme(t)}
                   key={i}
-                  className={`border-b text-left hover:bg-green-50 ${
-                    CourseSelected?.MaHP === t.MaHP ? "bg-green-50" : ""
+                  className={`text-left hover:bg-black/3 cursor-pointer ${
+                    CourseSelected?.MaHP === t.MaHP ? "bg-black/5" : ""
                   }`}
                 >
-                  <td className="py-3">{t.MaHP}</td>
+                  <td className="py-3 px-2">{t.MaHP}</td>
                   <td>{t.ten_hocphan}</td>
                   <td>{t.so_tinchi}</td>
                   <td>{t.HocPhi.toLocaleString("vi-VN")}đ</td>
@@ -162,22 +162,22 @@ const StudentEnrollClassCourse = () => {
             </tbody>
           </table>
         </div>
-        <h2 className="py-3 border-b text-xl text-green-600 uppercase mt-5">
-          Danh sách lớp học phần
+        <h2 className="py-3 text-xl uppercase mt-5">
+          Class
         </h2>
-        <div className="w-full">
-          <table className="table-auto w-full">
+        <div className="w-full p-4 shadow-sm rounded-xl">
+          <table className="table-auto w-full bg-black/3">
             <thead>
-              <tr className="text-left border-b bg-gray-100">
+              <tr className="text-left bg-yellow-brand text-white">
                 {headerTableClassCourse.map((h) => (
-                  <th className="py-2">{h}</th>
+                  <th className="py-2 px-2">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {dataClassCourse?.map((c, i) => (
-                <tr key={i} className="border-b text-left">
-                  <td className="py-3">{c.MaLop}</td>
+                <tr key={i} className="text-left">
+                  <td className="py-3 px-2">{c.MaLop}</td>
                   <td>{c.giangvien}</td>
                   <td>
                     Thứ {c.ThuTrongTuan + 1}, Tiết {c.tiet_batdau} -
@@ -202,7 +202,7 @@ const StudentEnrollClassCourse = () => {
                         )
                       }
                       variant="primary"
-                      title="Đăng ký"
+                      title="Enroll"
                       size="sm"
                     />
                   </td>
@@ -211,22 +211,22 @@ const StudentEnrollClassCourse = () => {
             </tbody>
           </table>
         </div>
-        <h2 className="py-3 border-b text-xl text-green-600 uppercase mt-5">
-          Đã đăng ký
+        <h2 className="py-3 text-xl uppercase mt-5">
+          Enrolled
         </h2>
-        <div className="w-full">
-          <table className="table-auto w-full">
+        <div className="w-full p-4 shadow-sm rounded-xl">
+          <table className="table-auto w-full bg-black/3">
             <thead>
-              <tr className="text-left border-b bg-gray-100">
+              <tr className="text-left bg-orange-brand text-white">
                 {headerTableEnrolledCourse.map((h) => (
-                  <th className="py-2">{h}</th>
+                  <th className="py-2 px-2">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {dataEnrolledCourse?.map((c, i) => (
-                <tr key={i} className="border-b text-left">
-                  <td className="py-3">{c.MaLop}</td>
+                <tr key={i} className="text-left">
+                  <td className="py-3 px-2">{c.MaLop}</td>
                   <td>{c.ten_hocphan}</td>
                   <td>{c.HocPhi.toLocaleString("vi-VN")}đ</td>
                   <td>{c.TrangThai}</td>
@@ -238,7 +238,7 @@ const StudentEnrollClassCourse = () => {
                       description="Lưu ý: trong thời gian đăng ký bạn có thể huỷ hoặc đăng ký lại, nếu hết thời gian sẽ không được huỷ."
                       onclick={() => CancleEnrollCourse(c.MaLop, c.MaHP)}
                       trigger={
-                        <Button variant="danger" title="Huỷ" size="sm" />
+                        <Button variant="danger" title="Cancle" size="sm" />
                       }
                     />
                   </td>

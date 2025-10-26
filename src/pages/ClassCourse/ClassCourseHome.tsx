@@ -135,10 +135,10 @@ const ClassCourseManagementHome = () => {
     document.title = classCourseData?.ten_lop + '-' + classCourseData?.MaLop || 'Lớp học'
   },[classCourseData])
   return (
-    <div className="flex-1 overflow-auto max-h-165 px-20">
+    <div className="flex-1 overflow-auto max-h-170 px-20">
       {/* cover */}
-      <div className="w-full h-40 p-3 flex flex-col justify-end rounded-xl bg-[url('https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149008068.jpg?uid=R40278496&ga=GA1.1.12754122.1753975824&semt=ais_hybrid&w=740&q=80')] bg-cover">
-        <h1 className="text-3xl">{classCourseData?.ten_lop}</h1>
+      <div className="w-full h-40 flex flex-col justify-end rounded-xl bg-cover overflow-hidden" style={{backgroundImage: `url(${classCourseData?.cover})`}}>
+        <h1 className="text-3xl bg-black/50 text-white p-2">{classCourseData?.ten_lop}</h1>
       </div>
       {/* content */}
       <div className="mt-5">

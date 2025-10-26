@@ -185,7 +185,7 @@ const ListCoursePage = () => {
   };
 
   return (
-    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card">
+    <div className="py-5 px-10 w-full h-full dark:bg-card">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Quản lý học phần</h2>
       </div>
@@ -213,7 +213,7 @@ const ListCoursePage = () => {
         <div className="w-full h-[350px] overflow-y-auto">
           <table className="table-auto w-full">
             <thead>
-              <tr className="text-left border-b">
+              <tr className="text-left border-b border-gray-500">
                 {headerTableCourse.map((h) => (
                   <th className="py-2">{h}</th>
                 ))}
@@ -221,14 +221,14 @@ const ListCoursePage = () => {
             </thead>
             <tbody>
               {dataCourse?.map((t: any, i) => (
-                <tr className="border-b text-left">
+                <tr className="border-b border-gray-500 text-left">
                   {/* 2  */}
                   <td className="py-3">{i + 1}</td>
                   <td>{t.MaHP}</td>
                   <td>{t.ten_hocphan}</td>
                   <td>{t.so_tinchi}</td>
                   <td>
-                    <div className="flex">
+                    <div className="flex gap-2">
                       <Dialog
                         trigger={
                           <Button

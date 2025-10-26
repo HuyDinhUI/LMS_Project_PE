@@ -176,7 +176,7 @@ const ListSchedulePage = () => {
   };
 
   return (
-    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card">
+    <div className="py-5 px-10 w-full h-full dark:bg-card">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Quản lý lịch dạy & học</h2>
       </div>
@@ -192,7 +192,7 @@ const ListSchedulePage = () => {
         <div className="w-full h-[350px] overflow-y-auto">
           <table className="table-auto w-full">
             <thead>
-              <tr className="text-left border-b">
+              <tr className="text-left border-b border-gray-500">
                 {headerTableSchedule.map((h) => (
                   <th className="py-2">{h}</th>
                 ))}
@@ -200,7 +200,7 @@ const ListSchedulePage = () => {
             </thead>
             <tbody>
               {dataSchedule?.map((t: any, i) => (
-                <tr className="border-b text-left">
+                <tr className="border-b text-left border-gray-500">
                   {/* 2  */}
                   <td className="py-3">{i + 1}</td>
                   <td>{t.MaLichDay}</td>
@@ -210,7 +210,7 @@ const ListSchedulePage = () => {
                   <td>{t.tiet_batdau}</td>
                   <td>{t.tiet_kethuc}</td>
                   <td>
-                    <div className="flex">
+                    <div className="flex gap-2">
                       <Dialog
                         trigger={
                           <Button

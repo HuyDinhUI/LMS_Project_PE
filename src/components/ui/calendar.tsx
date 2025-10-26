@@ -29,7 +29,7 @@ export const Calendar = ({ data }: props) => {
             bgColor = "bg-red-500 text-white";
             break;
           default:
-            bgColor = "bg-black text-white";
+            bgColor = "bg-green-brand text-white";
         }
         return (
           <div
@@ -62,7 +62,7 @@ export const Calendar = ({ data }: props) => {
         right: "dayGridMonth,timeGridWeek,timeGridDay",
       }}
       events={data}
-      height="65vh"
+      height="80vh"
       slotMinTime="07:00:00"
       slotMaxTime="20:00:00"
       locale="vi" // tiếng Việt

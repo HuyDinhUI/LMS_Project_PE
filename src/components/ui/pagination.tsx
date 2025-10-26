@@ -21,11 +21,11 @@ export const Pagination = ({page, limit, totalPages, prevFunction, nextFunction,
         <div className="py-5 mt-8">
             {/* pagination */}
             <div className="flex items-center gap-2">
-                <Button disabled={page === 1} onClick={() => prevFunction()} size="md" icon={<ChevronLeft color="gray"/>}/>
+                <Button disabled={page === 1} onClick={() => prevFunction()} variant="outline" size="md" icon={<ChevronLeft color="gray"/>}/>
                 {Array.from({length:totalPages}).map((_,i) => (
-                    <Button onClick={() => pageFunction(i+1)} variant={i+1 === page ? 'primary' : 'default'} size="md" title={`${i+1}`}/>
+                    <Button onClick={() => pageFunction(i+1)} variant={i+1 === page ? 'primary' : 'outline'} size="md" title={`${i+1}`}/>
                 ))}
-                <Button disabled={page === totalPages} onClick={() => nextFunction()} size="md" icon={<ChevronRight color="gray"/>}/>
+                <Button disabled={page === totalPages} onClick={() => nextFunction()} variant="outline" size="md" icon={<ChevronRight color="gray"/>}/>
             </div>
             {/* option limt */}
         </div>

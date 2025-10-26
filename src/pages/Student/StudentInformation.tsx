@@ -28,7 +28,7 @@ const StudentInformation = () => {
   }, []);
 
   return (
-    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card">
+    <div className="py-5 px-10 w-full h-full dark:bg-card overflow-auto">
       {!isUpdateForm ? (
         <div className="mt-10">
           <div className="flex gap-2 px-2">
@@ -36,7 +36,7 @@ const StudentInformation = () => {
               <img className="h-full rounded-md" src={bg_light}></img>
             </div>
             <div className="flex-1 flex-col gap-2 ms-10">
-              <h1 className="text-xl mb-5 font-bold uppercase border-b pb-3">
+              <h1 className="text-xl mb-5 font-bold uppercase border-b border-gray-500 pb-3">
                 Thông tin học vấn
               </h1>
               <div className="flex gap-20 text-md">
@@ -77,12 +77,12 @@ const StudentInformation = () => {
                 </div>
               </div>
               <div className="mt-10">
-                <h1 className="text-xl mb-5 font-bold uppercase border-b pb-3">
+                <h1 className="text-xl mb-5 font-bold uppercase border-b border-gray-500 pb-3">
                   Thông tin cá nhân
                 </h1>
               </div>
               <div className="mt-10">
-                <h1 className="text-xl mb-5 font-bold uppercase border-b pb-3">
+                <h1 className="text-xl mb-5 font-bold uppercase border-b border-gray-500 pb-3">
                   Quan hệ gia đình
                 </h1>
               </div>
@@ -94,9 +94,9 @@ const StudentInformation = () => {
       )}
       <Button
         onClick={() => setIsUpdateForm(!isUpdateForm)}
-        title={isUpdateForm ? "Quay lại" : "Cập nhật"}
-        className="absolute top-20 right-5"
-        variant={isUpdateForm ? "default" : "primary"}
+        title={isUpdateForm ? "Return" : "Update"}
+        className="absolute top-30 right-15"
+        variant={isUpdateForm ? "outline" : "primary"}
         icon={isUpdateForm ? <ChevronLeft size={18} /> : <Pen size={18} />}
       />
     </div>
@@ -142,7 +142,7 @@ const FormUpdateInformation = () => {
     <div className="flex flex-col gap-5 px-2 py-3 h-full mt-10">
       <form
         onSubmit={handleSubmit(handleUpdateInformation)}
-        className="relative h-full"
+        className="h-full"
       >
         <h1 className="text-orange-400 font-bold uppercase pb-3 border-b">
           I. Thông tin cá nhân
@@ -208,7 +208,7 @@ const FormUpdateInformation = () => {
         <h1 className="text-orange-400 font-bold uppercase pb-3 border-b">
           II. Quan hệ gia đình
         </h1>
-        <div className="absolute flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">
+        <div className="absolute flex gap-2 justify-end bottom-10 right-25">
           <Button variant="dark" title="Lưu" type="submit" />
         </div>
       </form>

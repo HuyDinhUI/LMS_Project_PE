@@ -188,7 +188,7 @@ const ListStudentPage = () => {
   };
 
   return (
-    <div className="py-5 px-10 w-full h-full bg-white dark:bg-card">
+    <div className="py-5 px-10 w-full h-full dark:bg-card">
       <div className="w-full px-2">
         <h2 className="text-2xl uppercase">Quản lý sinh viên</h2>
       </div>
@@ -216,7 +216,7 @@ const ListStudentPage = () => {
         <div className="w-full h-[350px] overflow-y-auto">
           <table className="table-auto w-full">
             <thead>
-              <tr className="text-left border-b">
+              <tr className="text-left border-b border-gray-500">
                 {headerTableStudent.map((h) => (
                   <th className="py-2">{h}</th>
                 ))}
@@ -224,7 +224,7 @@ const ListStudentPage = () => {
             </thead>
             <tbody>
               {dataStudent?.map((t: any, i) => (
-                <tr className="border-b text-left">
+                <tr className="border-b text-left border-gray-500">
                   
                   <td className="py-3">{i + 1}</td>
                   <td>{t.MaSV}</td>
@@ -235,7 +235,7 @@ const ListStudentPage = () => {
                   <td>{t.MaLopHC}</td>
                   
                   <td>
-                    <div className="flex">
+                    <div className="flex gap-2">
                       <Dialog
                         trigger={
                           <Button
