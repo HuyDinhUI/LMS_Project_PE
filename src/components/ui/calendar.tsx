@@ -16,9 +16,10 @@ export type EventType = {
 
 type props = {
   data: EventType[];
+  height?: string
 };
 
-export const Calendar = ({ data }: props) => {
+export const Calendar = ({ data, height = '80vh' }: props) => {
   const role = localStorage.getItem("role");
   return (
     <FullCalendar
@@ -62,16 +63,17 @@ export const Calendar = ({ data }: props) => {
         right: "dayGridMonth,timeGridWeek,timeGridDay",
       }}
       events={data}
-      height="80vh"
+      height={height}
       slotMinTime="07:00:00"
       slotMaxTime="20:00:00"
       locale="vi" // tiếng Việt
       allDaySlot={false}
+      
     />
   );
 };
 
-export const CalendarToday = ({ data }: props) => {
+export const CalendarToday = ({ data,height = '35vh' }: props) => {
   const role = localStorage.getItem("role");
   return (
     <FullCalendar
@@ -111,7 +113,7 @@ export const CalendarToday = ({ data }: props) => {
       initialView="timeGridDay"
       headerToolbar={false}
       events={data}
-      height="35vh"
+      height={height}
       slotMinTime="07:00:00"
       slotMaxTime="20:00:00"
       locale="vi" // tiếng Việt

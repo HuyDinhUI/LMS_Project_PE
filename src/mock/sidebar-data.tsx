@@ -101,7 +101,7 @@ export const SidebarTeacherData: SidebarItem[] = [
   {
     type: "item",
     label: "Inbox",
-    href: "/",
+    href: "/inbox",
     icon: <Inbox/>
   },
   { type: "separator" },
@@ -155,7 +155,7 @@ export const SidebarStudentData: SidebarItem[] = [
   {
     type: "item",
     label: "Inbox",
-    href: "/",
+    href: "/inbox",
     icon: <Inbox/>
   },
   { type: "separator" },

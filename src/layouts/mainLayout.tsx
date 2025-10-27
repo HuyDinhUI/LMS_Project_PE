@@ -27,7 +27,7 @@ const MainLayout = ({ children }: Props) => {
     <div className="h-full dark:bg-background bg-[#fefae0] p-5">
       <div className="flex h-full items-center">
         <Sidebar items={getSidebarItems()} />
-        <div className="dark:bg-background flex-1 h-full overflow-hidden">
+        <div className="dark:bg-background flex flex-col flex-1 h-full overflow-hidden">
           <Header />
           {children}
         </div>

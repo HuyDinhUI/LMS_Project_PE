@@ -93,6 +93,8 @@ const ClassCourseListPage = lazy(() => import("@/pages/ClassCourse/ClassCourseLi
 
 const ClassCourseMembersPage = lazy(() => import("@/pages/ClassCourse/ClassCourseMembers"))
 
+const InboxMainPage = lazy(() => import("@/pages/Inbox/InboxMain"))
+
 export const privateRoutes = [
   /////////////  Admin  /////////////////
   {
@@ -351,4 +353,17 @@ export const privateRoutes = [
       </Guard>
     ),
   },
+
+  /////////// INBOX ////////////
+
+  {
+    path: "/inbox",
+    element: (
+      <Guard>
+        <MainLayout>
+          <InboxMainPage/>
+        </MainLayout>
+      </Guard>
+    )
+  }
 ];
