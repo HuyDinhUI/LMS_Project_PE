@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-
-
 @custom-variant dark (&:is(.dark *));
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -130,9 +128,8 @@
 }
 
 body {
-  overflow: hidden
+  overflow: hidden;
 }
-
 
 @theme {
   --color-green-brand: #606c38;
@@ -142,10 +139,8 @@ body {
   --color-orange-brand: #f4a261;
   --color-green-light-brand: #a3a380;
 
-  --font-brand-logo: 'Gluten', sans-serif;
+  --font-brand-logo: "Gluten", sans-serif;
 }
-
-
 
 @theme {
   --animate-checkbox: fade 0.5s ease-in-out;
@@ -154,17 +149,15 @@ body {
   --animate-zoomIn: zoomIn 300ms ease-out;
   --animate-slideInRight: SlideIn 300ms ease-out;
   --animate-slideOutRight: SlideOut 300ms ease-out;
+  --animate-slideInBottom: SlideYIn 300ms ease-out;
   @keyframes fade {
-
     0%,
     50% {
       opacity: 0;
-
     }
 
     100% {
       opacity: 1;
-
     }
   }
 
@@ -193,7 +186,7 @@ body {
       transform: scale(0);
     }
 
-    to{
+    to {
       transform: scale(1);
     }
   }
@@ -202,7 +195,16 @@ body {
     from {
       transform: translateX(100%);
     }
-    to{
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes SlideYIn {
+    from {
+      transform: translateY(5px);
+    }
+    to {
       transform: translateX(0);
     }
   }
@@ -211,13 +213,11 @@ body {
     from {
       transform: translateX(0);
     }
-    to{
+    to {
       transform: translateX(100%);
     }
   }
 }
-
-
 
 .fc .fc-toolbar-title {
   font-size: 20px;
@@ -228,20 +228,19 @@ body {
 }
 
 .fc .fc-event {
-   /* xanh */
+  /* xanh */
   border: none;
   border-radius: 6px;
   font-size: 14px;
   background: transparent;
 }
 
-.fc .fc-button{
+.fc .fc-button {
   background-color: #e9c46a !important;
   border: none;
 }
 
-*{
-  
-  scrollbar-color:white;
-  scrollbar-width:none;
+* {
+  scrollbar-color: white;
+  scrollbar-width: none;
 }

@@ -112,13 +112,19 @@ const ClassCourseAssignmentGuidance = () => {
           <div className="flex flex-col gap-2">
             <h1 className="text-2xl font-medium">{assignmentsData?.TieuDe}</h1>
             <p className="text-gray-500 text-sm">
-              {new Date(assignmentsData?.NgayTao ?? "").toLocaleDateString("vi-VN")}{" "}
+              {new Date(assignmentsData?.NgayTao ?? "").toLocaleDateString(
+                "vi-VN"
+              )}{" "}
             </p>
             <p>{assignmentsData?.DiemToiDa} Point</p>
           </div>
           <div className="pt-5">
             <div className="mb-5">
-              <div dangerouslySetInnerHTML={{ __html: assignmentsData?.NoiDung ?? ''}}></div>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: assignmentsData?.NoiDung ?? "",
+                }}
+              ></div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="flex flex-col items-center justify-center gap-2 p-3 bg-black/5 rounded-md">
@@ -140,33 +146,37 @@ const ClassCourseAssignmentGuidance = () => {
               <div className="flex flex-col gap-3">
                 <h2 className="text-lg font-medium">Submission</h2>
                 <p className="text-sm">
-                  Points will be deducted for late assignment submission according to the instructor's regulations
+                  {new Date(assignmentsData?.HanNop ?? "") < new Date()
+                    ? "You cannot submit this assignment because it is past the due date."
+                    : "Points will be deducted for late assignment submission according to the instructor's regulations"}
                 </p>
-                <div>
-                  <div
-                    onClick={handleClick}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                    className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors ${
-                      isDragging
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-400"
-                    }`}
-                  >
-                    {file ? (
-                      <p className="">{file.name}</p>
-                    ) : (
-                      <p>Drag and Drop or Click</p>
-                    )}
+                {new Date(assignmentsData?.HanNop ?? "") > new Date() && (
+                  <div>
+                    <div
+                      onClick={handleClick}
+                      onDragOver={handleDragOver}
+                      onDragLeave={handleDragLeave}
+                      onDrop={handleDrop}
+                      className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-colors ${
+                        isDragging
+                          ? "border-blue-500 bg-blue-50"
+                          : "border-gray-400"
+                      }`}
+                    >
+                      {file ? (
+                        <p className="">{file.name}</p>
+                      ) : (
+                        <p>Drag and Drop or Click</p>
+                      )}
+                    </div>
+                    <input
+                      type="file"
+                      hidden
+                      ref={dropRef}
+                      onChange={handleFileChange}
+                    />
                   </div>
-                  <input
-                    type="file"
-                    hidden
-                    ref={dropRef}
-                    onChange={handleFileChange}
-                  />
-                </div>
+                )}
                 {file && (
                   <Button
                     onClick={() => handleSubmit()}
@@ -180,7 +190,8 @@ const ClassCourseAssignmentGuidance = () => {
               <div className="flex flex-col gap-3">
                 <h2 className="text-lg font-medium">Submited</h2>
                 <p className="text-sm">
-                  You have submitted this assignment. If you want to change, please contact your instructor.
+                  You have submitted this assignment. If you want to change,
+                  please contact your instructor.
                 </p>
                 <div className="flex flex-col items-center justify-center gap-2 p-3 bg-green-brand text-white rounded-md">
                   <File size={20} />
@@ -193,9 +204,9 @@ const ClassCourseAssignmentGuidance = () => {
                 </div>
                 <p className="text-sm text-gray-500">
                   Submit at:{" "}
-                  {new Date(
-                    dataSubmission?.thoigian_nop ?? ""
-                  ).toLocaleString("vi-VN")}
+                  {new Date(dataSubmission?.thoigian_nop ?? "").toLocaleString(
+                    "vi-VN"
+                  )}
                 </p>
               </div>
             )}

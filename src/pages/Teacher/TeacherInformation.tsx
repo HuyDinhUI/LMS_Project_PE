@@ -100,9 +100,9 @@ const TeacherInformation = () => {
       )}
       <Button
         onClick={() => setIsUpdateForm(!isUpdateForm)}
-        title={isUpdateForm ? "Quay lại" : "Cập nhật"}
-        className="absolute top-20 right-5"
-        variant={isUpdateForm ? "default" : "primary"}
+        title={isUpdateForm ? "Return" : "Update"}
+        className="absolute top-30 right-15"
+        variant={isUpdateForm ? "transparent" : "primary"}
         icon={isUpdateForm ? <ChevronLeft size={18} /> : <Pen size={18} />}
       />
     </div>

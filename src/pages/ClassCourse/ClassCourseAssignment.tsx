@@ -4,13 +4,43 @@ import { Input } from "@/components/ui/input";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import type { AssignmentType } from "@/types/AssignmentType";
 import API from "@/utils/axios";
-import { Ellipsis, File, Pen, Plus, Trash, Upload } from "lucide-react";
+import { Ellipsis, File, LayoutGrid, LayoutList, Pen, Plus, Trash, Upload } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { FilterForm } from "@/components/ui/filter-form";
+
+const data_mock = [
+    {
+      key: "order",
+      select: [
+        {
+          name: "Last create",
+          value: "asc",
+        },
+        {
+          name: "New create",
+          value: "desc",
+        },
+      ],
+    },
+    {
+      key: "status",
+      select: [
+        {
+          name: "Submited",
+          value: "submited"
+        },
+        {
+          name: "Unsubmit",
+          value: "unsubmit"
+        }
+      ]
+    }
+  ];
 
 const ClassCourseManagementAssignment = () => {
   const role = localStorage.getItem("role");
@@ -145,11 +175,23 @@ const ClassCourseManagementAssignment = () => {
     }
   };
 
+  const handleFilter = async () => {
+
+  }
+
   return (
     <div className="flex-1 overflow-auto max-h-165">
       {/* content */}
       <div className="flex flex-col justify-center px-20 w-full">
-        <div className="flex flex-col gap-3 w-full">
+        {/* filter */}
+        <div className="flex gap-2 mt-2">
+          <div className="flex">
+          <Button variant="icon" icon={<LayoutGrid size={18}/>}/>
+          <Button variant="transparent" icon={<LayoutList size={18}/>}/>
+        </div>
+        <FilterForm data={data_mock} handleFilter={handleFilter}/>
+        </div>
+        <div className="flex flex-col gap-3 w-full mt-5 mb-7">
           {/* Form tạo */}
           {role === "GV" && (
             <div
@@ -292,7 +334,7 @@ const ClassCourseManagementAssignment = () => {
                   <p>
                     {item.TrangThai === "Đã nộp" || item.TrangThai === "Nộp trễ"
                       ? item.TrangThai
-                      : `Dealine:${" "}
+                      : `Deadline:${" "}
                     ${new Date(
                       item.HanNop ?? "No dealine"
                     ).toLocaleDateString("vi-VN")}${" "}

@@ -3,6 +3,7 @@ import API from "@/utils/axios";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import CheckboxDemo from "./checkbox";
+import AlertDialogDemo from "./alert-dialog";
 
 /**
  * Props types
@@ -144,18 +145,16 @@ export default function QuizPlayer({
       Answers: questions.map((q, i) => ({
         MaCauHoi: q.MaCauHoi ?? i,
         SelectedMaDapAn: answers[i], // may be null
-        
       })),
     };
 
     try {
-
-      console.log(payload)
+      console.log(payload);
 
       if (submitUrl) {
-        const res = await API.post(submitUrl,payload)
-        toast.success('Nộp bài thành công')
-        setResult({score: Number(res.data.result.data.TongDiem),total:10})
+        const res = await API.post(submitUrl, payload);
+        toast.success("Nộp bài thành công");
+        setResult({ score: Number(res.data.result.data.TongDiem), total: 10 });
       }
 
       // compute local score if possible
@@ -166,7 +165,7 @@ export default function QuizPlayer({
       // if (onSubmit)
       //   onSubmit({ score: local.score, total: local.total, details: payload });
     } catch (err: any) {
-      if (!auto) toast.error(err?.response?.data?.message)
+      if (!auto) toast.error(err?.response?.data?.message);
     } finally {
       setSubmitting(false);
     }
@@ -228,7 +227,6 @@ export default function QuizPlayer({
                 <CheckboxDemo
                   checked={chosen}
                   onCheckedChange={() => chooseAnswer(current, ans.MaDapAn)}
-                  
                 />
                 <span>{ans.NoiDung}</span>
               </label>
@@ -272,7 +270,9 @@ export default function QuizPlayer({
                   key={i}
                   onClick={() => jumpTo(i)}
                   className={`inline-block w-8 h-8 mr-1 rounded ${
-                    answers[i] != null ? "bg-green-brand text-white" : "bg-green-brand/50"
+                    answers[i] != null
+                      ? "bg-green-brand text-white"
+                      : "bg-green-brand/50"
                   }`}
                   aria-label={`Question ${i + 1}`}
                 >
@@ -281,22 +281,30 @@ export default function QuizPlayer({
               ))}
             </div>
 
-            <button
-              onClick={() => {
-                if (confirm("Bạn có chắc muốn nộp bài?")) handleSubmit(false);
-              }}
-              disabled={submitting || submitted}
-              className="px-4 py-2 bg-green-dark-brand text-white rounded disabled:opacity-60"
-            >
-              {submitting ? "Đang nộp..." : submitted ? "Submited" : "Submit"}
-            </button>
+            <AlertDialogDemo
+              label="Do you want submit?"
+              description="Note: This action cannot be undone."
+              onclick={() => handleSubmit(false)}
+              trigger={
+                <button
+                  disabled={submitting || submitted}
+                  className="px-4 py-2 bg-green-dark-brand text-white rounded disabled:opacity-60"
+                >
+                  {submitting
+                    ? "Đang nộp..."
+                    : submitted
+                    ? "Submited"
+                    : "Submit"}
+                </button>
+              }
+            />
           </div>
         </div>
       </div>
 
       {/* Result */}
       {submitted && result && (
-        <div className="p-4 border rounded bg-gray-50">
+        <div className="p-4 border rounded bg-yellow-brand text-white">
           <h3 className="font-semibold">Kết quả (tạm tính)</h3>
           <p>
             Điểm: <strong>{result.score}</strong> / {result.total}
