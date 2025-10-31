@@ -25,10 +25,10 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
   return (
     <div
       ref={ref}
-      className="flex items-center flex-1 rounded-sm relative gap-2"
+      className="flex items-center flex-1 rounded-full relative gap-2 ring ring-gray-400 px-2 py-1"
     >
-      <div className="p-2 bg-pink-brand rounded-full">
-        <Search size={15} />
+      <div className="p-2 bg-black rounded-full">
+        <Search size={15} color="white" />
       </div>
       <input
         value={keyword}
@@ -37,7 +37,7 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
           handleSearch(e.target.value);
         }}
         onFocus={() => setOnSearch(true)}
-        className="outline-none w-full ring ring-gray-400 rounded-full px-2 py-1"
+        className="outline-none w-full rounded-full"
         placeholder="Search"
       ></input>
       {/* {onSearch && (

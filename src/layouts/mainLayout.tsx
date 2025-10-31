@@ -5,7 +5,7 @@ import {
   SidebarStudentData,
   SidebarTeacherData,
 } from "@/mock/sidebar-data";
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 type Props = {
   children: ReactNode;

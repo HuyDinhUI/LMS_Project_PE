@@ -10,6 +10,7 @@ import {
   Settings,
   User,
   CircleUser,
+  Fullscreen,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
@@ -73,13 +74,27 @@ export const Header = () => {
 
   }
 
+  const handleFullscreen = () => {
+    const elem = document.documentElement; // toàn bộ trang
+
+    if (!document.fullscreenElement) {
+      elem.requestFullscreen().catch((err) => {
+        console.error(`Lỗi khi bật fullscreen: ${err.message}`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
   return (
     <div className="flex px-3 py-2 items-center justify-between">
       <div className="w-[40%] ms-4">
-        <SearchForm handleSearch={handleSearch}/>
+        <Button variant="transparent" size="ic" icon={<Fullscreen/>} onClick={() => handleFullscreen()}/>
+        
       </div>
 
-      <div className="w-[25%] flex justify-end items-center gap-2">
+      <div className="w-[30%] flex justify-end items-center gap-2">
+        <SearchForm handleSearch={handleSearch}/>
         {theme === "light" ? (
           <Button
             variant="icon"

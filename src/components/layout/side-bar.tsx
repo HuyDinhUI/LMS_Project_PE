@@ -4,9 +4,11 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  PawPrint,
 } from "lucide-react";
-import logo from "@/assets/logo_lms.webp"
+import logo from "@/assets/logo_cat.svg"
 import { Button } from "../ui/button";
+
 
 export type SidebarItem =
   | {
@@ -53,9 +55,10 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
   
 
   return (
-    <aside className={`xl:block hidden ${isHidden ? 'w-20' : 'w-60'} ${SidebarVariantOption[variant]} sticky px-4 py-4 space-y-2 text-white rounded-2xl transition-all duration-150`}>
+    <aside className={`xl:block hidden shadow-md ${isHidden ? 'w-20' : 'w-60'} ${SidebarVariantOption[variant]} sticky px-4 py-4 space-y-2 text-white rounded-2xl transition-all duration-150`}>
       <div className="flex items-center justify-center mt-5 mb-5">
-        {!isHidden && <h1 className="font-brand-logo text-5xl">henry</h1>}
+        <img width={40} src={logo} className="mb-5"></img>
+        {!isHidden && <h1 className={`font-brand-logo text-5xl`}>eduCat</h1>}
       </div>
       {items.map((item, index) => {
         if (item.type === 'separator') {
@@ -75,8 +78,8 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
           <div key={item.label} className="transition-all">
             <button
               onClick={() => hasSub && toggleMenu(item.label)}
-              className={`cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-full transition ${isActive && !isHidden ? "bg-pink-brand text-white py-2" : ""
-                } ${isActive && isHidden ? "bg-pink-brand rounded-full text-white p-3 hover:bg-pink-brand/30" : ""
+              className={`cursor-pointer w-full flex items-center justify-between px-3 py-2 rounded-full transition ${isActive && !isHidden ? "bg-yellow-brand text-white py-2" : ""
+                } ${isActive && isHidden ? "bg-yellow-brand rounded-full text-white p-3 hover:bg-yellow-brand/30" : ""
                 }`}
             >
               <span className={`flex-1 ${isHidden ? 'text-4xl' : 'text-sm'}`}>
@@ -127,7 +130,7 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
           </div>
         );
       })}
-      <Button onClick={() => setIsHidden(!isHidden)} variant="icon" size="ic" icon={isHidden ? <ChevronRight size={13}/> : <ChevronLeft size={13}/>} className="absolute -right-3 bottom-20"/>
+      <Button onClick={() => setIsHidden(!isHidden)} variant="icon" size="ic" icon={isHidden ? <PawPrint size={15}/> : <PawPrint size={15} className='-rotate-90'/>} className="absolute -right-3 bottom-1/2"/>
     </aside>
   );
 };

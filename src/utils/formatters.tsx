@@ -31,3 +31,9 @@ export const formatterDataEventCalendar = (data: any) =>{
 
     return events
 }
+
+export const getName = (fullname: string) => {
+    const length = fullname.split(' ',5).length
+    const name = fullname.split(' ',5)[length-1]
+    return name
+}
