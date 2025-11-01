@@ -99,7 +99,7 @@ const Quiz = () => {
             {dataQuiz?.map((q) => (
               <div
                 key={q.MaTN}
-                className="w-full h-55 p-5 bg-[url('https://img.freepik.com/free-vector/hand-drawn-minimal-background_23-2149017540.jpg?uid=R40278496&ga=GA1.1.12754122.1753975824&semt=ais_hybrid&w=740&q=80')] bg-cover rounded-xl relative"
+                className="w-full h-55 p-5 bg-black/5 rounded-xl relative"
               >
                 <h2 className="text-lg font-semibold">{q.TieuDe}</h2>
                 <p className="h-5 overflow-ellipsis">{q.MoTa}</p>
@@ -133,7 +133,7 @@ const Quiz = () => {
                         align="end"
                         trigger={
                           <Button
-                            variant="icon"
+                            variant="transparent"
                             icon={<Ellipsis size={18} />}
                           />
                         }
@@ -158,9 +158,8 @@ const Quiz = () => {
                 )}
                 {role === "GV" && (
                   <Button
-                    variant="transparent"
                     title="Xem danh sách nộp bài"
-                    className="p-2 cursor-pointer backdrop-blur-md rounded-md flex items-center gap-2 mt-5"
+                    className="p-2 cursor-pointer backdrop-blur-md rounded-md flex items-center gap-2 mt-5 bg-yellow-brand"
                     onClick={() =>
                       navigator(`/classcourse/${id}/quiz/${q.MaTN}/submissions`)
                     }
@@ -311,9 +310,8 @@ function QuizCreate({ handleGetQuiz }: props) {
   };
 
   return (
-    <div className="px-30 pb-10">
+    <div className="px-5 pb-10">
       <h1 className="text-2xl font-semibold mb-4">Create Quiz</h1>
-
       <Input
         placeholder="Title"
         value={tieuDe}
@@ -324,7 +322,7 @@ function QuizCreate({ handleGetQuiz }: props) {
         placeholder="Description"
         value={moTa}
         onChange={(e) => setMoTa(e.target.value)}
-        className="w-full border border-gray-500 rounded-md p-2 mb-3"
+        className="w-full border border-gray-500 rounded-xl p-2 mb-3"
       />
       <div className="grid grid-cols-2 gap-2">
         <Input
@@ -336,7 +334,7 @@ function QuizCreate({ handleGetQuiz }: props) {
         />
         <select
           onChange={(e) => setType(String(e.target.value))}
-          className="p-2 h-10 ring ring-gray-500 rounded-md"
+          className="p-2 h-10 ring ring-gray-500 rounded-xl"
         >
           <option value="" disabled selected>
             Type quiz
@@ -412,7 +410,7 @@ function QuizCreate({ handleGetQuiz }: props) {
             icon={<Plus size={18} />}
             type="button"
             onClick={() => dispatch({ type: "ADD_ANSWER", qid: q.id })}
-            className="mt-3 bg-pink-brand text-white hover:bg-pink-brand/80"
+            className="mt-3 bg-yellow-brand text-white hover:bg-yellow-brand/80"
           ></Button>
         </div>
       ))}
@@ -422,7 +420,7 @@ function QuizCreate({ handleGetQuiz }: props) {
           title="Add question"
           icon={<Plus size={18} />}
           onClick={() => dispatch({ type: "ADD_QUESTION" })}
-          className="bg-green-brand text-white hover:bg-green-brand/80"
+          className="bg-black/20 text-white hover:bg-black/30"
         ></Button>
         <Button
           title="Create"

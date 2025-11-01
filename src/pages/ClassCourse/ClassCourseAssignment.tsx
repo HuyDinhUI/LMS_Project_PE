@@ -216,11 +216,6 @@ const ClassCourseManagementAssignment = () => {
                     {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
                     placeholder="Title"
                   />
-                  {/* <textarea
-                  placeholder="Nội dung"
-                  className="p-2 ring ring-gray-200 rounded-md"
-                  {...register("NoiDung")}
-                ></textarea> */}
                   <ReactQuill value={description} onChange={setDescription} />
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-2">

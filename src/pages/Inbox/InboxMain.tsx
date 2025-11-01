@@ -102,34 +102,36 @@ const InboxMain = () => {
   const handleSearch = () => {};
 
   return (
-    <div className="pt-5 px-10 w-full flex gap-2 flex-1">
+    <div className="pt-5 ps-10 pe-5 w-full flex gap-2 flex-1">
       {/* Sidebar: danh sách lớp */}
-      <div className="w-1/4 bg-green-light-brand rounded-xl p-2 overflow-y-auto">
-        <div className="w-full py-4 text-white">
+      <div className="w-1/4 bg-yellow-brand rounded-xl p-2 overflow-y-auto">
+        <div className="w-full py-4 text-black">
           <Input placeholder="Search" variant="borderBottom" />
         </div>
-        {listInbox.map((inbox) => (
-          <div
-            key={inbox.MaLop}
-            className={`p-2 rounded cursor-pointer text-white ${
-              selectedInbox?.MaLop === inbox.MaLop ? "bg-yellow-brand" : ""
-            }`}
-            onClick={() => setSelectedInbox(inbox)}
-          >
-            {inbox.ten_lop} - {inbox.MaLop}
-          </div>
-        ))}
+        <div className="flex flex-col gap-2">
+          {listInbox.map((inbox) => (
+            <div
+              key={inbox.MaLop}
+              className={`p-2 rounded-md cursor-pointer text-black ${
+                selectedInbox?.MaLop === inbox.MaLop ? "bg-black text-white" : "bg-black/5"
+              }`}
+              onClick={() => setSelectedInbox(inbox)}
+            >
+              {inbox.ten_lop}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Khung chat */}
       <div
-        className="flex-1 bg-black/3 rounded-xl overflow-hidden bg-cover"
-        style={{ backgroundImage: `url(${selectedInbox?.cover})` }}
+        className="flex-1 bg-black/5 rounded-xl overflow-hidden"
+        
       >
         {selectedInbox ? (
           <div className="h-full flex flex-col relative">
-            <div className="px-3 py-5 w-full bg-white/2 backdrop-blur-sm">
-              <h1 className="text-xl font-bold">{selectedInbox.ten_lop}</h1>
+            <div className="px-3 py-4.5 w-full border-b border-gray-300">
+              <h1 className="text-xl font-bold uppercase">{selectedInbox.TieuDe}</h1>
             </div>
             {/* Tin nhắn */}
             <div className="overflow-y-auto p-3 flex-1" ref={chatEndRef}>
@@ -144,7 +146,7 @@ const InboxMain = () => {
                     className={`p-2 rounded-xl max-w-[70%] mt-2 animate-slideInBottom ${
                       msg.MaNguoiGui === id
                         ? "bg-black text-white"
-                        : "bg-green-brand text-white"
+                        : "bg-black/50 text-white"
                     }`}
                   >
                     <p className="text-sm mb-1">
@@ -167,7 +169,7 @@ const InboxMain = () => {
                 e.preventDefault();
                 handleSend();
               }}
-              className="p-3 border-t flex gap-2 absolute bottom-0 right-0 left-0"
+              className="p-3 border-t border-gray-300 flex gap-2 absolute bottom-0 right-0 left-0"
             >
               <Input
                 placeholder="Enter message..."

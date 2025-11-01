@@ -1,15 +1,12 @@
-import { type EventType } from "@/components/ui/calendar";
 import type { ClassCourseType } from "@/types/ClassCourseType";
-
 import API from "@/utils/axios";
-import { formatterDataEventCalendar, getName } from "@/utils/formatters";
-import {} from "lucide-react";
+import { getName } from "@/utils/formatters";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import type { StudentEducation, StudentType } from "@/types/StudentType";
+import type { StudentEducation } from "@/types/StudentType";
 import { Button } from "@/components/ui/button";
-import Man from "@/assets/Character_Cat_1.svg";
+import CatImg from "@/assets/Character_Cat_1.svg";
 import type { AssignmentType } from "@/types/AssignmentType";
 import {
   Chart as ChartJS,
@@ -21,7 +18,8 @@ import {
   Filler,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { FilterForm } from "@/components/ui/filter-form";
+import { Process } from "@/components/ui/process";
+import { Pagination } from "@/components/ui/pagination";
 
 ChartJS.register(
   LineElement,
@@ -29,20 +27,28 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   Filler,
-  Tooltip,
+  Tooltip
 );
+
+type PaginationType = {
+  page: number;
+  limit: number;
+};
+
+const InitPagination: PaginationType = {
+  page: 1,
+  limit: 4,
+};
 
 const StudentDashboard = () => {
   const [dataStudent, setDataStudent] = useState<StudentEducation>();
-  const [events, setEvents] = useState<EventType[]>([]);
   const [dueSoon, setDueSoon] = useState<any[]>([]);
   const [selectedFilter, setSelectedFilter] = useState<string>("All");
-  const [assignmentScoreData, setAssignmentScoreData] = useState<
-    AssignmentType[]
-  >([]);
   const [selectedMaLop, setSelectedMaLop] = useState<string>("");
   const [listClass, setListClass] = useState<ClassCourseType[]>([]);
   const [chartData, setChartData] = useState<any>(null);
+  const [pagination, setPagination] = useState<PaginationType>(InitPagination);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const MaSV = localStorage.getItem("username");
 
   const getOneStudent = async () => {
@@ -63,7 +69,7 @@ const StudentDashboard = () => {
       const res = await API.get(
         `/assignments/getAssignmentByStudent/${MaSV}/${malop}`
       );
-      setAssignmentScoreData(res.data.result.data);
+
       const data: AssignmentType[] = res.data.result.data;
 
       const sorted = data.sort(
@@ -85,7 +91,7 @@ const StudentDashboard = () => {
             backgroundColor: "rgba(0, 0, 0, 0.071)",
             pointBackgroundColor: "black",
             pointRadius: 6,
-            tension: 0.3, // bo cong mượt
+            tension: 0.3,
           },
         ],
       });
@@ -109,20 +115,12 @@ const StudentDashboard = () => {
 
   const getDueSoon = async () => {
     try {
-      const res = await API.get("/assignments/getAllDueSoon");
+      const res = await API.get(`/assignments/getAllDueSoon?filter=${selectedFilter}&page=${pagination.page}&limit=${pagination.limit}`);
       setDueSoon(res.data.result.data);
+      setTotalPages(res.data.result.totalPages)
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
     }
-  };
-
-  const getSchedule = async () => {
-    const res = await API.get(
-      "/student/getSchedule/" + localStorage.getItem("username")
-    );
-    console.log(res.data);
-    console.log(formatterDataEventCalendar(res.data.result.data));
-    setEvents(formatterDataEventCalendar(res.data.result.data));
   };
 
   const handleFilter = async (key: string) => {
@@ -148,14 +146,29 @@ const StudentDashboard = () => {
     },
   ];
 
-  
+  const prevPage = () => {
+    setPagination((prev) => {
+      return { ...prev, page: prev.page - 1 };
+    });
+  };
+
+  const nextPage = () => {
+    setPagination((prev) => {
+      return { ...prev, page: prev.page + 1 };
+    });
+  };
+
+  const PageNunmberPagination = (page: number) => {
+    setPagination((prev) => {
+      return { ...prev, page };
+    });
+  };
 
   useEffect(() => {
     getClassByStudent();
     getOneStudent();
-    getSchedule();
     getDueSoon();
-  }, []);
+  }, [pagination, selectedFilter]);
 
   useEffect(() => {
     document.title = dataStudent?.hoten ?? "Dashboard";
@@ -177,7 +190,7 @@ const StudentDashboard = () => {
             </h1>
             <p>It's good to see you again.</p>
             <div className="absolute -top-5 right-10">
-              <img width={170} src={Man} />
+              <img width={170} src={CatImg} />
             </div>
           </div>
           <div className="flex-1 flex flex-col gap-5 mt-5">
@@ -193,7 +206,7 @@ const StudentDashboard = () => {
               ))}
             </div>
             {/* List assignment */}
-            <div className="h-120 flex flex-col gap-3 overflow-auto">
+            <div className="h-120 grid grid-rows-6 gap-3">
               {dueSoon.map((d) => (
                 <div
                   key={d.MaBaiTap}
@@ -211,6 +224,14 @@ const StudentDashboard = () => {
                   </Link>
                 </div>
               ))}
+              <Pagination
+                prevFunction={prevPage}
+                nextFunction={nextPage}
+                pageFunction={PageNunmberPagination}
+                totalPages={totalPages}
+                page={pagination.page}
+                limit={pagination.limit}
+              />
             </div>
           </div>
         </div>
@@ -231,42 +252,61 @@ const StudentDashboard = () => {
           </div>
           <div className="bg-black/5 py-3 px-2 rounded-xl">
             <div className="flex justify-end">
-              <select className="p-2 outline-none bg-black/10 rounded-md" onChange={(e) => setSelectedMaLop(e.target.value)}>
-                {listClass.map((c,i) => (
-                  <option key={i} value={c.MaLop}>{c.ten_lop}</option>
+              <select
+                className="p-2 outline-none bg-black/5 rounded-md"
+                onChange={(e) => setSelectedMaLop(e.target.value)}
+              >
+                {listClass.map((c, i) => (
+                  <option key={i} value={c.MaLop}>
+                    {c.ten_lop}
+                  </option>
                 ))}
               </select>
             </div>
             <div className="pt-5">
-              {chartData && chartData.labels?.length > 0 ? <Line
-                data={chartData}
-                options={{
-                  responsive: true,
-                  plugins: {
-                    tooltip: {
-                      callbacks: {
-                        label: (context) => {
-                          const score = context.raw;
-                          const label =
-                            context.chart.data.labels?.[context.dataIndex];
-                          return `${label}: ${score} điểm`;
+              {chartData && chartData.labels?.length > 0 ? (
+                <Line
+                  data={chartData}
+                  options={{
+                    responsive: true,
+                    plugins: {
+                      tooltip: {
+                        callbacks: {
+                          label: (context) => {
+                            const score = context.raw;
+                            const label =
+                              context.chart.data.labels?.[context.dataIndex];
+                            return `${label}: ${score} điểm`;
+                          },
                         },
                       },
                     },
-                  },
-                  scales: {
-                    y: {
-                      beginAtZero: true,
-                      max: 10,
-              
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        max: 10,
+                      },
+                      x: {},
                     },
-                    x: {
-              
-                    },
-                  },
-                }}
-              />: <p className="text-center text-gray-500">Chưa có dữ liệu điểm</p>}
+                  }}
+                />
+              ) : (
+                <p className="text-center text-gray-500">
+                  Chưa có dữ liệu điểm
+                </p>
+              )}
             </div>
+          </div>
+          <div className="flex-1 bg-black rounded-xl p-7">
+            <Process
+              total={159}
+              current={20}
+              label="Credit"
+              size="sm"
+              description="Number of accumulated credits"
+              note="Data from SIS system"
+              classname="bg-white"
+            />
           </div>
         </div>
       </div>

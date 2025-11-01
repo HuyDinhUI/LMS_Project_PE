@@ -130,7 +130,7 @@ export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
           </div>
         );
       })}
-      <Button onClick={() => setIsHidden(!isHidden)} variant="icon" size="ic" icon={isHidden ? <PawPrint size={15}/> : <PawPrint size={15} className='-rotate-90'/>} className="absolute -right-3 bottom-1/2"/>
+      <Button onClick={() => setIsHidden(!isHidden)} variant="icon" size="ic" icon={isHidden ? <PawPrint size={15}/> : <PawPrint size={15} className='-rotate-90'/>} className="absolute -right-3 top-25"/>
     </aside>
   );
 };

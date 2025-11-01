@@ -105,45 +105,12 @@ const ClassCourseManagementGrades = () => {
     }
   }, []);
 
-  const data_mock = [
-    {
-      key: "gioitinh",
-      select: [
-        {
-          name: "All",
-          value: "",
-        },
-        {
-          name: "Nam",
-          value: "Nam",
-        },
-        {
-          name: "Nữ",
-          value: "nữ",
-        },
-      ],
-    },
-    {
-      key: "order",
-      select: [
-        {
-          name: "a-z",
-          value: "asc",
-        },
-        {
-          name: "z-a",
-          value: "desc",
-        },
-      ],
-    },
-  ];
   return (
     <div className="flex-1 overflow-auto max-h-170 px-20">
       {/* header */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 mt-2">
         <div className="flex-1 flex gap-2 items-center">
           <SearchForm handleSearch={handleSearch} />
-          <FilterForm data={data_mock} handleFilter={handleFilter} />
         </div>
         <div>
           <Button

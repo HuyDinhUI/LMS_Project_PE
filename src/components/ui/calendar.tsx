@@ -30,7 +30,7 @@ export const Calendar = ({ data, height = '80vh' }: props) => {
             bgColor = "bg-red-500 text-white";
             break;
           default:
-            bgColor = "bg-green-brand text-white";
+            bgColor = "bg-black text-white";
         }
         return (
           <div
