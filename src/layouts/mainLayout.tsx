@@ -23,6 +23,8 @@ const MainLayout = ({ children }: Props) => {
       return SidebarAdminData;
     }
   };
+
+  
   return (
     <div className="h-full dark:bg-background bg-[#fff8f0] p-5">
       <div className="flex h-full items-center">

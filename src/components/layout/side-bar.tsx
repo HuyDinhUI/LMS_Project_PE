@@ -2,7 +2,6 @@ import { useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   ChevronDown,
-  ChevronLeft,
   ChevronRight,
   PawPrint,
 } from "lucide-react";

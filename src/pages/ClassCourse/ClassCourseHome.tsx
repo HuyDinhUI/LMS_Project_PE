@@ -138,7 +138,7 @@ const ClassCourseManagementHome = () => {
     <div className="flex-1 overflow-auto max-h-170 px-20">
       {/* cover */}
       <div className="w-full h-40 flex flex-col justify-end rounded-xl bg-cover overflow-hidden" style={{backgroundImage: `url(${classCourseData?.cover})`}}>
-        <h1 className="text-3xl bg-black/50 text-white p-2">{classCourseData?.ten_lop}</h1>
+        
       </div>
       {/* content */}
       <div className="mt-5">

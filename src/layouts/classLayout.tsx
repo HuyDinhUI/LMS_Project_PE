@@ -1,12 +1,16 @@
 import { Header } from "@/components/layout/header";
-import { Sidebar, type SidebarItem } from "@/components/layout/side-bar";
+import { Sidebar } from "@/components/layout/side-bar";
 import {
   SidebarAdminData,
   SidebarStudentData,
   SidebarTeacherData,
 } from "@/mock/sidebar-data";
-import type { ReactNode } from "react";
+import type { ClassCourseType } from "@/types/ClassCourseType";
+import API from "@/utils/axios";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import catImg from "@/assets/Character_Cat_3.svg"
 
 type Props = {
   children: ReactNode;
@@ -15,6 +19,7 @@ type Props = {
 const ClassLayout = ({ children }: Props) => {
   const { id } = useParams();
   const role = localStorage.getItem("role");
+  const [classCourseData, setClassCourseData] = useState<ClassCourseType>();
 
   const getSidebarItems = () => {
     if (role === "SV") {
@@ -27,6 +32,20 @@ const ClassLayout = ({ children }: Props) => {
   }
 
   const location = useLocation();
+
+  const getClassCourse = async () => {
+    try {
+      const res = await API.get(`/classCourse/getOneClassCourse/${id}`);
+      setClassCourseData(res.data.result.data[0]);
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    getClassCourse()
+  },[id])
+
   const navbarClassItems = [
     {
       title: "Home",
@@ -71,7 +90,17 @@ const ClassLayout = ({ children }: Props) => {
                 </Link>
               ))}
             </div>
-            <div className="overflow-auto flex-1">{children}</div>
+            <div className="overflow-y-hidden flex-1">
+              {/* <div className="relative px-20 pb-5">
+                <div className="border-b border-gray-500 flex items-end justify-center">
+                  <div className=""><img width={90} src={catImg}/></div>
+                  <div className="">
+                    <h1 className="text-3xl font-brand-logo">{classCourseData?.ten_lop}</h1>
+                  </div>
+                </div>
+              </div> */}
+              {children}
+            </div>
           </div>
         </div>
       </div>
