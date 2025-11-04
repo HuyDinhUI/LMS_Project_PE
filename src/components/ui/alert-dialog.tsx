@@ -25,7 +25,7 @@ const AlertDialogDemo = ({trigger,label,description,onclick}:AlertDialogProps) =
 				<div className="flex justify-end gap-2">
 					<AlertDialog.Cancel asChild>
 						<button className="inline-flex h-[35px] items-center justify-center rounded px-[15px] font-medium leading-none outline-none outline-offset-1  select-none cursor-pointer hover:bg-black/5 dark:hover:bg-white/10">
-							Cancle
+							Cancel
 						</button>
 					</AlertDialog.Cancel>
 					<AlertDialog.Action asChild>

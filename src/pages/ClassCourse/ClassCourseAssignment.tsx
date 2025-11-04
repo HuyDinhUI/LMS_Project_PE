@@ -4,8 +4,17 @@ import { Input } from "@/components/ui/input";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import type { AssignmentType } from "@/types/AssignmentType";
 import API from "@/utils/axios";
-import { Ellipsis, File, LayoutGrid, LayoutList, Pen, Plus, Trash, Upload } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import {
+  Ellipsis,
+  File,
+  LayoutGrid,
+  LayoutList,
+  Pen,
+  Plus,
+  Trash,
+  Upload,
+} from "lucide-react";
+import { use, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,33 +23,33 @@ import "react-quill-new/dist/quill.snow.css";
 import { FilterForm } from "@/components/ui/filter-form";
 
 const data_mock = [
-    {
-      key: "order",
-      select: [
-        {
-          name: "Last create",
-          value: "asc",
-        },
-        {
-          name: "New create",
-          value: "desc",
-        },
-      ],
-    },
-    {
-      key: "status",
-      select: [
-        {
-          name: "Submited",
-          value: "submited"
-        },
-        {
-          name: "Unsubmit",
-          value: "unsubmit"
-        }
-      ]
-    }
-  ];
+  {
+    key: "order",
+    select: [
+      {
+        name: "Last create",
+        value: "asc",
+      },
+      {
+        name: "New create",
+        value: "desc",
+      },
+    ],
+  },
+  {
+    key: "status",
+    select: [
+      {
+        name: "Submited",
+        value: "submited",
+      },
+      {
+        name: "Unsubmit",
+        value: "unsubmit",
+      },
+    ],
+  },
+];
 
 const ClassCourseManagementAssignment = () => {
   const role = localStorage.getItem("role");
@@ -52,6 +61,7 @@ const ClassCourseManagementAssignment = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [description, setDescription] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
+  const [selectedMaBaiTap, setSelectedMaBaiTap] = useState<string>("");
   const dropRef = useRef<any>(null);
   const {
     register,
@@ -129,14 +139,14 @@ const ClassCourseManagementAssignment = () => {
     formData.append("TieuDe", data.TieuDe);
     formData.append("NoiDung", description);
     formData.append("HanNop", data.HanNop);
-    formData.append("GioNop", data.GioNop);
+    formData.append("NgayBatDau", data.NgayBatDau);
     formData.append("DiemToiDa", data.DiemToiDa);
     formData.append("MaLop", id!);
     formData.append("file", file!);
 
     console.log(...formData);
     try {
-      const res = await API.post("/assignments/create", formData, {
+      await API.post("/assignments/create", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -152,7 +162,11 @@ const ClassCourseManagementAssignment = () => {
 
   const getItemActionAssignment = (MaBaiTap: string) => {
     return [
-      { label: "Edit", icon: <Pen size={16} /> },
+      {
+        label: "Edit",
+        icon: <Pen size={16} />,
+        onClick: () => setSelectedMaBaiTap(MaBaiTap),
+      },
       {
         label: "Delete",
         icon: <Trash size={16} />,
@@ -175,9 +189,7 @@ const ClassCourseManagementAssignment = () => {
     }
   };
 
-  const handleFilter = async () => {
-
-  }
+  const handleFilter = async () => {};
 
   return (
     <div className="flex-1 overflow-auto max-h-165">
@@ -186,10 +198,10 @@ const ClassCourseManagementAssignment = () => {
         {/* filter */}
         <div className="flex gap-2 mt-2">
           <div className="flex">
-          <Button variant="icon" icon={<LayoutGrid size={18}/>}/>
-          <Button variant="transparent" icon={<LayoutList size={18}/>}/>
-        </div>
-        <FilterForm data={data_mock} handleFilter={handleFilter}/>
+            <Button variant="icon" icon={<LayoutGrid size={18} />} />
+            <Button variant="transparent" icon={<LayoutList size={18} />} />
+          </div>
+          <FilterForm data={data_mock} handleFilter={handleFilter} />
         </div>
         <div className="flex flex-col gap-3 w-full mt-5 mb-7">
           {/* Form tạo */}
@@ -220,30 +232,37 @@ const ClassCourseManagementAssignment = () => {
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-2">
                       <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">Date</label>
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">
+                          Start date
+                        </label>
+                        <Input
+                          {...register("NgayBatDau")}
+                          type="datetime-local"
+                          variant="primary"
+                          placeholder=""
+                        />
+                      </div>
+                      <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">
+                          End date
+                        </label>
                         <Input
                           {...register("HanNop")}
-                          type="date"
+                          type="datetime-local"
                           variant="primary"
-                          placeholder="Hạn nộp"
+                          placeholder=""
                         />
                       </div>
+
                       <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">Time</label>
-                        <Input
-                          {...register("GioNop")}
-                          type="time"
-                          variant="primary"
-                          placeholder="Giờ nộp"
-                        />
-                      </div>
-                      <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">Grade</label>
+                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">
+                          Point
+                        </label>
                         <Input
                           {...register("DiemToiDa")}
                           type="number"
                           variant="primary"
-                          placeholder="Maximum grade"
+                          placeholder="10"
                         />
                       </div>
                     </div>
@@ -286,7 +305,7 @@ const ClassCourseManagementAssignment = () => {
                       }}
                       type="button"
                       variant="transparent"
-                      title="Cancle"
+                      title="Cancel"
                     />
                     <Button type="submit" variant="primary" title="Create" />
                   </div>
@@ -330,9 +349,9 @@ const ClassCourseManagementAssignment = () => {
                     {item.TrangThai === "Đã nộp" || item.TrangThai === "Nộp trễ"
                       ? item.TrangThai
                       : `Deadline:${" "}
-                    ${new Date(
-                      item.HanNop ?? "No dealine"
-                    ).toLocaleDateString("vi-VN")}${" "}
+                    ${new Date(item.HanNop ?? "No dealine").toLocaleDateString(
+                      "vi-VN"
+                    )}${" "}
                     ${item.HanNop && " - "} ${item.GioNop}`}
                   </p>
                 )}
@@ -369,6 +388,204 @@ const ClassCourseManagementAssignment = () => {
             </div>
           ))}
         </div>
+      </div>
+      {role === "GV" && selectedMaBaiTap && (
+        <FormUpdateAssignment
+          MaBaiTap={selectedMaBaiTap}
+          handleClose={() => {
+            setSelectedMaBaiTap("");
+            getAllAssignments();
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+type Props = {
+  MaBaiTap: string;
+  handleClose: () => void;
+};
+
+const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
+  const [assignmentData, setAssignmentsData] = useState<AssignmentType>();
+  const { register, handleSubmit, reset } = useForm();
+  const [description, setDescription] = useState<string>("");
+  const [file, setFile] = useState<File | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const dropRef = useRef<any>(null);
+  const getOneAssignment = async () => {
+    try {
+      const res = await API.get(`/assignments/getAssignmentById/${MaBaiTap}`);
+      setAssignmentsData(res.data.result.data[0]);
+      reset(res.data.result.data[0]);
+      setDescription(res.data.result.data[0].NoiDung);
+    } catch (err: any) {
+      console.log(err?.response?.data?.message);
+    }
+  };
+
+  const handleUpdate = async (data: any) => {
+    const formData = new FormData();
+    formData.append("MaBaiTap", MaBaiTap);
+    formData.append("TieuDe", data.TieuDe);
+    formData.append("NoiDung", description);
+    formData.append("HanNop", data.HanNop);
+    formData.append("NgayBatDau", data.NgayBatDau);
+    formData.append("DiemToiDa", data.DiemToiDa);
+    formData.append("file", file!);
+    try {
+      await API.put("/assignments/update", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      toast.success("Cập nhật bài tập thành công");
+      handleClose();
+    } catch (err: any) {
+      toast.error(err?.response?.message?.data);
+    }
+  };
+
+  // Khi kéo file vào vùng
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  // Khi rời file khỏi vùng
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  // Khi thả file vào vùng
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
+    }
+  };
+
+  // Khi chọn file bằng click
+  const handleFileChange = (e: any) => {
+    setFile(e.target.files[0]);
+  };
+
+  // Click để mở file picker
+  const handleClick = () => {
+    dropRef.current.click();
+  };
+
+  useEffect(() => {
+    getOneAssignment();
+  }, []);
+  return (
+    <div className="right-0 top-0 left-0 z-999 h-[100vh] w-[100-vw] bg-black/20 fixed">
+      <div className="bg-white w-130 p-5 h-[100vh] absolute right-0 flex flex-col gap-2 animate-slideInRight overflow-auto">
+        <h1 className="uppercase font-bold pb-2 mb-3 border-b">
+          Update Assignment
+        </h1>
+        <form onSubmit={handleSubmit(handleUpdate)}>
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="font-bold">Title:</label>
+              <Input
+                {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
+                placeholder="Title"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="font-bold">Description:</label>
+              <ReactQuill value={description} onChange={setDescription} />
+            </div>
+            <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-2">
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="flex flex-col gap-2">
+                    <label className="font-bold">
+                      Start date:
+                    </label>
+                    <Input
+                      {...register("NgayBatDau")}
+                      type="datetime-local"
+                      placeholder=""
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="font-bold">
+                      End date:
+                    </label>
+                    <Input
+                      {...register("HanNop")}
+                      type="datetime-local"
+                      placeholder=""
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="font-bold">
+                      Point:
+                    </label>
+                    <Input
+                      {...register("DiemToiDa")}
+                      type="number"
+                      placeholder="10"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex flex-col gap-5">
+                {assignmentData?.file_path ? (
+                  <div className="flex flex-col gap-2">
+                    <label className="font-bold">Current file:</label>
+                    <a
+                      className="bg-gray-100 underline p-2 rounded-md"
+                      href={`${import.meta.env.VITE_BASE_STATIC_FILE}/${
+                        assignmentData?.file_path
+                      }`}
+                      target="_blank"
+                    >
+                      {assignmentData?.original_name}
+                    </a>
+                  </div>
+                ) : (
+                  <p className="text-center italic bg-gray-50 rounded-md p-2">
+                    There are no files
+                  </p>
+                )}
+                <div
+                  onClick={handleClick}
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={`border-1 h-full flex items-center justify-center border-dashed rounded-xl p-10 cursor-pointer transition-colors ${
+                    isDragging
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-400"
+                  }`}
+                >
+                  {file ? (
+                    <p className="">{file.name}</p>
+                  ) : (
+                    <p>Drag and Drop or Click</p>
+                  )}
+                </div>
+                <input
+                  type="file"
+                  hidden
+                  ref={dropRef}
+                  onChange={handleFileChange}
+                />
+              </div>
+            </div>
+            <div className="flex gap-2 justify-end absolute bottom-5 right-5 bg-black p-2 rounded-md">
+              <Button type="submit" title="Save" variant="transparent" className="bg-white" />
+              <Button type="button" onClick={handleClose} title="Cancel" className="text-white"/>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   );

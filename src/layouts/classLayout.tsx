@@ -73,7 +73,7 @@ const ClassLayout = ({ children }: Props) => {
       <div className="flex h-full items-center">
         <Sidebar items={getSidebarItems()} />
         <div className="dark:bg-background flex-1 h-full overflow-hidden">
-          <Header />
+          <Header router={classCourseData?.ten_lop}/>
           <div className="flex px-5 gap-5 mt-5 h-full">
             <div className="flex flex-col gap-5">
               {navbarClassItems.map((c, i) => (

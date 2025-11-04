@@ -93,10 +93,13 @@ export const DropdownMenu = ({
               <>
                 {item.children ? (
                   <Dropdown.Item
-                    onClick={() => {
+                    onClick={(e) => {
+                      if (item.dialog) {
+                        e.preventDefault()
+                      }
                       handleClick(item);
                     }}
-                    onSelect={(e) => e.preventDefault()}
+                    
                     key={index}
                     className={clsx(
                       "flex items-center justify-between px-2 py-1.5 text-sm",
@@ -137,7 +140,11 @@ export const DropdownMenu = ({
                   </Dropdown.Item>
                 ) : (
                   <Dropdown.Item
-                    onSelect={(e) => e.preventDefault()}
+                    onClick={(e) => {
+                      if (item.dialog) {
+                        e.preventDefault()
+                      }
+                    }}
                     key={index}
                     className={clsx(
                       "flex items-center px-2 py-1.5 text-sm",

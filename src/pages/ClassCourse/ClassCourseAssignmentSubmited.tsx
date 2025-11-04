@@ -158,7 +158,7 @@ const ClassCourseAssignmentSubmited = () => {
                     ></textarea>
                     <div className="flex gap-2">
                       <Button title="Save" variant="dark" onClick={() => handleScoring(item.MaSV,grade)} />
-                      <Button onClick={() => setSelected("")} title="Cancle" />
+                      <Button onClick={() => setSelected("")} title="Cancel" />
                     </div>
                   </div>
                 </div>

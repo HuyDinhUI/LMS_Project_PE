@@ -61,7 +61,7 @@ type InputProps = {
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 const variantClass: Record<InputVariant, string> = {
-  default: "ring ring-gray-500 dark:ring-gray-500 rounded-xl",
+  default: "ring ring-gray-300 dark:ring-gray-500 rounded-md",
   primary: "",
   danger: "",
   borderBottom: "rounded-none border-b border-gray-500",

@@ -10,12 +10,21 @@ import { GoFileZip } from "react-icons/go";
 import { FilePreview } from "@/components/ui/file-preview";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Ellipsis, File, Link2, Pen, Plus, Trash, Upload, Youtube } from "lucide-react";
+import {
+  Ellipsis,
+  File,
+  Link2,
+  Pen,
+  Plus,
+  Trash,
+  Upload,
+  Youtube,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import { DropdownMenu } from "@/components/ui/dropdown";
-import ReactQuill from 'react-quill-new';
-import 'react-quill-new/dist/quill.snow.css';
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 
 const get_icon: any = {
@@ -35,7 +44,8 @@ const ClassCourseManagementHome = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [classCourseData, setClassCourseData] = useState<ClassCourseType>();
-  const [description,setDescription] = useState<string>("")
+  const [description, setDescription] = useState<string>("");
+  const [selectedMaNoiDung, setSelectedMaNoiDung] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -45,7 +55,11 @@ const ClassCourseManagementHome = () => {
 
   const getItemActionContent = (MaNoiDung: string) => {
     return [
-      { label: "Edit", icon: <Pen size={16} /> },
+      {
+        label: "Edit",
+        icon: <Pen size={16} />,
+        onClick: () => setSelectedMaNoiDung(MaNoiDung),
+      },
       {
         label: "Delete",
         icon: <Trash size={16} />,
@@ -128,118 +142,126 @@ const ClassCourseManagementHome = () => {
   useEffect(() => {
     getClassCourse();
     getContent();
-    
   }, []);
 
   useEffect(() => {
-    document.title = classCourseData?.ten_lop + '-' + classCourseData?.MaLop || 'Lớp học'
-  },[classCourseData])
+    document.title =
+      classCourseData?.ten_lop + "-" + classCourseData?.MaLop || "Lớp học";
+  }, [classCourseData]);
   return (
     <div className="flex-1 overflow-auto max-h-170 px-20">
       {/* cover */}
-      <div className="w-full h-40 flex flex-col justify-end rounded-xl bg-cover overflow-hidden" style={{backgroundImage: `url(${classCourseData?.cover})`}}>
-        
-      </div>
+      <div
+        className="w-full h-40 flex flex-col justify-end rounded-xl bg-cover overflow-hidden"
+        style={{ backgroundImage: `url(${classCourseData?.cover})` }}
+      ></div>
       {/* content */}
       <div className="mt-5">
         {/* form tạo content */}
-        <div className={`p-4 rounded-xl bg-black/3 overflow-scroll transition-all duration-300 relative ${opentFormCreate ? "h-100" : "h-13"}`}>
+        <div
+          className={`p-4 rounded-xl bg-black/3 overflow-scroll transition-all duration-300 relative ${
+            opentFormCreate ? "h-100" : "h-13"
+          }`}
+        >
           <h2
             onClick={() => setOpenFormCreate(!opentFormCreate)}
             className="cursor-pointer flex gap-2"
           >
-            <Plus/>
+            <Plus />
             Add content
           </h2>
 
-          {opentFormCreate && <form
-            onSubmit={handleSubmit(handleCreateContent)}
-            className="flex flex-col gap-3 mt-10"
-          >
-            <Input
-              placeholder="Title"
-              {...register("tieu_de", {
-                required: "Tiêu đề không được để trống",
-              })}
-            />
-            {/* <textarea
+          {opentFormCreate && (
+            <form
+              onSubmit={handleSubmit(handleCreateContent)}
+              className="flex flex-col gap-3 mt-10"
+            >
+              <Input
+                placeholder="Title"
+                {...register("tieu_de", {
+                  required: "Tiêu đề không được để trống",
+                })}
+              />
+              {/* <textarea
               className="w-full ring ring-gray-200 rounded-md p-2"
               placeholder="Mô tả"
               {...register("mota")}
             ></textarea> */}
-            <ReactQuill value={description} onChange={setDescription}/>
-            <Input
-              {...register("file")}
-              ref={(e) => {
-                ref(e); // Gắn ref của React Hook Form
-                fileInputRef.current = e; // Lưu ref của bạn để trigger click
-              }}
-              hidden
-              type="file"
-              onChange={handleFileOnChange}
-            />
-            {/* Preview */}
-            {file && (
-              <div className="grid grid-cols-4">
-                <div className="p-3 ring ring-gray-200 rounded-md">
-                  <label>
-                    <div className="flex justify-center items-center p-5">
-                      <File />
-                    </div>
-                    <label className="text-center w-full block">
-                      {file.name}
-                    </label>
-                  </label>
-                </div>
-              </div>
-            )}
-            <div className="flex gap-2">
-              <Button
-                onClick={() => fileInputRef.current?.click()}
-                type="button"
-                variant="icon"
-                size="lg"
-                className=""
-                icon={<Upload />}
-              />
-              <Button
-                type="button"
-                variant="icon"
-                size="lg"
-                className=""
-                icon={<Link2 />}
-              />
-               <Button
-                type="button"
-                variant="icon"
-                size="lg"
-                className=""
-                icon={<Youtube />}
-              />
-            </div>
-            <div className={`flex justify-end gap-2 ${opentFormCreate ? 'absolute bottom-3 right-3' : 'hidden'}`}>
-              <Button
-                type="button"
-                onClick={() => {
-                  setFile(null);
-                  reset();
-                  setOpenFormCreate(false);
+              <ReactQuill value={description} onChange={setDescription} />
+              <Input
+                {...register("file")}
+                ref={(e) => {
+                  ref(e); // Gắn ref của React Hook Form
+                  fileInputRef.current = e; // Lưu ref của bạn để trigger click
                 }}
-                title="Cancle"
-                variant="transparent"
+                hidden
+                type="file"
+                onChange={handleFileOnChange}
               />
-              <Button type="submit" variant="primary" title="Post" />
-            </div>
-          </form>}
+              {/* Preview */}
+              {file && (
+                <div className="grid grid-cols-4">
+                  <div className="p-3 ring ring-gray-200 rounded-md">
+                    <label>
+                      <div className="flex justify-center items-center p-5">
+                        <File />
+                      </div>
+                      <label className="text-center w-full block">
+                        {file.name}
+                      </label>
+                    </label>
+                  </div>
+                </div>
+              )}
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => fileInputRef.current?.click()}
+                  type="button"
+                  variant="icon"
+                  size="lg"
+                  className=""
+                  icon={<Upload />}
+                />
+                <Button
+                  type="button"
+                  variant="icon"
+                  size="lg"
+                  className=""
+                  icon={<Link2 />}
+                />
+                <Button
+                  type="button"
+                  variant="icon"
+                  size="lg"
+                  className=""
+                  icon={<Youtube />}
+                />
+              </div>
+              <div
+                className={`flex justify-end gap-2 ${
+                  opentFormCreate ? "absolute bottom-3 right-3" : "hidden"
+                }`}
+              >
+                <Button
+                  type="button"
+                  onClick={() => {
+                    setFile(null);
+                    reset();
+                    setOpenFormCreate(false);
+                  }}
+                  title="Cancle"
+                  variant="transparent"
+                />
+                <Button type="submit" variant="primary" title="Post" />
+              </div>
+            </form>
+          )}
         </div>
 
         {/* list content */}
         <div className="flex flex-col gap-3 mt-5 h-150">
           {contentData.map((c, i) => (
-            <div
-              key={i}
-              className="w-full p-5 bg-black/3 rounded-xl relative"
-            >
+            <div key={i} className="w-full p-5 bg-black/3 rounded-xl relative">
               {/* header */}
               <div className="flex gap-2">
                 <img
@@ -275,9 +297,7 @@ const ClassCourseManagementHome = () => {
                     <div className="flex items-center">
                       {get_icon[`${getFileType(c.mime_type)}`]}
                     </div>
-                    <label className="w-full block">
-                      {c.original_name}
-                    </label>
+                    <label className="w-full block">{c.original_name}</label>
                   </div>
                 </div>
               )}
@@ -313,6 +333,176 @@ const ClassCourseManagementHome = () => {
           </div>
         </div>
       )}
+      {role === "GV" && selectedMaNoiDung && (
+        <FormUpdateContent
+          MaNoiDung={selectedMaNoiDung}
+          handleClose={() => {
+            setSelectedMaNoiDung("");
+            getContent();
+          }}
+        />
+      )}
+    </div>
+  );
+};
+
+type Props = {
+  MaNoiDung: string;
+  handleClose: () => void;
+};
+
+const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
+  const [contentData, setContentData] = useState<ContentType>();
+  const [file, setFile] = useState<File | null>(null);
+  const [description, setDescription] = useState<string>("");
+  const [isDragging, setIsDragging] = useState(false);
+  const dropRef = useRef<any>(null);
+  const { register, handleSubmit, reset } = useForm();
+
+  const getOneContentById = async () => {
+    try {
+      const res = await API.get(`/contents/getOneById/${MaNoiDung}`);
+      setContentData(res.data.result.data);
+      setDescription(res.data.result.data.mota);
+      reset(res.data.result.data);
+    } catch (err: any) {
+      console.log(err?.response?.data?.message);
+    }
+  };
+
+
+  // Khi kéo file vào vùng
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  // Khi rời file khỏi vùng
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  // Khi thả file vào vùng
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
+    }
+  };
+
+  // Khi chọn file bằng click
+  const handleFileChange = (e: any) => {
+    setFile(e.target.files[0]);
+  };
+
+  // Click để mở file picker
+  const handleClick = () => {
+    dropRef.current.click();
+  };
+
+  const handleUpdate = async (data: any) => {
+    const formData = new FormData()
+    formData.append("tieu_de", data.tieu_de)
+    formData.append("MaNoiDung", MaNoiDung)
+    formData.append("mota", description)
+    formData.append("file", file!)
+
+    try{
+      await API.put("/contents/update",formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      })
+      toast.success("Cập nhật nội dung thành công")
+      handleClose()
+    }
+    catch(err: any) {
+      console.log(err?.response?.data?.message)
+    }
+  };
+
+  useEffect(() => {
+    getOneContentById();
+  }, []);
+
+  return (
+    <div className="right-0 top-0 left-0 z-999 h-[100vh] w-[100-vw] bg-black/20 fixed">
+      <div className="bg-white w-130 p-5 h-full absolute right-0 flex flex-col gap-2 animate-slideInRight overflow-auto">
+        <h1 className="uppercase font-bold pb-2 mb-3 border-b">
+          Update Content
+        </h1>
+        <form onSubmit={handleSubmit(handleUpdate)}>
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-2">
+              <label className="font-bold">Title:</label>
+              <Input
+                {...register("tieu_de", { required: "Tiêu đề là bắt buộc" })}
+                placeholder="Title"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="font-bold">Description:</label>
+              <ReactQuill value={description} onChange={setDescription} />
+            </div>
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <label className="font-bold">Current file:</label>
+                {contentData?.file_path ? (
+                  <a
+                    className="bg-gray-100 underline p-2 rounded-md"
+                    href={`${import.meta.env.VITE_BASE_STATIC_FILE}/${
+                      contentData?.file_path
+                    }`}
+                    target="_blank"
+                  >
+                    {contentData?.original_name}
+                  </a>
+                ) : (
+                  <p className="text-center italic bg-gray-50 rounded-md p-2">
+                    There are no files
+                  </p>
+                )}
+              </div>
+              <div
+                onClick={handleClick}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`border-1 h-full flex items-center justify-center border-dashed rounded-xl p-10 cursor-pointer transition-colors ${
+                  isDragging ? "border-blue-500 bg-blue-50" : "border-gray-400"
+                }`}
+              >
+                {file ? (
+                  <p className="">{file.name}</p>
+                ) : (
+                  <p>Drag and Drop or Click</p>
+                )}
+              </div>
+              <input
+                type="file"
+                hidden
+                ref={dropRef}
+                onChange={handleFileChange}
+              />
+            </div>
+            <div className="flex gap-2 justify-end absolute bottom-5 right-5 bg-black p-2 rounded-md">
+              <Button
+                type="submit"
+                title="Save"
+                variant="transparent"
+                className="bg-white"
+              />
+              <Button
+                type="button"
+                onClick={handleClose}
+                title="Cancel"
+                className="text-white"
+              />
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

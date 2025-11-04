@@ -8,11 +8,11 @@ import CatImg from "@/assets/Character_Cat_1.svg";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
-import { Doughnut } from "react-chartjs-2";
+import { Doughnut, PolarArea, Pie } from "react-chartjs-2";
 import { Plus } from "lucide-react";
 
-import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
-ChartJS.register(ArcElement, Tooltip);
+import { Chart as ChartJS, ArcElement, Tooltip, RadialLinearScale } from "chart.js";
+ChartJS.register(ArcElement, Tooltip, RadialLinearScale);
 
 type PaginationType = {
   page: number;
@@ -78,7 +78,7 @@ const TeacherDashboard = () => {
               "rgba(0, 0, 0, 0.2)",
               "rgba(0, 0, 0, 0.3)",
             ],
-            borderColor: ["rgba(0, 0, 0, 0.2)","rgba(0, 0, 0, 0.3)","rgba(0, 0, 0, 0.4)"]
+            borderColor: ["rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)","rgba(0, 0, 0, 0)"]
           },
         ],
       });
@@ -159,7 +159,7 @@ const TeacherDashboard = () => {
   }, [dataTeach]);
 
   return (
-    <div className="pt-5 ps-10 pe-5 w-full h-175">
+    <div className="pt-5 ps-10 pe-5 w-full h-full">
       <div className="flex gap-15 h-full">
         <div className="w-[50%]">
           <div className="p-10 mt-5 bg-black/5 rounded-xl relative h-40">
@@ -214,7 +214,7 @@ const TeacherDashboard = () => {
             </div>
           </div>
         </div>
-        <div className="flex-1 flex flex-col gap-5 overflow-auto">
+        <div className="flex-1 flex flex-col gap-5">
           <div className="grid grid-cols-2 gap-3 mt-5 h-40">
             <div className="h-full bg-black/5 rounded-xl flex gap-2 justify-center items-center">
               <span className="text-7xl font-bold font-brand-title">11</span>
@@ -229,7 +229,7 @@ const TeacherDashboard = () => {
               </span>
             </div>
           </div>
-          <div className="bg-black/5 py-3 px-2 rounded-xl">
+          <div className="bg-black/5 py-3 px-5 rounded-xl">
             <div className="flex justify-end">
               <select
                 className="p-2 outline-none bg-black/5 rounded-md"
@@ -242,34 +242,62 @@ const TeacherDashboard = () => {
                 ))}
               </select>
             </div>
-            <div className="pt-5 h-70 flex justify-center">
-              {chartData && chartData.labels?.length > 0 ? (
-                <Doughnut
-                  data={chartData}
-                  options={{
-                    responsive: true,
-                    plugins: {
-                      tooltip: {
-                        callbacks: {
-                          label: (context) => {
-                            const sum = context.raw;
-                            const label =
-                              context.chart.data.labels?.[context.dataIndex];
-                            return `${label}: ${sum}`;
+            <div className="pt-5 grid grid-cols-2 gap-2 justify-center">
+              <div>
+                {chartData && chartData.labels?.length > 0 ? (
+                  <Pie
+                    data={chartData}
+                    options={{
+                      responsive: true,
+                      plugins: {
+                        tooltip: {
+                          callbacks: {
+                            label: (context) => {
+                              const sum = context.raw;
+                              const label =
+                                context.chart.data.labels?.[context.dataIndex];
+                              return `${label}: ${sum}`;
+                            },
                           },
                         },
                       },
-                    },
-                  }}
-                />
-              ) : (
-                <p className="text-center text-gray-500">
-                  Chưa có dữ liệu điểm
-                </p>
-              )}
+                    }}
+                  />
+                ) : (
+                  <p className="text-center text-gray-500">
+                    Chưa có dữ liệu điểm
+                  </p>
+                )}
+              </div>
+              <div>
+                {chartData && chartData.labels?.length > 0 ? (
+                  <PolarArea
+                    data={chartData}
+                    options={{
+                      responsive: true,
+                      plugins: {
+                        tooltip: {
+                          callbacks: {
+                            label: (context) => {
+                              const sum = context.raw;
+                              const label =
+                                context.chart.data.labels?.[context.dataIndex];
+                              return `${label}: ${sum}`;
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                ) : (
+                  <p className="text-center text-gray-500">
+                    Chưa có dữ liệu điểm
+                  </p>
+                )}
+              </div>
             </div>
           </div>
-          <div className="flex-1 grid grid-cols-2 gap-2 bg-black rounded-xl p-5">
+          <div className="grid grid-cols-2 gap-2 bg-black rounded-xl p-5">
             <Button
               title="Assignment"
               className="bg-white/10 text-white hover:bg-white/20"

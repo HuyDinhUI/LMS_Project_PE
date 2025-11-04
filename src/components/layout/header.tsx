@@ -17,14 +17,18 @@ import { useEffect, useState } from "react";
 
 import type { MenuItem } from "@/types/MenuItemType";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import API from "@/utils/axios";
 import { toast } from "react-toastify";
 import { AlertDialogLogout } from "@/mock/AlertDialog-MockData";
 import { DropdownMenu } from "../ui/dropdown";
 import { SearchForm } from "../ui/search-form";
 
-export const Header = () => {
+type props = {
+  router?: string;
+};
+
+export const Header = ({ router }: props) => {
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") ?? "light"
   );
@@ -70,9 +74,7 @@ export const Header = () => {
     }
   };
 
-  const handleSearch = () => {
-
-  }
+  const handleSearch = () => {};
 
   const handleFullscreen = () => {
     const elem = document.documentElement; // toàn bộ trang
@@ -88,13 +90,25 @@ export const Header = () => {
 
   return (
     <div className="flex px-3 py-2 items-center justify-between">
-      <div className="w-[40%] ms-4">
-        <Button variant="transparent" size="ic" icon={<Fullscreen/>} onClick={() => handleFullscreen()}/>
-        
+      <div className="w-[40%] ms-4 flex gap-2 items-center">
+        <Button
+          variant="transparent"
+          size="ic"
+          icon={<Fullscreen />}
+          onClick={() => handleFullscreen()}
+        />
+        <div>
+          <div className="flex gap-2 text-sm">
+            {" "}
+            { router && <Link to={`/classcourse/list`}>
+              Class
+            </Link>} / <strong>{router}</strong>
+          </div>
+        </div>
       </div>
 
       <div className="w-[30%] flex justify-end items-center gap-2">
-        <SearchForm handleSearch={handleSearch}/>
+        <SearchForm handleSearch={handleSearch} />
         {theme === "light" ? (
           <Button
             variant="icon"
