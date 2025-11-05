@@ -101,8 +101,8 @@ export const Header = ({ router }: props) => {
           <div className="flex gap-2 text-sm">
             {" "}
             { router && <Link to={`/classcourse/list`}>
-              Class
-            </Link>} / <strong>{router}</strong>
+              Class /
+            </Link>}<strong>{router}</strong>
           </div>
         </div>
       </div>

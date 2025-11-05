@@ -485,7 +485,7 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
   return (
     <div className="right-0 top-0 left-0 z-999 h-[100vh] w-[100-vw] bg-black/20 fixed">
       <div className="bg-white w-130 p-5 h-[100vh] absolute right-0 flex flex-col gap-2 animate-slideInRight overflow-auto">
-        <h1 className="uppercase font-bold pb-2 mb-3 border-b">
+        <h1 className="uppercase font-bold pb-2 mb-3 border-b sticky top-0 bg-white">
           Update Assignment
         </h1>
         <form onSubmit={handleSubmit(handleUpdate)}>
@@ -580,9 +580,9 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
                 />
               </div>
             </div>
-            <div className="flex gap-2 justify-end absolute bottom-5 right-5 bg-black p-2 rounded-md">
-              <Button type="submit" title="Save" variant="transparent" className="bg-white" />
-              <Button type="button" onClick={handleClose} title="Cancel" className="text-white"/>
+            <div className="flex gap-2 justify-end fixed top-4 right-5 rounded-md">
+              <Button type="submit" title="Save" size="sm" variant="dark"/>
+              <Button type="button" onClick={handleClose} size="sm" title="Cancel"/>
             </div>
           </div>
         </form>

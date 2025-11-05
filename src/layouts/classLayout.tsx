@@ -69,7 +69,7 @@ const ClassLayout = ({ children }: Props) => {
     },
   ];
   return (
-    <div className="h-full dark:bg-background bg-amber-50 p-5">
+    <div className="h-full dark:bg-background bg-[#fff8f0] p-5">
       <div className="flex h-full items-center">
         <Sidebar items={getSidebarItems()} />
         <div className="dark:bg-background flex-1 h-full overflow-hidden">

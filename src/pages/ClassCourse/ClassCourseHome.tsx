@@ -486,18 +486,18 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
                 onChange={handleFileChange}
               />
             </div>
-            <div className="flex gap-2 justify-end absolute bottom-5 right-5 bg-black p-2 rounded-md">
+            <div className="flex gap-2 justify-end fixed top-4 right-5 rounded-md">
               <Button
                 type="submit"
                 title="Save"
-                variant="transparent"
-                className="bg-white"
+                variant="dark"
+                size="sm"
               />
               <Button
                 type="button"
                 onClick={handleClose}
                 title="Cancel"
-                className="text-white"
+                size="sm"
               />
             </div>
           </div>

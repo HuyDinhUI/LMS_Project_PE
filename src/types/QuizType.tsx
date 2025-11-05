@@ -6,6 +6,7 @@ export type QuizType = {
     ThoiGianLam: number
     TongDiem: number
     HanNop: Date | null
+    NgayBatDau: Date
     TrangThai: string
     NgayTao: Date
     isRandom: boolean
@@ -20,11 +21,13 @@ export type Question = {
     NoiDung: string
     Diem: number
     DapAn: Answer[]
+    CorrectIndex?: boolean | null
 }
 
 type Answer = {
     MaDapAn: string
     NoiDung: string
+    LaDapAnDung: boolean
 }
 
 export type Submissions = {
