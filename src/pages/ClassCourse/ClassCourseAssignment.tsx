@@ -7,49 +7,16 @@ import API from "@/utils/axios";
 import {
   Ellipsis,
   File,
-  LayoutGrid,
-  LayoutList,
   Pen,
   Plus,
   Trash,
-  Upload,
 } from "lucide-react";
-import { use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { FilterForm } from "@/components/ui/filter-form";
-
-const data_mock = [
-  {
-    key: "order",
-    select: [
-      {
-        name: "Last create",
-        value: "asc",
-      },
-      {
-        name: "New create",
-        value: "desc",
-      },
-    ],
-  },
-  {
-    key: "status",
-    select: [
-      {
-        name: "Submited",
-        value: "submited",
-      },
-      {
-        name: "Unsubmit",
-        value: "unsubmit",
-      },
-    ],
-  },
-];
 
 const ClassCourseManagementAssignment = () => {
   const role = localStorage.getItem("role");
@@ -58,10 +25,10 @@ const ClassCourseManagementAssignment = () => {
   const [assignmentsData, setAssignmentsData] = useState<AssignmentType[]>([]);
   const [opentFormCreate, setOpenFormCreate] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [description, setDescription] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
   const [selectedMaBaiTap, setSelectedMaBaiTap] = useState<string>("");
+  const [selectedFilter, setSelectedFilter] = useState<string>("All");
   const dropRef = useRef<any>(null);
   const {
     register,
@@ -72,7 +39,7 @@ const ClassCourseManagementAssignment = () => {
 
   const getAllAssignments = async () => {
     try {
-      const res = await API.get(`/assignments/getAssignmentsByClass/${id}`);
+      const res = await API.get(`/assignments/getAssignmentsByClass/${id}?filter=${selectedFilter}`);
       setAssignmentsData(res.data.result.data);
     } catch (err: any) {
       toast.error(
@@ -84,7 +51,7 @@ const ClassCourseManagementAssignment = () => {
   const getAssignmentsByStudent = async () => {
     try {
       const res = await API.get(
-        `/assignments/getAssignmentByStudent/${MaSV}/${id}`
+        `/assignments/getAssignmentByStudent/${MaSV}/${id}?filter=${selectedFilter}`
       );
       setAssignmentsData(res.data.result.data);
     } catch (err: any) {
@@ -132,7 +99,7 @@ const ClassCourseManagementAssignment = () => {
     } else {
       getAssignmentsByStudent();
     }
-  }, []);
+  }, [selectedFilter]);
 
   const handleCreateAssignment = async (data: any) => {
     const formData = new FormData();
@@ -189,19 +156,45 @@ const ClassCourseManagementAssignment = () => {
     }
   };
 
-  const handleFilter = async () => {};
+  const handleFilter = async (key: string) => {
+    setSelectedFilter(key);
+  };
+
+  const FILTER_LIST = [
+    {
+      title: "All",
+      onclick: () => handleFilter("All"),
+    },
+    {
+      title: "Today",
+      onclick: () => handleFilter("Today"),
+    },
+    {
+      title: "Soon",
+      onclick: () => handleFilter("Soon"),
+    },
+    {
+      title: "Due",
+      onclick: () => handleFilter("Due"),
+    },
+  ];
 
   return (
     <div className="flex-1 overflow-auto max-h-165">
       {/* content */}
-      <div className="flex flex-col justify-center px-20 w-full">
+      <div className="flex flex-col justify-center px-20 w-full relative">
         {/* filter */}
-        <div className="flex gap-2 mt-2">
-          <div className="flex">
-            <Button variant="icon" icon={<LayoutGrid size={18} />} />
-            <Button variant="transparent" icon={<LayoutList size={18} />} />
+        <div className="flex sticky top-0 z-999">
+          <div className="flex gap-2 bg-[#fff8f0] w-full py-3">
+            {FILTER_LIST.map((f, i) => (
+              <Button
+                key={i}
+                title={f.title}
+                onClick={f.onclick}
+                variant={f.title === selectedFilter ? "primary" : "outline"}
+              />
+            ))}
           </div>
-          <FilterForm data={data_mock} handleFilter={handleFilter} />
         </div>
         <div className="flex flex-col gap-3 w-full mt-5 mb-7">
           {/* Form tạo */}
@@ -349,10 +342,9 @@ const ClassCourseManagementAssignment = () => {
                     {item.TrangThai === "Đã nộp" || item.TrangThai === "Nộp trễ"
                       ? item.TrangThai
                       : `Deadline:${" "}
-                    ${new Date(item.HanNop ?? "No dealine").toLocaleDateString(
+                    ${new Date(item.HanNop ?? "No dealine").toLocaleString(
                       "vi-VN"
-                    )}${" "}
-                    ${item.HanNop && " - "} ${item.GioNop}`}
+                    )}`}
                   </p>
                 )}
 
@@ -387,6 +379,7 @@ const ClassCourseManagementAssignment = () => {
               </div>
             </div>
           ))}
+          {assignmentsData.length === 0 && <span className="text-center italic">No data available</span>}
         </div>
       </div>
       {role === "GV" && selectedMaBaiTap && (
@@ -505,9 +498,7 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
               <div className="flex flex-col gap-2">
                 <div className="grid grid-cols-2 gap-2">
                   <div className="flex flex-col gap-2">
-                    <label className="font-bold">
-                      Start date:
-                    </label>
+                    <label className="font-bold">Start date:</label>
                     <Input
                       {...register("NgayBatDau")}
                       type="datetime-local"
@@ -515,9 +506,7 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="font-bold">
-                      End date:
-                    </label>
+                    <label className="font-bold">End date:</label>
                     <Input
                       {...register("HanNop")}
                       type="datetime-local"
@@ -525,9 +514,7 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
                     />
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="font-bold">
-                      Point:
-                    </label>
+                    <label className="font-bold">Point:</label>
                     <Input
                       {...register("DiemToiDa")}
                       type="number"
@@ -581,8 +568,13 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
               </div>
             </div>
             <div className="flex gap-2 justify-end fixed top-4 right-5 rounded-md">
-              <Button type="submit" title="Save" size="sm" variant="dark"/>
-              <Button type="button" onClick={handleClose} size="sm" title="Cancel"/>
+              <Button type="submit" title="Save" size="sm" variant="dark" />
+              <Button
+                type="button"
+                onClick={handleClose}
+                size="sm"
+                title="Cancel"
+              />
             </div>
           </div>
         </form>

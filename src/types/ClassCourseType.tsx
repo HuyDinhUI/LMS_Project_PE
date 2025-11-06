@@ -13,4 +13,6 @@ export type ClassCourseType = {
     sl_dangky: number
     MaHP: string
     cover: string
+    ngay_batdau: Date
+    ngay_kethuc: Date
 }

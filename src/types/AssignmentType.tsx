@@ -5,7 +5,6 @@ export type AssignmentType = {
     NoiDung: string | null;
     NgayTao: string;
     HanNop: Date | null;
-    GioNop: string | null;
     DiemToiDa: number;
     file_name: string | null;
     file_type: string | null;

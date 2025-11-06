@@ -13,13 +13,13 @@ type ButtonProps = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>; // Thêm các props như onClick, type,...
 
 const variantClass: Record<ButtonVariant, string> = {
-    default: 'rounded-xl dark:hover:bg-white/10',
-    primary: 'bg-[#0c0f0a] rounded-xl hover:bg-[#0c0f0a]/90 text-white dark:border dark:border-white dark:hover:border-green-500 dark:hover:bg-transparent dark:bg-transparent',
-    danger: 'bg-red-500 rounded-xl hover:bg-red-600 text-white',
-    dark: 'bg-[#0c0f0a] rounded-xl hover:bg-[#0c0f0a]/80 text-white dark:bg-gray-200 dark:text-black dark:hover:bg-white',
-    outline: 'rounded-xl ring ring-gray-500 dark:ring-gray-500 hover:bg-white/10',
+    default: 'rounded-md dark:hover:bg-white/10',
+    primary: 'bg-[#0c0f0a] rounded-md hover:bg-[#0c0f0a]/90 text-white dark:border dark:border-white dark:hover:border-green-500 dark:hover:bg-transparent dark:bg-transparent',
+    danger: 'bg-red-500 rounded-md hover:bg-red-600 text-white',
+    dark: 'bg-[#0c0f0a] rounded-md hover:bg-[#0c0f0a]/80 text-white dark:bg-gray-200 dark:text-black dark:hover:bg-white',
+    outline: 'rounded-md ring ring-gray-500 dark:ring-gray-500 hover:bg-white/10',
     icon: 'rounded-full bg-[#0c0f0a] text-white hover:bg-[#0c0f0a]/90',
-    transparent: 'bg-transparent rounded-xl text-black',
+    transparent: 'bg-transparent rounded-md text-black',
     item: 'bg-transparent dark:text-gray-300'
 };
 
