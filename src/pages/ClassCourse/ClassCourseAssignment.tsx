@@ -379,7 +379,7 @@ const ClassCourseManagementAssignment = () => {
               </div>
             </div>
           ))}
-          {assignmentsData.length === 0 && <span className="text-center italic">No data available</span>}
+          {assignmentsData.length === 0 && <span className="text-center italic">☘ Luckily, there is no homework today.</span>}
         </div>
       </div>
       {role === "GV" && selectedMaBaiTap && (

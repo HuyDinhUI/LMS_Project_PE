@@ -2,12 +2,13 @@ import { Button } from "@/components/ui/button";
 import type { Submissions } from "@/types/QuizType";
 import API from "@/utils/axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ClassCourseQuizSubmited = () => {
   const { matn } = useParams();
   const [submissions, setSubmissions] = useState<Submissions[]>([]);
+  const navigator = useNavigate()
 
   const getSubmissions = async () => {
     try {
@@ -70,7 +71,7 @@ const ClassCourseQuizSubmited = () => {
               </div>
             )}
             {(item.TrangThaiNopBai === "Đã nộp" ||
-              item.TrangThaiNopBai === "Nộp trễ") && (<Button variant="dark" title="Xem chi tiết" className="rounded-md"/>)}
+              item.TrangThaiNopBai === "Nộp trễ") && (<Button onClick={() => navigator(`${item.MaBaiLam}`)} variant="dark" title="Detail" className="rounded-md"/>)}
           </div>
         ))}
       </div>

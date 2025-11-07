@@ -1,12 +1,6 @@
 import ClassLayout from "@/layouts/classLayout";
 import MainLayout from "@/layouts/mainLayout";
-import {
-  SidebarAdminData,
-  SidebarStudentData,
-  SidebarTeacherData,
-} from "@/mock/sidebar-data";
 import Guard from "@/routes/guard";
-import path from "path";
 import { lazy } from "react";
 
 const AttendancePage = lazy(() => import("@/pages/Attendance"));
@@ -85,15 +79,25 @@ const ClassCourseAssignmentQuiz = lazy(
 
 const ClassCourseAssignmentQuizPlay = lazy(
   () => import("@/pages/ClassCourse/ClassCoursePlayQuiz")
-)
+);
 
-const ClassCourseQuizSubmissionsPage = lazy(() => import("@/pages/ClassCourse/ClassCourseQuizSubmited"))
+const ClassCourseQuizDetailSubmittedPage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseQuizDetailSubmitted")
+);
 
-const ClassCourseListPage = lazy(() => import("@/pages/ClassCourse/ClassCourseList"))
+const ClassCourseQuizSubmissionsPage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseQuizSubmited")
+);
 
-const ClassCourseMembersPage = lazy(() => import("@/pages/ClassCourse/ClassCourseMembers"))
+const ClassCourseListPage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseList")
+);
 
-const InboxMainPage = lazy(() => import("@/pages/Inbox/InboxMain"))
+const ClassCourseMembersPage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseMembers")
+);
+
+const InboxMainPage = lazy(() => import("@/pages/Inbox/InboxMain"));
 
 export const privateRoutes = [
   /////////////  Admin  /////////////////
@@ -187,10 +191,10 @@ export const privateRoutes = [
     element: (
       <Guard>
         <MainLayout>
-          <ClassCourseListPage/>
+          <ClassCourseListPage />
         </MainLayout>
       </Guard>
-    )
+    ),
   },
 
   {
@@ -261,10 +265,10 @@ export const privateRoutes = [
     element: (
       <Guard>
         <ClassLayout>
-          <ClassCourseAssignmentQuizPlay/>
+          <ClassCourseAssignmentQuizPlay />
         </ClassLayout>
       </Guard>
-    )
+    ),
   },
 
   {
@@ -272,10 +276,21 @@ export const privateRoutes = [
     element: (
       <Guard>
         <ClassLayout>
-          <ClassCourseQuizSubmissionsPage/>
+          <ClassCourseQuizSubmissionsPage />
         </ClassLayout>
       </Guard>
-    )
+    ),
+  },
+
+  {
+    path: "classcourse/:id/quiz/:matn/submissions/:mabailam",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseQuizDetailSubmittedPage />
+        </ClassLayout>
+      </Guard>
+    ),
   },
 
   {
@@ -283,12 +298,11 @@ export const privateRoutes = [
     element: (
       <Guard>
         <ClassLayout>
-          <ClassCourseMembersPage/>
+          <ClassCourseMembersPage />
         </ClassLayout>
       </Guard>
-    )
+    ),
   },
-
 
   /////////////  Student  ////////////////
 
@@ -361,9 +375,9 @@ export const privateRoutes = [
     element: (
       <Guard>
         <MainLayout>
-          <InboxMainPage/>
+          <InboxMainPage />
         </MainLayout>
       </Guard>
-    )
-  }
+    ),
+  },
 ];

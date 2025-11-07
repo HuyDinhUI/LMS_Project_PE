@@ -104,7 +104,7 @@ const InboxMain = () => {
   return (
     <div className="pt-5 ps-10 pe-5 w-full flex gap-2 flex-1">
       
-      <div className="bg-[#0c0f0a] w-full flex gap-2 p-5 rounded-xl">
+      <div className="bg-green-brand/80 w-full flex gap-2 p-5 rounded-xl">
         {/* Sidebar: danh sách lớp */}
         <div className="w-1/5 rounded-xl p-2 overflow-y-auto">
           <div className="w-full py-4 text-white">

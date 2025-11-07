@@ -11,21 +11,27 @@ import { FilePreview } from "@/components/ui/file-preview";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
+  ChevronLeft,
+  ChevronRight,
   Ellipsis,
   File,
   Link2,
   Pen,
   Plus,
+  Search,
   Trash,
   Upload,
   Youtube,
 } from "lucide-react";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import { DropdownMenu } from "@/components/ui/dropdown";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
+import { Dialog } from "@/components/ui/dialog";
+import logo_youtube from "@/assets/logo_youtube.png";
+import { SearchForm } from "@/components/ui/search-form";
 
 const get_icon: any = {
   pdf: <FaFilePdf size={30} />,
@@ -46,6 +52,15 @@ const ClassCourseManagementHome = () => {
   const [classCourseData, setClassCourseData] = useState<ClassCourseType>();
   const [description, setDescription] = useState<string>("");
   const [selectedMaNoiDung, setSelectedMaNoiDung] = useState<string>("");
+  const [keyword, setKeyword] = useState<string>("");
+  const [dataVideoYoutube, setDataVideoYoutube] = useState<any>([]);
+  const [dialog, setDialog] = useState<boolean>(false);
+  const [selectedVideoId, setSelectedVideoId] = useState<{
+    id: string;
+    title: string;
+    thumbnail: string;
+  } | null>();
+
   const {
     register,
     handleSubmit,
@@ -139,6 +154,15 @@ const ClassCourseManagementHome = () => {
     setFile(e.target.files[0]);
   };
 
+  const submitSearch = async () => {
+    try {
+      const res = await API.get(`/youtube/getVideos?keyword=${keyword}`);
+      setDataVideoYoutube(res.data.result.data);
+    } catch (err: any) {
+      console.log(err?.response?.data?.message);
+    }
+  };
+
   useEffect(() => {
     getClassCourse();
     getContent();
@@ -159,102 +183,232 @@ const ClassCourseManagementHome = () => {
       <div className="mt-5">
         {/* form tạo content */}
         <div
-          className={`p-4 rounded-xl bg-black/3 overflow-scroll transition-all duration-300 relative ${
+          className={`rounded-xl bg-black/3 transition-all duration-300 relative overflow-hidden ${
             opentFormCreate ? "h-100" : "h-13"
           }`}
         >
           <h2
             onClick={() => setOpenFormCreate(!opentFormCreate)}
-            className="cursor-pointer flex gap-2"
+            className="cursor-pointer flex gap-2 p-4 sticky top-0 bg-green-brand text-white"
           >
             <Plus />
             Add content
           </h2>
 
           {opentFormCreate && (
-            <form
-              onSubmit={handleSubmit(handleCreateContent)}
-              className="flex flex-col gap-3 mt-10"
-            >
-              <Input
-                placeholder="Title"
-                {...register("tieu_de", {
-                  required: "Tiêu đề không được để trống",
-                })}
-              />
-              {/* <textarea
-              className="w-full ring ring-gray-200 rounded-md p-2"
-              placeholder="Mô tả"
-              {...register("mota")}
-            ></textarea> */}
-              <ReactQuill value={description} onChange={setDescription} />
-              <Input
-                {...register("file")}
-                ref={(e) => {
-                  ref(e); // Gắn ref của React Hook Form
-                  fileInputRef.current = e; // Lưu ref của bạn để trigger click
-                }}
-                hidden
-                type="file"
-                onChange={handleFileOnChange}
-              />
-              {/* Preview */}
-              {file && (
-                <div className="grid grid-cols-4">
-                  <div className="p-3 ring ring-gray-200 rounded-md">
-                    <label>
-                      <div className="flex justify-center items-center p-5">
-                        <File />
+            <div className="overflow-auto h-90">
+              <form
+                onSubmit={handleSubmit(handleCreateContent)}
+                className="h-120"
+              >
+                <div className="p-4 flex flex-col gap-3">
+                  <Input
+                    placeholder="Title"
+                    {...register("tieu_de", {
+                      required: "Tiêu đề không được để trống",
+                    })}
+                  />
+                  {/* <textarea
+                  className="w-full ring ring-gray-200 rounded-md p-2"
+                  placeholder="Mô tả"
+                  {...register("mota")}
+                              ></textarea> */}
+                  <ReactQuill value={description} onChange={setDescription} />
+                  <Input
+                    {...register("file")}
+                    ref={(e) => {
+                      ref(e); // Gắn ref của React Hook Form
+                      fileInputRef.current = e; // Lưu ref của bạn để trigger click
+                    }}
+                    hidden
+                    type="file"
+                    onChange={handleFileOnChange}
+                  />
+                  {/* Preview */}
+                  {selectedVideoId && (
+                    <div className="grid grid-cols-3">
+                      <div className="flex items-center gap-2 p-2 ring ring-gray-300 rounded-xl">
+                        <span className="flex-1">{selectedVideoId.title}</span>
+                        <img width={100} src={selectedVideoId.thumbnail}></img>
                       </div>
-                      <label className="text-center w-full block">
-                        {file.name}
-                      </label>
-                    </label>
+                    </div>
+                  )}
+                  {file && (
+                    <div className="grid grid-cols-4">
+                      <div className="p-3 ring ring-gray-200 rounded-md">
+                        <label>
+                          <div className="flex justify-center items-center p-5">
+                            <File />
+                          </div>
+                          <label className="text-center w-full block">
+                            {file.name}
+                          </label>
+                        </label>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div
+                  className={`flex bg-green-brand justify-between items-center p-3 gap-2 absolute bottom-0 left-0 right-0 ${
+                    opentFormCreate ? "" : "hidden"
+                  }`}
+                >
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => fileInputRef.current?.click()}
+                      type="button"
+                      variant="icon"
+                      size="ic"
+                      className="bg-transparent ring"
+                      icon={<Upload/>}
+                    />
+                    <Button
+                      type="button"
+                      variant="icon"
+                      size="ic"
+                      className="bg-transparent ring"
+                      icon={<Link2/>}
+                    />
+                    <Dialog
+                      close={dialog}
+                      handleClose={() => setDataVideoYoutube([])}
+                      trigger={
+                        <Button
+                          onClick={() => {
+                            setDataVideoYoutube([]);
+                            setSelectedVideoId(null);
+                          }}
+                          type="button"
+                          variant="icon"
+                          size="ic"
+                          className="bg-transparent ring"
+                          icon={<Youtube/>}
+                        />
+                      }
+                    >
+                      <div className="flex flex-col h-full overflow-scroll relative">
+                        <header className="p-5 sticky top-0 bg-white">
+                          <img width={130} height={50} src={logo_youtube}></img>
+                        </header>
+                        <hr></hr>
+                        {dataVideoYoutube.length === 0 && (
+                          <div className="flex flex-col pt-20  items-center flex-1">
+                            <img
+                              width={300}
+                              src="//www.gstatic.com/newt/images/newt_uploadvideo@1x.gif"
+                            ></img>
+                            <div className="w-100 flex p-2 ring ring-gray-400 rounded-md gap-2">
+                              <input
+                                value={keyword}
+                                onChange={(e) => setKeyword(e.target.value)}
+                                onKeyDown={(e) =>
+                                  e.key === "Enter" && submitSearch()
+                                }
+                                className="flex-1 outline-none border-r border-gray-300"
+                              />
+                              <Search color="gray" />
+                            </div>
+                          </div>
+                        )}
+                        {dataVideoYoutube.length > 0 && !selectedVideoId && (
+                          <div className="p-5">
+                            <div>
+                              <div className="w-100 flex p-2 ring ring-gray-400 rounded-md gap-2">
+                                <input
+                                  value={keyword}
+                                  onChange={(e) => setKeyword(e.target.value)}
+                                  onKeyDown={(e) =>
+                                    e.key === "Enter" && submitSearch()
+                                  }
+                                  className="flex-1 outline-none border-r border-gray-300"
+                                />
+                                <Search color="gray" />
+                              </div>
+                              <div className="grid grid-cols-4 gap-3 mt-5">
+                                {dataVideoYoutube.map((v: any) => (
+                                  <div
+                                    onClick={() =>
+                                      setSelectedVideoId({
+                                        id: v.id,
+                                        title: v.title,
+                                        thumbnail: v.thumbnail,
+                                      })
+                                    }
+                                    key={v.id}
+                                    className="ring ring-gray-100 overflow-hidden rounded-md"
+                                  >
+                                    <img
+                                      src={v.thumbnail}
+                                      alt={v.title}
+                                      className="w-full object-cover"
+                                    />
+                                    <div className="p-2">
+                                      <p className="font-semibold mt-2 line-clamp-2">
+                                        {v.title}
+                                      </p>
+                                      <p className="text-sm text-gray-500">
+                                        {v.channelTitle}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {selectedVideoId && (
+                          <div className="aspect-video w-full rounded-lg overflow-hidden shadow-md p-5 flex flex-col gap-5">
+                            <div className="flex justify-between">
+                              <Button
+                                title="return"
+                                icon={<ChevronLeft />}
+                                variant="transparent"
+                                className="hover:bg-gray-100"
+                              />
+                              <Button
+                                title="Add video"
+                                icon={<Plus />}
+                                variant="primary"
+                                onClick={() => {
+                                  setDialog(true);
+                                  setDataVideoYoutube([]);
+                                  setKeyword("");
+                                }}
+                              />
+                            </div>
+                            <div className="flex-1">
+                              <iframe
+                                width="100%"
+                                height="100%"
+                                src={`https://www.youtube.com/embed/${selectedVideoId.id}`}
+                                title="YouTube video player"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </Dialog>
+                  </div>
+                  <div>
+                    <Button
+                      type="button"
+                      onClick={() => {
+                        setSelectedVideoId(null)
+                        setFile(null);
+                        reset();
+                        setOpenFormCreate(false);
+                      }}
+                      title="Cancle"
+                      variant="transparent"
+                      className="text-white"
+                    />
+                    <Button type="submit" variant="transparent" title="Post" className="bg-white" />
                   </div>
                 </div>
-              )}
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => fileInputRef.current?.click()}
-                  type="button"
-                  variant="icon"
-                  size="lg"
-                  className=""
-                  icon={<Upload />}
-                />
-                <Button
-                  type="button"
-                  variant="icon"
-                  size="lg"
-                  className=""
-                  icon={<Link2 />}
-                />
-                <Button
-                  type="button"
-                  variant="icon"
-                  size="lg"
-                  className=""
-                  icon={<Youtube />}
-                />
-              </div>
-              <div
-                className={`flex justify-end gap-2 ${
-                  opentFormCreate ? "absolute bottom-3 right-3" : "hidden"
-                }`}
-              >
-                <Button
-                  type="button"
-                  onClick={() => {
-                    setFile(null);
-                    reset();
-                    setOpenFormCreate(false);
-                  }}
-                  title="Cancle"
-                  variant="transparent"
-                />
-                <Button type="submit" variant="primary" title="Post" />
-              </div>
-            </form>
+              </form>
+            </div>
           )}
         </div>
 
@@ -370,7 +524,6 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
     }
   };
 
-
   // Khi kéo file vào vùng
   const handleDragOver = (e: any) => {
     e.preventDefault();
@@ -404,21 +557,20 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
   };
 
   const handleUpdate = async (data: any) => {
-    const formData = new FormData()
-    formData.append("tieu_de", data.tieu_de)
-    formData.append("MaNoiDung", MaNoiDung)
-    formData.append("mota", description)
-    formData.append("file", file!)
+    const formData = new FormData();
+    formData.append("tieu_de", data.tieu_de);
+    formData.append("MaNoiDung", MaNoiDung);
+    formData.append("mota", description);
+    formData.append("file", file!);
 
-    try{
-      await API.put("/contents/update",formData, {
+    try {
+      await API.put("/contents/update", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-      })
-      toast.success("Cập nhật nội dung thành công")
-      handleClose()
-    }
-    catch(err: any) {
-      console.log(err?.response?.data?.message)
+      });
+      toast.success("Cập nhật nội dung thành công");
+      handleClose();
+    } catch (err: any) {
+      console.log(err?.response?.data?.message);
     }
   };
 
@@ -487,12 +639,7 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
               />
             </div>
             <div className="flex gap-2 justify-end fixed top-4 right-5 rounded-md">
-              <Button
-                type="submit"
-                title="Save"
-                variant="dark"
-                size="sm"
-              />
+              <Button type="submit" title="Save" variant="dark" size="sm" />
               <Button
                 type="button"
                 onClick={handleClose}

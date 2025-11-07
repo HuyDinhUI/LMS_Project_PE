@@ -4,8 +4,8 @@ import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import type { Question, QuizType } from "@/types/QuizType";
+import { useNavigate, useParams } from "react-router-dom";
+import type { QuizType } from "@/types/QuizType";
 import {
   ChevronLeft,
   Clock,
@@ -28,7 +28,7 @@ const Quiz = () => {
   const { id } = useParams();
   const MaSV = localStorage.getItem("username");
   const role = localStorage.getItem("role");
-  const [dataQuiz, setDataQuiz] = useState<QuizType[]>();
+  const [dataQuiz, setDataQuiz] = useState<any>([]);
   const [openFormAction, setOpenFormAction] = useState<string>("");
   const [selectedMaTN, setSelectedMaTN] = useState<string>("");
   const navigator = useNavigate();
@@ -124,7 +124,7 @@ const Quiz = () => {
         {!openFormAction && (
           <div className="grid grid-cols-3 gap-3">
             {/* list quiz */}
-            {dataQuiz?.map((q) => (
+            {dataQuiz?.map((q: any) => (
               <div
                 key={q.MaTN}
                 className="w-full h-55 p-5 bg-black/5 rounded-xl relative"
@@ -173,29 +173,36 @@ const Quiz = () => {
                     </div>
                   )}
                 </div>
-                {role === "SV" && q.TrangThai === "Mo" && (
-                  <Button
-                    variant="dark"
-                    title={q.TrangThai === "Mo" ? "Play" : "Close"}
-                    icon={<Play size={18} />}
-                    className="p-2 bg-black/90 cursor-pointer hover:bg-black/80 text-white rounded-md flex items-center gap-2 mt-5"
-                    onClick={() =>
-                      navigator(`/classcourse/${id}/quiz/${q.MaTN}/play`)
-                    }
-                    disabled={
-                      q.TrangThaiNopBai && q.SoLanChoPhep > 0 ? true : false
-                    }
-                  ></Button>
-                )}
-                {role === "GV" && (
-                  <Button
-                    title="Xem danh sách nộp bài"
-                    className="p-2 cursor-pointer backdrop-blur-md rounded-md flex items-center gap-2 mt-5 bg-yellow-brand"
-                    onClick={() =>
-                      navigator(`/classcourse/${id}/quiz/${q.MaTN}/submissions`)
-                    }
-                  />
-                )}
+                <div className="flex gap-2 items-center mt-5">
+                  {role === "SV" && q.TrangThai === "Mo" && (
+                    <Button
+                      variant="dark"
+                      title={q.TrangThai === "Mo" ? "Play" : "Close"}
+                      icon={<Play size={18} />}
+                      className="p-2 bg-black/90 cursor-pointer hover:bg-black/80 text-white rounded-md flex items-center gap-2"
+                      onClick={() => navigator(`${q.MaTN}/play`)}
+                      disabled={
+                        q.TrangThaiNopBai && q.SoLanChoPhep > 0 ? true : false
+                      }
+                    ></Button>
+                  )}
+                  {role === "SV" && q.TrangThaiNopBai && (
+                    <Button
+                      variant="outline"
+                      title="View"
+                      onClick={() =>
+                        navigator(`${q.MaTN}/submissions/${q.MaBaiLam}`)
+                      }
+                    />
+                  )}
+                  {role === "GV" && (
+                    <Button
+                      title="Xem danh sách nộp bài"
+                      className="p-2 cursor-pointer backdrop-blur-md rounded-md flex items-center gap-2 bg-yellow-brand"
+                      onClick={() => navigator(`${q.MaTN}/submissions`)}
+                    />
+                  )}
+                </div>
                 <div
                   className={`w-20 text-center absolute bottom-3 right-5 ${
                     q.TrangThai === "Mo" && q.TrangThaiNopBai != "Chưa nộp"
@@ -214,6 +221,11 @@ const Quiz = () => {
                 </div>
               </div>
             ))}
+            {dataQuiz.length === 0 && (
+              <span className="text-center italic col-span-3">
+                ️🎉 Congratulations, you have not taken any tests yet.️
+              </span>
+            )}
           </div>
         )}
       </div>
@@ -342,11 +354,11 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN }: props) {
       NgayBatDau: endDate,
       TongDiem: 10,
       CauHoi: questions.map((q: any) => ({
-        MaCauHoi: q.MaCauHoi ?? '',
+        MaCauHoi: q.MaCauHoi ?? "",
         NoiDung: q.NoiDung,
         Diem: q.Diem,
         DapAn: q.DapAn.map((a: any) => ({
-          MaDapAn: a.MaDapAn ?? '',
+          MaDapAn: a.MaDapAn ?? "",
           NoiDung: a.NoiDung,
           LaDapAnDung: a.LaDapAnDung,
         })),
