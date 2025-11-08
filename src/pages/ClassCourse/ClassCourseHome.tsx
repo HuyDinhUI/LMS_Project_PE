@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
-  ChevronRight,
   Ellipsis,
   File,
   Link2,
@@ -31,7 +30,6 @@ import "react-quill-new/dist/quill.snow.css";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import { Dialog } from "@/components/ui/dialog";
 import logo_youtube from "@/assets/logo_youtube.png";
-import { SearchForm } from "@/components/ui/search-form";
 
 const get_icon: any = {
   pdf: <FaFilePdf size={30} />,
@@ -124,6 +122,9 @@ const ClassCourseManagementHome = () => {
     formData.append("tieu_de", data.tieu_de);
     formData.append("MaLop", id!);
     formData.append("mota", description);
+    formData.append("id_youtube", selectedVideoId?.id ?? "");
+    formData.append("thumbnail_youtube", selectedVideoId?.thumbnail ?? "");
+    formData.append("title_youtube", selectedVideoId?.title ?? "");
     formData.append("file", file!);
 
     console.log(formData);
@@ -260,14 +261,14 @@ const ClassCourseManagementHome = () => {
                       variant="icon"
                       size="ic"
                       className="bg-transparent ring"
-                      icon={<Upload/>}
+                      icon={<Upload />}
                     />
                     <Button
                       type="button"
                       variant="icon"
                       size="ic"
                       className="bg-transparent ring"
-                      icon={<Link2/>}
+                      icon={<Link2 />}
                     />
                     <Dialog
                       close={dialog}
@@ -282,7 +283,7 @@ const ClassCourseManagementHome = () => {
                           variant="icon"
                           size="ic"
                           className="bg-transparent ring"
-                          icon={<Youtube/>}
+                          icon={<Youtube />}
                         />
                       }
                     >
@@ -395,7 +396,7 @@ const ClassCourseManagementHome = () => {
                     <Button
                       type="button"
                       onClick={() => {
-                        setSelectedVideoId(null)
+                        setSelectedVideoId(null);
                         setFile(null);
                         reset();
                         setOpenFormCreate(false);
@@ -404,7 +405,12 @@ const ClassCourseManagementHome = () => {
                       variant="transparent"
                       className="text-white"
                     />
-                    <Button type="submit" variant="transparent" title="Post" className="bg-white" />
+                    <Button
+                      type="submit"
+                      variant="transparent"
+                      title="Post"
+                      className="bg-white"
+                    />
                   </div>
                 </div>
               </form>
@@ -413,7 +419,7 @@ const ClassCourseManagementHome = () => {
         </div>
 
         {/* list content */}
-        <div className="flex flex-col gap-3 mt-5 h-150">
+        <div className="flex flex-col gap-3 mt-5">
           {contentData.map((c, i) => (
             <div key={i} className="w-full p-5 bg-black/3 rounded-xl relative">
               {/* header */}
@@ -436,6 +442,19 @@ const ClassCourseManagementHome = () => {
                 <h2 className="font-bold">{c.tieu_de}</h2>
                 <div dangerouslySetInnerHTML={{ __html: c.mota }}></div>
               </div>
+              {/* youtube */}
+              {c.youtube_id && (
+                <div className="grid grid-cols-3 mt-4">
+                  <a
+                    target="_blank"
+                    href={`https://www.youtube.com/watch?v=${c.youtube_id}`}
+                    className="ring ring-gray-300 rounded-md p-2 flex gap-2"
+                  >
+                    <p className="flex-1">{c.youtube_title}</p>
+                    <img width={70} src={c.thumbnail}></img>
+                  </a>
+                </div>
+              )}
               {/* file */}
               {c.file_name && (
                 <div className="grid grid-cols-4 mt-4">
@@ -446,12 +465,12 @@ const ClassCourseManagementHome = () => {
                         getFileType(c.mime_type)
                       )
                     }
-                    className="p-3 bg-green-brand text-white rounded-xl flex gap-2"
+                    className="p-3 ring ring-gray-300 rounded-xl flex gap-2 cursor-pointer"
                   >
                     <div className="flex items-center">
                       {get_icon[`${getFileType(c.mime_type)}`]}
                     </div>
-                    <label className="w-full block">{c.original_name}</label>
+                    <label className="w-full block cursor-pointer">{c.original_name}</label>
                   </div>
                 </div>
               )}
@@ -596,6 +615,25 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
             <div className="flex flex-col gap-2">
               <label className="font-bold">Description:</label>
               <ReactQuill value={description} onChange={setDescription} />
+            </div>
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <label className="font-bold">Current video:</label>
+                {contentData?.youtube_id ? (
+                  <a
+                    className="bg-gray-100 underline p-2 rounded-md flex"
+                    href={`https://www.youtube.com/watch?v=${contentData?.youtube_id}`}
+                    target="_blank"
+                  >
+                    <span className="flex-1">{contentData?.youtube_title}</span>
+                    <img width={100} src={contentData?.thumbnail}></img>
+                  </a>
+                ) : (
+                  <p className="text-center italic bg-gray-50 rounded-md p-2">
+                    There are no video
+                  </p>
+                )}
+              </div>
             </div>
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">

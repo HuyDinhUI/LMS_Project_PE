@@ -10,4 +10,7 @@ export type ContentType = {
     mime_type: string
     original_name: string
     ngay_tao: Date
+    youtube_id: string
+    youtube_title: string
+    thumbnail: string
 }

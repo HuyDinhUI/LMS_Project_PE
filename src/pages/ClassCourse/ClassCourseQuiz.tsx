@@ -177,12 +177,22 @@ const Quiz = () => {
                   {role === "SV" && q.TrangThai === "Mo" && (
                     <Button
                       variant="dark"
-                      title={q.TrangThai === "Mo" ? "Play" : "Close"}
+                      title={
+                        (new Date(q.NgayBatDau) <= new Date() &&
+                          new Date(q.HanNop) >= new Date()) ||
+                        !q.HanNop
+                          ? "Play"
+                          : "Close"
+                      }
                       icon={<Play size={18} />}
                       className="p-2 bg-black/90 cursor-pointer hover:bg-black/80 text-white rounded-md flex items-center gap-2"
                       onClick={() => navigator(`${q.MaTN}/play`)}
                       disabled={
-                        q.TrangThaiNopBai && q.SoLanChoPhep > 0 ? true : false
+                        (q.TrangThaiNopBai === "Đã nộp" &&
+                          (q.SoLanChoPhep > 0) ||
+                        new Date(q.HanNop) < new Date() && q.HanNop)
+                          ? true
+                          : false
                       }
                     ></Button>
                   )}
@@ -205,13 +215,19 @@ const Quiz = () => {
                 </div>
                 <div
                   className={`w-20 text-center absolute bottom-3 right-5 ${
-                    q.TrangThai === "Mo" && q.TrangThaiNopBai != "Chưa nộp"
+                    q.TrangThaiNopBai != "Chưa nộp"
                       ? "bg-green-100 ring ring-green-400 text-green-600 text-sm px-2 rounded-md"
                       : "bg-rose-100 ring ring-rose-400 text-rose-600 text-sm px-2 rounded-md"
                   }`}
                 >
                   {role === "GV" && (
-                    <p>{q.TrangThai === "Mo" ? "Openning" : "Close"}</p>
+                    <p>
+                      {(new Date(q.NgayBatDau) <= new Date() &&
+                        new Date(q.HanNop) >= new Date()) ||
+                      !q.HanNop
+                        ? "Openning"
+                        : "Close"}
+                    </p>
                   )}
                   {role === "SV" && (
                     <p>

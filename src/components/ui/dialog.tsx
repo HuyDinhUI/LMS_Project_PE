@@ -26,8 +26,6 @@ function Portal({ children }: { children: React.ReactNode }) {
 export const Dialog = ({ children, trigger, handleClose, close }: DialogProps) => {
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(close ?? false);
 
-  console.log(close)
-
   useEffect(() => {
     setIsOpenDialog(false)
   },[close])
