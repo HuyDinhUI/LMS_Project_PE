@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import API from "@/utils/axios";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   Clock,
   Ellipsis,
+  Import,
   Lock,
   LockOpen,
   Pen,
@@ -78,11 +79,7 @@ const Quiz = () => {
         icon: <Trash size={16} />,
         dialog: AlertDialogDelete,
         onClick: () => handleDeleteQuiz(MaTN),
-      },
-      {
-        label: `${status === "Mo" ? "Close" : "Open"}`,
-        icon: status === "Mo" ? <Lock size={16} /> : <LockOpen size={16} />,
-      },
+      }
     ];
   };
 
@@ -98,23 +95,39 @@ const Quiz = () => {
       <div className="flex flex-col justify-center px-20">
         <div className="flex items-center gap-2 mb-10 sticky -top-2 z-999 bg-[#fff8f0]">
           {role === "GV" && (
-            <Button
-              onClick={() =>
-                setOpenFormAction((prev) => (prev ? "" : "create"))
-              }
-              title={openFormAction ? "Return" : "Quiz"}
-              icon={openFormAction ? <ChevronLeft /> : <Plus />}
-              variant={openFormAction ? "transparent" : "primary"}
-            />
+            <>
+              <Button
+                onClick={() =>
+                  setOpenFormAction((prev) => (prev ? "" : "create"))
+                }
+                title={openFormAction ? "Return" : "Quiz"}
+                icon={openFormAction ? <ChevronLeft /> : <Plus />}
+                variant={openFormAction ? "transparent" : "primary"}
+              />
+
+              {!openFormAction && (
+                <Button
+                  onClick={() => setOpenFormAction("import")}
+                  title="Import"
+                  variant="outline"
+                  icon={<Import />}
+                />
+              )}
+            </>
           )}
         </div>
 
         {openFormAction === "create" && (
-          <QuizAction typeAction="create" handleGetQuiz={getQuiz} />
+          <QuizAction title="Create Quiz" typeAction="create" handleGetQuiz={getQuiz} />
+        )}
+
+        {openFormAction === "import" && (
+          <QuizAction title="Import Quiz" typeAction="import" handleGetQuiz={getQuiz} />
         )}
 
         {openFormAction === "update" && (
           <QuizAction
+            title="Update Quiz"
             typeAction="update"
             MaTN={selectedMaTN}
             handleGetQuiz={getQuiz}
@@ -189,8 +202,8 @@ const Quiz = () => {
                       onClick={() => navigator(`${q.MaTN}/play`)}
                       disabled={
                         (q.TrangThaiNopBai === "Đã nộp" &&
-                          (q.SoLanChoPhep > 0) ||
-                        new Date(q.HanNop) < new Date() && q.HanNop)
+                          q.SoLanChoPhep > 0) ||
+                        (new Date(q.HanNop) < new Date() && q.HanNop)
                           ? true
                           : false
                       }
@@ -322,12 +335,13 @@ const quizReducer = (state: any, action: any) => {
 };
 
 type props = {
+  title: string
   handleGetQuiz: () => void;
   MaTN?: string;
   typeAction: string;
 };
 
-function QuizAction({ handleGetQuiz, typeAction, MaTN }: props) {
+function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
   const { id } = useParams();
   const [dataQuiz, setDataQuiz] = useState<QuizType>();
   const [tieuDe, setTieuDe] = useState("");
@@ -335,8 +349,43 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN }: props) {
   const [thoiGian, setThoiGian] = useState<number>();
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
-  const [type, setType] = useState<string>();
+  const [type, setType] = useState<string>("");
   const [questions, dispatch] = useReducer(quizReducer, []);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
+  const dropRef = useRef<any>(null);
+
+  // Khi kéo file vào vùng
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  // Khi rời file khỏi vùng
+  const handleDragLeave = () => {
+    setIsDragging(false);
+  };
+
+  // Khi thả file vào vùng
+  const handleDrop = (e: any) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const droppedFile = e.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
+    }
+  };
+
+  // Khi chọn file bằng click
+  const handleFileChange = (e: any) => {
+    setFile(e.target.files[0]);
+  };
+
+  // Click để mở file picker
+  const handleClick = () => {
+    dropRef.current.click();
+  };
 
   const getQuiz = async () => {
     try {
@@ -387,9 +436,31 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN }: props) {
       if (typeAction === "create") {
         await API.post("/quiz/createQuiz", body);
         toast.success("Tạo quiz thành công!");
-      } else {
+      } else if (typeAction === "update") {
         await API.put("quiz/update", body);
         toast.success("Cập nhật quiz thành công!");
+      } else {
+        const formData = new FormData();
+        formData.append("MaLop", id!);
+        formData.append("TieuDe", tieuDe);
+        formData.append("MoTa", moTa);
+        formData.append("LoaiTracNghiem", type);
+        formData.append("ThoiGianLam", String(thoiGian));
+        formData.append("HanNop", String(startDate));
+        formData.append("NgayBatDau", String(endDate));
+        formData.append("TongDiem", String(10));
+        formData.append("file", file!);
+
+        try {
+          await API.post("/quiz/import", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+          toast.success("Thêm bài trắc nghiệm thành công");
+        } catch (err: any) {
+          console.log(err?.response?.message?.data);
+        }
       }
 
       handleGetQuiz();
@@ -422,7 +493,7 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN }: props) {
 
   return (
     <div className="px-5 pb-10 flex flex-col gap-3">
-      <h1 className="text-2xl font-semibold">Create Quiz</h1>
+      <h1 className="text-2xl font-semibold">{title}</h1>
       <div className="flex items-center rounded-md overflow-hidden ring ring-gray-300">
         <label className="w-[13%] p-2 bg-black/5 text-center">Title</label>
         <Input
@@ -462,6 +533,7 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN }: props) {
             Start date
           </label>
           <Input
+            value={startDate}
             type="datetime-local"
             variant="primary"
             onChange={(e) => setStartDate(e.target.value)}
@@ -470,14 +542,43 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN }: props) {
         <div className="flex items-center rounded-md overflow-hidden ring ring-gray-300">
           <label className="w-[30%] p-2 bg-black/5 text-center">End date</label>
           <Input
+            value={endDate}
             type="datetime-local"
             variant="primary"
             onChange={(e) => setEndDate(e.target.value)}
           />
         </div>
+
+        {typeAction === "import" && (
+          <>
+            <div
+              onClick={handleClick}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`border-1 h-full col-span-2 flex items-center justify-center border-dashed rounded-xl p-10 cursor-pointer transition-colors ${
+                isDragging ? "border-blue-500 bg-blue-50" : "border-gray-400"
+              }`}
+            >
+              {file ? (
+                <p className="">{file.name}</p>
+              ) : (
+                <p>Drag and Drop or Click</p>
+              )}
+            </div>
+            <input
+              type="file"
+              accept=".xls,.xlsx"
+              hidden
+              ref={dropRef}
+              onChange={handleFileChange}
+            />
+          </>
+        )}
       </div>
 
-      {questions.length > 0 &&
+      {typeAction !== "import" &&
+        questions.length > 0 &&
         questions.map((q: any, qi: number) => (
           <div key={q.MaCauHoi} className="p-4 shadow-sm rounded-xl mb-4">
             <label className="font-semibold">Question {qi + 1}:</label>
@@ -535,14 +636,16 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN }: props) {
         ))}
 
       <div className="flex gap-3 mt-5">
+        {typeAction !== "import" && (
+          <Button
+            title="Add question"
+            icon={<Plus size={18} />}
+            onClick={() => dispatch({ type: "ADD_QUESTION" })}
+            variant="outline"
+          ></Button>
+        )}
         <Button
-          title="Add question"
-          icon={<Plus size={18} />}
-          onClick={() => dispatch({ type: "ADD_QUESTION" })}
-          className="bg-black/20 text-white hover:bg-black/30"
-        ></Button>
-        <Button
-          title="Create"
+          title="Save"
           onClick={handleSubmit}
           variant="primary"
         ></Button>

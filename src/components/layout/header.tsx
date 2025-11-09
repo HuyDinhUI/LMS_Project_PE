@@ -21,19 +21,26 @@ import { Link, useNavigate } from "react-router-dom";
 import API from "@/utils/axios";
 import { toast } from "react-toastify";
 import { AlertDialogLogout } from "@/mock/AlertDialog-MockData";
-import { DropdownMenu } from "../ui/dropdown";
+import { DropdownMenu, Notification } from "../ui/dropdown";
 import { SearchForm } from "../ui/search-form";
+import { useSocket } from "@/hooks/useSocket";
 
 type props = {
   router?: string;
 };
 
 export const Header = ({ router }: props) => {
+  const [notification, setNotifications] = useState<any>([]);
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") ?? "light"
   );
   const role = localStorage.getItem("role");
+  const MaSV = localStorage.getItem("username");
   const navigate = useNavigate();
+
+  useSocket(MaSV ?? null, null, (data) => {
+    setNotifications((prev: any) => [...prev, data])
+  });
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -64,7 +71,7 @@ export const Header = ({ router }: props) => {
 
   const Logout = async () => {
     try {
-      const res = await API.delete("/auth/logout");
+      await API.delete("/auth/logout");
       toast.success("Log out is success");
       localStorage.removeItem("username");
       localStorage.removeItem("role");
@@ -100,9 +107,8 @@ export const Header = ({ router }: props) => {
         <div>
           <div className="flex gap-2 text-sm">
             {" "}
-            { router && <Link to={`/classcourse/list`}>
-              Class /
-            </Link>}<strong>{router}</strong>
+            {router && <Link to={`/classcourse/list`}>Class /</Link>}
+            <strong>{router}</strong>
           </div>
         </div>
       </div>
@@ -124,7 +130,18 @@ export const Header = ({ router }: props) => {
             onClick={() => setTheme("light")}
           />
         )}
-        <Button variant="icon" size="ic" icon={<Bell size={20} />} />
+        <Notification
+          data={notification}
+          trigger={
+            <div className="relative">
+              <Button variant="icon" size="ic" icon={<Bell size={20} />} />
+              <div className="absolute -top-1 right-0 w-5 h-5 bg-rose-500 rounded-full text-sm text-white flex justify-center items-center">
+                <p>{notification.length}</p>
+              </div>
+            </div>
+          }
+        />
+
         <DropdownMenu
           label="Account"
           side="bottom"

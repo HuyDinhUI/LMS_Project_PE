@@ -20,7 +20,6 @@ import {
 import { Line } from "react-chartjs-2";
 import { Process } from "@/components/ui/process";
 import { Pagination } from "@/components/ui/pagination";
-import { useSocket } from "@/hooks/useSocket";
 
 ChartJS.register(
   LineElement,
@@ -51,13 +50,6 @@ const StudentDashboard = () => {
   const [pagination, setPagination] = useState<PaginationType>(InitPagination);
   const [totalPages, setTotalPages] = useState<number>(1);
   const MaSV = localStorage.getItem("username");
-  const [notifications, setNotifications] = useState<any>([]);
-
-
-  useSocket(MaSV ?? null,null, (data) => {
-    setNotifications((prev: any) => [...prev, data.message]);
-    console.log("🔔 New notification:", data.message);
-  });
 
   const getOneStudent = async () => {
     try {
