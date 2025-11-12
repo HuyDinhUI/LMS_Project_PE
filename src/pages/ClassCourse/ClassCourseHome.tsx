@@ -19,6 +19,7 @@ import {
   Plus,
   Search,
   Trash,
+  TriangleAlert,
   Upload,
   Youtube,
 } from "lucide-react";
@@ -130,11 +131,15 @@ const ClassCourseManagementHome = () => {
 
     console.log(formData);
     try {
-      const res = await API.post("/contents/create", formData, {
+      await API.post("/contents/create", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       getContent();
+      setOpenFormCreate(false);
+      setSelectedVideoId(null);
+      setFile(null);
+      reset();
       toast.success("Tạo nội dung thành công");
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
@@ -144,7 +149,7 @@ const ClassCourseManagementHome = () => {
   const handleDeleteContent = async (MaNoiDung: string) => {
     console.log(MaNoiDung);
     try {
-      const res = await API.delete(`/contents/delete/${MaNoiDung}`);
+      await API.delete(`/contents/delete/${MaNoiDung}`);
       getContent();
       toast.success("Xoá nội dung thành công");
     } catch (err: any) {
@@ -191,7 +196,7 @@ const ClassCourseManagementHome = () => {
         >
           <h2
             onClick={() => setOpenFormCreate(!opentFormCreate)}
-            className="cursor-pointer flex gap-2 p-4 sticky top-0 bg-green-brand text-white"
+            className="cursor-pointer flex gap-2 p-4 sticky top-0 bg-[#0c0f0a] text-white"
           >
             <Plus />
             Add content
@@ -204,17 +209,22 @@ const ClassCourseManagementHome = () => {
                 className="h-120"
               >
                 <div className="p-4 flex flex-col gap-3">
-                  <Input
-                    placeholder="Title"
-                    {...register("tieu_de", {
-                      required: "Tiêu đề không được để trống",
-                    })}
-                  />
-                  {/* <textarea
-                  className="w-full ring ring-gray-200 rounded-md p-2"
-                  placeholder="Mô tả"
-                  {...register("mota")}
-                              ></textarea> */}
+                  <div className="relative">
+                    <Input
+                      placeholder="Title"
+                      {...register("tieu_de", {
+                        required: "Tiêu đề không được để trống",
+                      })}
+                      variant={errors.tieu_de ? "danger" : "default"}
+                      aria-invalid={errors.tieu_de ? "true" : "false"}
+                    />
+                    {errors.tieu_de && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500">
+                        <TriangleAlert size={15}/>
+                      </div>
+                    )}
+                  </div>
+                  
                   <ReactQuill value={description} onChange={setDescription} />
                   <Input
                     {...register("file")}
@@ -251,7 +261,7 @@ const ClassCourseManagementHome = () => {
                   )}
                 </div>
                 <div
-                  className={`flex bg-green-brand justify-between items-center p-3 gap-2 absolute bottom-0 left-0 right-0 ${
+                  className={`flex bg-[#0c0f0a] justify-between items-center p-3 gap-2 absolute bottom-0 left-0 right-0 ${
                     opentFormCreate ? "" : "hidden"
                   }`}
                 >
@@ -263,13 +273,6 @@ const ClassCourseManagementHome = () => {
                       size="ic"
                       className="bg-transparent ring"
                       icon={<Upload />}
-                    />
-                    <Button
-                      type="button"
-                      variant="icon"
-                      size="ic"
-                      className="bg-transparent ring"
-                      icon={<Link2 />}
                     />
                     <Dialog
                       close={dialog}
@@ -421,8 +424,8 @@ const ClassCourseManagementHome = () => {
 
         {/* list content */}
         <div className="flex flex-col gap-3 mt-5">
-          {contentData.map((c, i) => (
-            <div key={i} className="w-full p-5 bg-black/3 rounded-xl relative">
+          {contentData.map((c) => (
+            <div key={c.MaNoiDung} className="w-full p-5 bg-black/3 rounded-xl relative">
               {/* header */}
               <div className="flex gap-2">
                 <img
@@ -451,7 +454,7 @@ const ClassCourseManagementHome = () => {
                     href={`https://www.youtube.com/watch?v=${c.youtube_id}`}
                     className="ring ring-gray-300 rounded-md p-2 flex gap-2"
                   >
-                    <p className="flex-1">{c.youtube_title}</p>
+                    <p className="flex-1 underline">{c.youtube_title}</p>
                     <img width={70} src={c.thumbnail}></img>
                   </a>
                 </div>
@@ -471,7 +474,7 @@ const ClassCourseManagementHome = () => {
                     <div className="flex items-center">
                       {get_icon[`${getFileType(c.mime_type)}`]}
                     </div>
-                    <label className="w-full block cursor-pointer">{c.original_name}</label>
+                    <label className="w-full block cursor-pointer underline">{c.original_name}</label>
                   </div>
                 </div>
               )}

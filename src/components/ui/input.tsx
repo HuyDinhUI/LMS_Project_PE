@@ -63,7 +63,7 @@ type InputProps = {
 const variantClass: Record<InputVariant, string> = {
   default: "ring ring-gray-300 dark:ring-gray-500 rounded-md",
   primary: "",
-  danger: "",
+  danger: "ring ring-red-500 rounded-md",
   borderBottom: "rounded-none border-b border-black",
 };
 

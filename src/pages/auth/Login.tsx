@@ -10,6 +10,7 @@ import bg_dark from "@/assets/10139763.jpg"
 import bg_light from "@/assets/v567-n-50-doodles.jpg"
 import logo from "@/assets/logo_cat_black.svg"
 import { useAuth } from "@/hooks/useAuth";
+import { TriangleAlert } from "lucide-react";
 
 const Login = () => {
   const {
@@ -69,23 +70,38 @@ const Login = () => {
           </div>
           {error && <AlertDanger title={error} />}
           <div className="">
-            <div className="grid gap-2 mb-5">
+            <div className="grid gap-2 mb-5 relative">
               <label>Username</label>
               <Input
                 type="username"
                 placeholder="01001234"
-                {...register("username", { required: "Email cannot be blank" })} />
+                {...register("username", { required: "Email cannot be blank" })}
+                aria-invalid={errors.username ? "true" : "false"} 
+                variant={errors.username ? "danger" : "default"}
+                />
+              {errors.username?.type === "required" && (
+                <div className="absolute top-11 right-3 text-red-500">
+                  <TriangleAlert size={15}/>
+                </div>
+              )}
             </div>
             <div className="grid gap-2 mb-5 relative">
               <label>Password</label>
               <Input
                 required
                 type="password"
-                {...register("password", { required: "Password cannot be blank" })} />
+                {...register("password", { required: "Password cannot be blank" })} 
+                aria-invalid={errors.password ? "true" : "false"} 
+                variant={errors.password ? "danger" : "default"}/>
               <Link className="absolute top-0 right-0" to={'/resetpassword'}>Forgot password?</Link>
+              {errors.password?.type === "required" && (
+                <div className="absolute top-11 right-3 text-red-500">
+                  <TriangleAlert size={15}/>
+                </div>
+              )}
             </div>
           </div>
-          <Button type="submit" className="w-full justify-center rounded-sm bg-yellow-brand hover:bg-yellow-brand/80" size="md" title="Login" />
+          <Button type="submit" className="w-full justify-center rounded-sm" size="md" title="Login" variant="primary" />
           
         </form>
         

@@ -10,7 +10,6 @@ import API from "@/utils/axios";
 import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import catImg from "@/assets/Character_Cat_3.svg"
 import { useAuth } from "@/hooks/useAuth";
 
 type Props = {
@@ -71,6 +70,18 @@ const ClassLayout = ({ children }: Props) => {
     {
       title: "Attendance",
       href: `/classcourse/${id}/attendance`,
+    },
+    {
+      title: "Resources",
+      href: `/classcourse/${id}/resources`,
+    },
+    {
+      title: "Group",
+      href: `/classcourse/${id}/groups`,
+    },
+    {
+      title: "Modules",
+      href: `/classcourse/${id}/modules`,
     }
   ];
   return (
