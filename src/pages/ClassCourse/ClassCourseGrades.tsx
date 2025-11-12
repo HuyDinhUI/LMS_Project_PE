@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { FilterForm } from "@/components/ui/filter-form";
 import { SearchForm } from "@/components/ui/search-form";
 import API from "@/utils/axios";
 import { FolderOutput, Printer, PrinterCheck } from "lucide-react";
@@ -50,9 +49,7 @@ const ClassCourseManagementGrades = () => {
 
   const getGradesTestForStudent = async () => {
     try {
-      const res = await API.get(
-        `/quiz/getQuizByStudent/${MaSV}/${id}`
-      );
+      const res = await API.get(`/quiz/getQuizByStudent/${MaSV}/${id}`);
       setDataGradesTest(res.data.result.data);
     } catch (err: any) {
       toast.error(
@@ -101,7 +98,7 @@ const ClassCourseManagementGrades = () => {
       getGradesTest();
     } else {
       getGradesAssignmentForStudent();
-      getGradesTestForStudent()
+      getGradesTestForStudent();
     }
   }, []);
 
@@ -125,62 +122,78 @@ const ClassCourseManagementGrades = () => {
       {/* table */}
       {role === "GV" && (
         <div className="mt-4">
-          <table className="min-w-full border border-gray-500 table-auto">
-            <thead className="text-left">
-              <tr>
-                <th className="px-4 py-2">ID</th>
-                <th className="px-4 py-2 border-l border-gray-500">Full name</th>
-                {columnsAssignment.map((col) => (
-                  <th className="px-4 py-2 border-l border-gray-500" key={col}>
-                    {col}
+          <div className="overflow-x-scroll">
+            <table className="min-w-300 border border-gray-500 table-auto">
+              <thead className="text-left">
+                <tr>
+                  <th className="px-4 py-2">ID</th>
+                  <th className="px-4 py-2 border-l border-gray-500">
+                    Full name
                   </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {dataGradesAssignment.map((row, index) => (
-                <tr key={index} className="border-t border-gray-500">
-                  <td className="border border-gray-500 px-4 py-2">{row.MaSV}</td>
-                  <td className="border border-gray-500 px-4 py-2">{row.hoten}</td>
                   {columnsAssignment.map((col) => (
-                    <td key={col} className="border border-gray-500 px-4 py-2">
-                      {row[col] !== null && row[col] !== undefined
-                        ? row[col]
-                        : "-"}
-                    </td>
+                    <th className="px-4 py-2 border-l border-gray-500" key={col}>
+                      {col}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <table className="mt-5 min-w-full border border-gray-500 table-auto">
-            <thead className="text-left">
-              <tr>
-                <th className="px-4 py-2">ID</th>
-                <th className="px-4 py-2 border-l border-gray-500">Full name</th>
-                {columnsTest.map((col) => (
-                  <th className="px-4 py-2 border-l border-gray-500" key={col}>
-                    {col}
-                  </th>
+              </thead>
+              <tbody>
+                {dataGradesAssignment.map((row, index) => (
+                  <tr key={index} className="border-t border-gray-500">
+                    <td className="border border-gray-500 px-4 py-2">
+                      {row.MaSV}
+                    </td>
+                    <td className="border border-gray-500 px-4 py-2">
+                      {row.hoten}
+                    </td>
+                    {columnsAssignment.map((col) => (
+                      <td key={col} className="border border-gray-500 px-4 py-2">
+                        {row[col] !== null && row[col] !== undefined
+                          ? row[col]
+                          : "-"}
+                      </td>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {dataGradesTest.map((row, index) => (
-                <tr key={index} className="border-t border-gray-500">
-                  <td className="border border-gray-500 px-4 py-2">{row.MaSV}</td>
-                  <td className="border border-gray-500 px-4 py-2">{row.hoten}</td>
+              </tbody>
+            </table>
+          </div>
+          <div className="overflow-x-scroll">
+            <table className="mt-5 min-w-300 border border-gray-500 table-auto">
+              <thead className="text-left">
+                <tr>
+                  <th className="px-4 py-2">ID</th>
+                  <th className="px-4 py-2 border-l border-gray-500">
+                    Full name
+                  </th>
                   {columnsTest.map((col) => (
-                    <td key={col} className="border border-gray-500 px-4 py-2">
-                      {row[col] !== null && row[col] !== undefined
-                        ? row[col]
-                        : "-"}
-                    </td>
+                    <th className="px-4 py-2 border-l border-gray-500" key={col}>
+                      {col}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {dataGradesTest.map((row, index) => (
+                  <tr key={index} className="border-t border-gray-500">
+                    <td className="border border-gray-500 px-4 py-2">
+                      {row.MaSV}
+                    </td>
+                    <td className="border border-gray-500 px-4 py-2">
+                      {row.hoten}
+                    </td>
+                    {columnsTest.map((col) => (
+                      <td key={col} className="border border-gray-500 px-4 py-2">
+                        {row[col] !== null && row[col] !== undefined
+                          ? row[col]
+                          : "-"}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
       {role === "SV" && (
@@ -197,7 +210,9 @@ const ClassCourseManagementGrades = () => {
             <tbody>
               {dataGradesAssignment.map((row, index) => (
                 <tr key={index} className="border-t border-gray-500">
-                  <td className="border border-gray-500 px-4 py-2">{row.TieuDe}</td>
+                  <td className="border border-gray-500 px-4 py-2">
+                    {row.TieuDe}
+                  </td>
                   <td className="border border-gray-500 px-4 py-2">
                     {new Date(row.HanNop).toLocaleDateString("vi-VN")}{" "}
                     {row.GioNop}
@@ -205,7 +220,9 @@ const ClassCourseManagementGrades = () => {
                   <td className="border border-gray-500 px-4 py-2">
                     {row.DiemSo !== null ? row.DiemSo : "-"}
                   </td>
-                  <td className="border border-gray-500 px-4 py-2">{row.TrangThai === 'Đã nộp' ? 'Submited' : 'Unsubmit'}</td>
+                  <td className="border border-gray-500 px-4 py-2">
+                    {row.TrangThai === "Đã nộp" ? "Submited" : "Unsubmit"}
+                  </td>
                 </tr>
               ))}
               <tr className="border-t border-gray-500 font-semibold">
@@ -233,15 +250,21 @@ const ClassCourseManagementGrades = () => {
             <tbody>
               {dataGradesTest.map((row, index) => (
                 <tr key={index} className="border-t border-gray-500">
-                  <td className="border border-gray-500 px-4 py-2">{row.TieuDe}</td>
+                  <td className="border border-gray-500 px-4 py-2">
+                    {row.TieuDe}
+                  </td>
                   <td className="border border-gray-500 px-4 py-2">
                     {new Date(row.HanNop).toLocaleDateString("vi-VN")}{" "}
                     {row.GioNop}
                   </td>
                   <td className="border border-gray-500 px-4 py-2">
-                    {parseFloat(row.DiemSo) !== null ? parseFloat(row.DiemSo) : "-"}
+                    {parseFloat(row.DiemSo) !== null
+                      ? parseFloat(row.DiemSo)
+                      : "-"}
                   </td>
-                  <td className="border border-gray-500 px-4 py-2">{row.TrangThaiNopBai === 'Đã nộp' ? 'Submited' : 'Unsubmit'}</td>
+                  <td className="border border-gray-500 px-4 py-2">
+                    {row.TrangThaiNopBai === "Đã nộp" ? "Submited" : "Unsubmit"}
+                  </td>
                 </tr>
               ))}
               <tr className="border-t border-gray-500 font-semibold">
@@ -249,17 +272,18 @@ const ClassCourseManagementGrades = () => {
                   Average score
                 </td>
                 <td className="border border-gray-500 px-4 py-2" colSpan={2}>
-                  {dataGradesTest.reduce(
+                  {(dataGradesTest.reduce(
                     (acc, row) => acc + (parseFloat(row.DiemSo) || acc),
                     0
-                  ) / dataGradesTest.length || 0}
+                  ) / dataGradesTest.length).toFixed(1) || 0}
                 </td>
               </tr>
             </tbody>
           </table>
           <div>
             <p className="mt-4 italic">
-              * Note: The average score is calculated based on graded assignments.
+              * Note: The average score is calculated based on graded
+              assignments.
             </p>
           </div>
         </div>

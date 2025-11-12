@@ -13,11 +13,14 @@ const ClassCourseAssignmentSubmited = () => {
   const [submissions, setSubmissions] = useState<SubmissionType[]>([]);
   const [selected, setSelected] = useState<string>("");
   const [grade, setGrade] = useState<number>(0)
+  const [comment, setComment] = useState<string>("")
   const debounceRef = useRef<any>(null);
+
   const getAllSubmissions = async () => {
     try {
       const res = await API.get(`/assignments/getListSubmited/${assignmentId}`);
       setSubmissions(res.data.result.data);
+      
     } catch (err: any) {
       toast.error(
         err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại"
@@ -27,12 +30,14 @@ const ClassCourseAssignmentSubmited = () => {
 
   const handleScoring = async (MaSV: string, grade: number) => {
     clearTimeout(debounceRef.current);
+    console.log(comment, grade);
     debounceRef.current = setTimeout(async () => {
       try {
         await API.post("/assignments/scoring", {
           MaSV,
           MaBaiTap: assignmentId,
           Diem: grade,
+          NhanXet: comment
         });
         toast.success("Chấm điểm thành công");
         getAllSubmissions();
@@ -78,6 +83,10 @@ const ClassCourseAssignmentSubmited = () => {
                 }`}
               >
                 {item.DiemSo ? 'Đã chấm' : 'Chưa chấm'}
+              
+              </span>}
+              {item.DiemSo !== null && <span className="text-blue-600 bg-blue-200 ring ring-blue-500 px-2 text-sm rounded-md">
+                Score: {item.DiemSo}
               </span>}
             </div>
             {(item.TrangThai === "Đã nộp" || item.TrangThai === "Nộp trễ") && (
@@ -107,20 +116,6 @@ const ClassCourseAssignmentSubmited = () => {
                     )}
                   </div>
                 </div>
-                {/* <div>
-                  <div className="mb-2 mr-5 w-20 h-20 p-3 ring ring-gray-300 flex flex-col justify-center items-center rounded-full">
-                    <span className="font-semibold grid grid-cols-2">
-                      <Input
-                        onChange={(e) => handleScoring(item.MaSV, e)}
-                        defaultValue={item.DiemSo ?? ""}
-                        variant="borderBottom"
-                        className="outline-none mt-[3px] text-center"
-                        sizeOpt="sm"
-                      /> {" "}
-                      / 10
-                    </span>
-                  </div>
-                </div> */}
 
                 <Button
                   onClick={() => setSelected(item.MaNopBai)}
@@ -145,7 +140,7 @@ const ClassCourseAssignmentSubmited = () => {
                     <p>Status: {item.TrangThai}</p>
                     <Input
                       onChange={(e) => setGrade(parseFloat(e.target.value))}
-                      defaultValue={item.DiemSo ?? ""}
+                      value={grade}
                       variant="default"
                       className="outline-none"
                       sizeOpt="md"
@@ -153,12 +148,17 @@ const ClassCourseAssignmentSubmited = () => {
                       type="number"
                     />
                     <textarea
+                      value={comment}
                       className="p-2 ring ring-gray-500 rounded-xl"
                       placeholder="Comment"
+                      onChange={(e) => setComment(e.target.value)}
                     ></textarea>
                     <div className="flex gap-2">
                       <Button title="Save" variant="dark" onClick={() => handleScoring(item.MaSV,grade)} />
-                      <Button onClick={() => setSelected("")} title="Cancel" />
+                      <Button onClick={() => {
+                        
+                        setSelected("")}
+                        } title="Cancel" />
                     </div>
                   </div>
                 </div>

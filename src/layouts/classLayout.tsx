@@ -11,6 +11,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import catImg from "@/assets/Character_Cat_3.svg"
+import { useAuth } from "@/hooks/useAuth";
 
 type Props = {
   children: ReactNode;
@@ -18,13 +19,13 @@ type Props = {
 
 const ClassLayout = ({ children }: Props) => {
   const { id } = useParams();
-  const role = localStorage.getItem("role");
+  const {user} = useAuth();
   const [classCourseData, setClassCourseData] = useState<ClassCourseType>();
 
   const getSidebarItems = () => {
-    if (role === "SV") {
+    if (user?.role === "SV") {
       return SidebarStudentData;
-    } else if (role === "GV") {
+    } else if (user?.role === "GV") {
       return SidebarTeacherData;
     } else {
       return SidebarAdminData;
@@ -67,6 +68,10 @@ const ClassLayout = ({ children }: Props) => {
       title: "Member",
       href: `/classcourse/${id}/members`,
     },
+    {
+      title: "Attendance",
+      href: `/classcourse/${id}/attendance`,
+    }
   ];
   return (
     <div className="h-full dark:bg-background bg-[#fff8f0] p-5">
@@ -91,14 +96,6 @@ const ClassLayout = ({ children }: Props) => {
               ))}
             </div>
             <div className="overflow-y-hidden flex-1">
-              {/* <div className="relative px-20 pb-5">
-                <div className="border-b border-gray-500 flex items-end justify-center">
-                  <div className=""><img width={90} src={catImg}/></div>
-                  <div className="">
-                    <h1 className="text-3xl font-brand-logo">{classCourseData?.ten_lop}</h1>
-                  </div>
-                </div>
-              </div> */}
               {children}
             </div>
           </div>

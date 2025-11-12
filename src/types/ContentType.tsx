@@ -13,4 +13,5 @@ export type ContentType = {
     youtube_id: string
     youtube_title: string
     thumbnail: string
+    userId: string
 }

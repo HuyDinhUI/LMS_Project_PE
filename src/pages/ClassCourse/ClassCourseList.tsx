@@ -74,11 +74,10 @@ const ClassCourseList = () => {
         </div>
       </div>
       <div className="mt-5">
-        <div></div>
         <div className="grid grid-cols-3 gap-5">
           {classData.map((c) => (
             <Link
-              to={new Date(c.ngay_kethuc) < new Date() && role === "SV" ? '#' : `/classcourse/${c.MaLop}`}
+              to={`/classcourse/${c.MaLop}`}
               key={c.MaLop}
               className={`rounded-xl shadow-sm overflow-hidden hover:-translate-y-1 transition-transform relative`}
             >

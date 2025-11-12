@@ -30,6 +30,7 @@ import "react-quill-new/dist/quill.snow.css";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import { Dialog } from "@/components/ui/dialog";
 import logo_youtube from "@/assets/logo_youtube.png";
+import { useAuth } from "@/hooks/useAuth";
 
 const get_icon: any = {
   pdf: <FaFilePdf size={30} />,
@@ -40,7 +41,7 @@ const get_icon: any = {
 };
 
 const ClassCourseManagementHome = () => {
-  const role = localStorage.getItem("role");
+  const {user} = useAuth()
   const [contentData, setContentData] = useState<ContentType[]>([]);
   const { id } = useParams(); // MaLop
   const [preview, setPreview] = useState<any>(null);
@@ -474,7 +475,7 @@ const ClassCourseManagementHome = () => {
                   </div>
                 </div>
               )}
-              {role === "GV" && (
+              {c.userId === user?.username  && (
                 <div className="absolute top-3 right-3">
                   <DropdownMenu
                     trigger={
@@ -506,7 +507,7 @@ const ClassCourseManagementHome = () => {
           </div>
         </div>
       )}
-      {role === "GV" && selectedMaNoiDung && (
+      {selectedMaNoiDung && (
         <FormUpdateContent
           MaNoiDung={selectedMaNoiDung}
           handleClose={() => {

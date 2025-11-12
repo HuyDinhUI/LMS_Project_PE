@@ -10,4 +10,5 @@ export type SubmissionType = {
   original_name: string | null;
   DiemSo: number | null;
   TrangThai: string;
+  NhanXet: string | null;
 };

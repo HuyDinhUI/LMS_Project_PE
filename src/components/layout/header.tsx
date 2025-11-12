@@ -24,6 +24,7 @@ import { AlertDialogLogout } from "@/mock/AlertDialog-MockData";
 import { DropdownMenu, Notification } from "../ui/dropdown";
 import { SearchForm } from "../ui/search-form";
 import { useSocket } from "@/hooks/useSocket";
+import { useAuth } from "@/hooks/useAuth";
 
 type props = {
   router?: string;
@@ -34,8 +35,9 @@ export const Header = ({ router }: props) => {
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") ?? "light"
   );
-  const role = localStorage.getItem("role");
+  
   const MaSV = localStorage.getItem("username");
+  const {user} = useAuth()
   const navigate = useNavigate();
 
   useSocket(MaSV ?? null, null, (data) => {
@@ -56,7 +58,7 @@ export const Header = ({ router }: props) => {
       label: "Information",
       icon: <CircleUser size={16} />,
       onClick: () =>
-        navigate(`/${role === "GV" ? "teacher" : "student"}/information`),
+        navigate(`/${user?.role === "GV" ? "teacher" : "student"}/information`),
     },
     { label: "Setting", icon: <Settings size={16} /> },
     { label: "Help", icon: <HelpCircle size={16} /> },

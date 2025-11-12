@@ -1,23 +1,23 @@
 import { Header } from "@/components/layout/header";
-import { Sidebar, type SidebarItem } from "@/components/layout/side-bar";
+import { Sidebar } from "@/components/layout/side-bar";
+import { useAuth } from "@/hooks/useAuth";
 import {
   SidebarAdminData,
   SidebarStudentData,
   SidebarTeacherData,
 } from "@/mock/sidebar-data";
-import { useRef, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
 };
 
 const MainLayout = ({ children }: Props) => {
-  const role = localStorage.getItem("role");
-
+  const {user} = useAuth();
   const getSidebarItems = () => {
-    if (role === "SV") {
+    if (user?.role === "SV") {
       return SidebarStudentData;
-    } else if (role === "GV") {
+    } else if (user?.role === "GV") {
       return SidebarTeacherData;
     } else {
       return SidebarAdminData;

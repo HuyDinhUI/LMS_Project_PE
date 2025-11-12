@@ -9,6 +9,7 @@ import { AlertDanger } from "@/components/ui/alert";
 import bg_dark from "@/assets/10139763.jpg"
 import bg_light from "@/assets/v567-n-50-doodles.jpg"
 import logo from "@/assets/logo_cat_black.svg"
+import { useAuth } from "@/hooks/useAuth";
 
 const Login = () => {
   const {
@@ -20,12 +21,15 @@ const Login = () => {
   const [error, setError] = useState<any>(undefined)
   const navigate = useNavigate();
   const theme = localStorage.getItem('theme') ?? 'light'
-
+  const {setUser} = useAuth();
+ 
 
   const submitLogin = async (data: any) => {
     console.log(data)
     try {
       const res = await API.post('/auth/login', data)
+      setUser(res.data)
+
       if (res.data.role === "GV") {
         navigate('/teacher/dashboard')
       }
@@ -45,6 +49,8 @@ const Login = () => {
   };
 
   useEffect(() => {
+    localStorage.removeItem('role')
+    localStorage.removeItem('username')
     document.title = "Login - LMS"
     
   }, [])

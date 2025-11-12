@@ -1,6 +1,7 @@
 import ClassLayout from "@/layouts/classLayout";
 import MainLayout from "@/layouts/mainLayout";
 import Guard from "@/routes/guard";
+import path from "path";
 import { lazy } from "react";
 
 const AttendancePage = lazy(() => import("@/pages/Attendance"));
@@ -97,7 +98,12 @@ const ClassCourseMembersPage = lazy(
   () => import("@/pages/ClassCourse/ClassCourseMembers")
 );
 
+const ClassCourseAttendancePage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseAttendance")
+);
+
 const InboxMainPage = lazy(() => import("@/pages/Inbox/InboxMain"));
+
 
 export const privateRoutes = [
   /////////////  Admin  /////////////////
@@ -299,6 +305,17 @@ export const privateRoutes = [
       <Guard>
         <ClassLayout>
           <ClassCourseMembersPage />
+        </ClassLayout>
+      </Guard>
+    ),
+  },
+
+  {
+    path: "/classcourse/:id/attendance",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseAttendancePage />
         </ClassLayout>
       </Guard>
     ),
