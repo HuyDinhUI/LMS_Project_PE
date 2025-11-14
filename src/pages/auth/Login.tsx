@@ -6,11 +6,13 @@ import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { AlertDanger } from "@/components/ui/alert";
-import bg_dark from "@/assets/10139763.jpg"
-import bg_light from "@/assets/v567-n-50-doodles.jpg"
-import logo from "@/assets/logo_cat_black.svg"
+import bg_dark from "@/assets/10139763.jpg";
+import bg_light from "@/assets/v567-n-50-doodles.jpg";
+import logo from "@/assets/logo_cat_black.svg";
 import { useAuth } from "@/hooks/useAuth";
 import { TriangleAlert } from "lucide-react";
+import { useSubmitLoading } from "@/hooks/useLoading";
+import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 const Login = () => {
   const {
@@ -19,47 +21,52 @@ const Login = () => {
     formState: { errors },
   } = useForm();
 
-  const [error, setError] = useState<any>(undefined)
+  const [error, setError] = useState<any>(undefined);
   const navigate = useNavigate();
-  const theme = localStorage.getItem('theme') ?? 'light'
-  const {setUser} = useAuth();
- 
+  const theme = localStorage.getItem("theme") ?? "light";
+  const { setUser } = useAuth();
+  const { loading, withLoading } = useSubmitLoading();
 
   const submitLogin = async (data: any) => {
-    console.log(data)
+    console.log(data);
     try {
-      const res = await API.post('/auth/login', data)
-      setUser(res.data)
+      withLoading(async () => {
+        const res = await API.post("/auth/login", data);
+        setUser(res.data);
 
-      if (res.data.role === "GV") {
-        navigate('/teacher/dashboard')
-      }
+        if (res.data.role === "GV") {
+          navigate("/teacher/dashboard");
+        }
 
-      if (res.data.role === "admin") {
-        navigate('/teachermanagement/listteacher')
-      }
+        if (res.data.role === "admin") {
+          navigate("/teachermanagement/listteacher");
+        }
 
-      if (res.data.role === "SV") {
-        navigate('/student/dashboard')
-      }
+        if (res.data.role === "SV") {
+          navigate("/student/dashboard");
+        }
+      });
+    } catch (error: any) {
+      setError(error.response?.data?.message);
     }
-    catch (error: any) {
-      setError(error.response?.data?.message)
-    }
-
   };
 
   useEffect(() => {
-    localStorage.removeItem('role')
-    localStorage.removeItem('username')
-    document.title = "Login - LMS"
-    
-  }, [])
+    localStorage.removeItem("role");
+    localStorage.removeItem("username");
+    document.title = "Login - LMS";
+  }, []);
 
   return (
-    <div 
-    className="h-[100vh] shadow-lg flex items-center justify-center bg-cover"
-    style={theme === 'dark' ? {backgroundImage:`url("${bg_dark}")`}:{backgroundImage:`url("${bg_light}")`}}>
+    <div
+      className="h-[100vh] shadow-lg flex items-center justify-center bg-cover"
+      style={
+        theme === "dark"
+          ? { backgroundImage: `url("${bg_dark}")` }
+          : { backgroundImage: `url("${bg_light}")` }
+      }
+    >
+      <LoadingOverlay show={loading}/>
       <div className="w-100 min-h-[100px] rounded-xl bg-white/5 dark:bg-transparent dark:backdrop-blur-md dark:ring dark:ring-gray-500 shadow-md flex overflow-hidden">
         <form className="w-full p-5" onSubmit={handleSubmit(submitLogin)}>
           <div className="text-center mb-5 mt-4">
@@ -76,12 +83,12 @@ const Login = () => {
                 type="username"
                 placeholder="01001234"
                 {...register("username", { required: "Email cannot be blank" })}
-                aria-invalid={errors.username ? "true" : "false"} 
+                aria-invalid={errors.username ? "true" : "false"}
                 variant={errors.username ? "danger" : "default"}
-                />
+              />
               {errors.username?.type === "required" && (
                 <div className="absolute top-11 right-3 text-red-500">
-                  <TriangleAlert size={15}/>
+                  <TriangleAlert size={15} />
                 </div>
               )}
             </div>
@@ -90,21 +97,30 @@ const Login = () => {
               <Input
                 required
                 type="password"
-                {...register("password", { required: "Password cannot be blank" })} 
-                aria-invalid={errors.password ? "true" : "false"} 
-                variant={errors.password ? "danger" : "default"}/>
-              <Link className="absolute top-0 right-0" to={'/resetpassword'}>Forgot password?</Link>
+                {...register("password", {
+                  required: "Password cannot be blank",
+                })}
+                aria-invalid={errors.password ? "true" : "false"}
+                variant={errors.password ? "danger" : "default"}
+              />
+              <Link className="absolute top-0 right-0" to={"/resetpassword"}>
+                Forgot password?
+              </Link>
               {errors.password?.type === "required" && (
                 <div className="absolute top-11 right-3 text-red-500">
-                  <TriangleAlert size={15}/>
+                  <TriangleAlert size={15} />
                 </div>
               )}
             </div>
           </div>
-          <Button type="submit" className="w-full justify-center rounded-sm" size="md" title="Login" variant="primary" />
-          
+          <Button
+            type="submit"
+            className="w-full justify-center rounded-sm"
+            size="md"
+            title="Login"
+            variant="primary"
+          />
         </form>
-        
       </div>
     </div>
   );

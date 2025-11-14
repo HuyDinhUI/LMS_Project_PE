@@ -6,6 +6,7 @@ import type { EnrollCourseType } from "@/types/EnrolledCourseType";
 import API from "@/utils/axios";
 import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
+import { data } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const headerTableCourse = [
@@ -125,14 +126,9 @@ const StudentEnrollClassCourse = () => {
   }, []);
   return (
     <div className="py-5 px-10 w-full h-175 overflow-auto">
-      <div className="w-full px-2">
-        <h1 className="text-2xl uppercase text-center font-bold">
-          Enroll course
-        </h1>
-      </div>
       <div className="w-full p-2">
         {/* Bảng danh sách học phần */}
-        <h2 className="py-3 text-xl uppercase">
+        <h2 className="py-3 text-xl uppercase text-center bg-black/5 font-semibold rounded-lg">
           COURSES
         </h2>
         <div className="w-full p-4 shadow-sm rounded-xl">
@@ -162,7 +158,7 @@ const StudentEnrollClassCourse = () => {
             </tbody>
           </table>
         </div>
-        <h2 className="py-3 text-xl uppercase mt-5">
+        <h2 className="py-3 text-xl uppercase mt-5 text-center bg-black/5 font-semibold rounded-lg">
           Class
         </h2>
         <div className="w-full p-4 shadow-sm rounded-xl">
@@ -210,8 +206,11 @@ const StudentEnrollClassCourse = () => {
               ))}
             </tbody>
           </table>
+          {!dataClassCourse && (
+            <p className="text-center py-5">Select a course to view the class list.</p>
+          )}
         </div>
-        <h2 className="py-3 text-xl uppercase mt-5">
+        <h2 className="py-3 text-xl uppercase mt-5 text-center bg-black/5 font-semibold rounded-lg">
           Enrolled
         </h2>
         <div className="w-full p-4 shadow-sm rounded-xl">

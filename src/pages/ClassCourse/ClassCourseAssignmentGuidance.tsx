@@ -150,7 +150,7 @@ const ClassCourseAssignmentGuidance = () => {
                     ? "You cannot submit this assignment because it is past the due date."
                     : "Points will be deducted for late assignment submission according to the instructor's regulations"}
                 </p>
-                {new Date(assignmentsData?.HanNop ?? "") > new Date() && (
+                {(new Date(assignmentsData?.HanNop ?? "") > new Date() || !assignmentsData?.HanNop) && (
                   <div>
                     <div
                       onClick={handleClick}

@@ -1,17 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { SearchForm } from "@/components/ui/search-form";
 import API from "@/utils/axios";
-import { FolderOutput, Printer, PrinterCheck } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { FolderOutput, PrinterCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { useAuth } from "@/hooks/useAuth";
 
 const ClassCourseManagementGrades = () => {
-  const role = localStorage.getItem("role");
   const { id } = useParams();
-  const MaSV = localStorage.getItem("username");
+  const {user} = useAuth();
   const [dataGradesAssignment, setDataGradesAssignment] = useState<any[]>([]);
   const [dataGradesTest, setDataGradesTest] = useState<any[]>([]);
 
@@ -37,7 +37,7 @@ const ClassCourseManagementGrades = () => {
   const getGradesAssignmentForStudent = async () => {
     try {
       const res = await API.get(
-        `/assignments/getAssignmentByStudent/${MaSV}/${id}`
+        `/assignments/getAssignmentByStudent/${user?.username}/${id}`
       );
       setDataGradesAssignment(res.data.result.data);
     } catch (err: any) {
@@ -49,7 +49,7 @@ const ClassCourseManagementGrades = () => {
 
   const getGradesTestForStudent = async () => {
     try {
-      const res = await API.get(`/quiz/getQuizByStudent/${MaSV}/${id}`);
+      const res = await API.get(`/quiz/getQuizByStudent/${user?.username}/${id}`);
       setDataGradesTest(res.data.result.data);
     } catch (err: any) {
       toast.error(
@@ -93,14 +93,16 @@ const ClassCourseManagementGrades = () => {
   };
 
   useEffect(() => {
-    if (role === "GV") {
+    if (!user || !user.role) return;
+
+    if (user?.role === "GV") {
       getGradesAssignment();
       getGradesTest();
     } else {
       getGradesAssignmentForStudent();
       getGradesTestForStudent();
     }
-  }, []);
+  }, [user]);
 
   return (
     <div className="flex-1 overflow-auto max-h-170 px-20">
@@ -112,15 +114,15 @@ const ClassCourseManagementGrades = () => {
         <div>
           <Button
             variant="primary"
-            title={role === "GV" ? "Export" : "Print"}
+            title={user?.role === "GV" ? "Export" : "Print"}
             className="rounded-md"
-            icon={role === "GV" ? <FolderOutput /> : <PrinterCheck />}
+            icon={user?.role === "GV" ? <FolderOutput /> : <PrinterCheck />}
             onClick={() => exportToExcel()}
           />
         </div>
       </div>
       {/* table */}
-      {role === "GV" && (
+      {user?.role === "GV" && (
         <div className="mt-4">
           <div className="overflow-x-scroll">
             <table className="min-w-300 border border-gray-500 table-auto">
@@ -196,7 +198,7 @@ const ClassCourseManagementGrades = () => {
           </div>
         </div>
       )}
-      {role === "SV" && (
+      {user?.role === "SV" && (
         <div className="mt-4">
           <table className="min-w-full border border-gray-500 table-auto">
             <thead className="text-left">
@@ -214,8 +216,7 @@ const ClassCourseManagementGrades = () => {
                     {row.TieuDe}
                   </td>
                   <td className="border border-gray-500 px-4 py-2">
-                    {new Date(row.HanNop).toLocaleDateString("vi-VN")}{" "}
-                    {row.GioNop}
+                    {row.HanNop ? new Date(row.HanNop).toLocaleString("vi-VN") : "Unlimited"}
                   </td>
                   <td className="border border-gray-500 px-4 py-2">
                     {row.DiemSo !== null ? row.DiemSo : "-"}
@@ -230,10 +231,10 @@ const ClassCourseManagementGrades = () => {
                   Average score
                 </td>
                 <td className="border border-gray-500 px-4 py-2" colSpan={2}>
-                  {dataGradesAssignment.reduce(
-                    (acc, row) => acc + (row.DiemSo || acc),
+                  {(dataGradesAssignment.reduce(
+                    (acc, row) => acc + (row.DiemSo),
                     0
-                  ) / dataGradesAssignment.length || 0}
+                  ) / dataGradesAssignment.filter(item => !item.DiemSo).length || 0).toFixed(1)}
                 </td>
               </tr>
             </tbody>
@@ -254,8 +255,7 @@ const ClassCourseManagementGrades = () => {
                     {row.TieuDe}
                   </td>
                   <td className="border border-gray-500 px-4 py-2">
-                    {new Date(row.HanNop).toLocaleDateString("vi-VN")}{" "}
-                    {row.GioNop}
+                    {row.HanNop ? new Date(row.HanNop).toLocaleString("vi-VN") : "Unlimited"}
                   </td>
                   <td className="border border-gray-500 px-4 py-2">
                     {parseFloat(row.DiemSo) !== null
@@ -273,7 +273,7 @@ const ClassCourseManagementGrades = () => {
                 </td>
                 <td className="border border-gray-500 px-4 py-2" colSpan={2}>
                   {(dataGradesTest.reduce(
-                    (acc, row) => acc + (parseFloat(row.DiemSo) || acc),
+                    (acc, row) => acc + (parseFloat(row.DiemSo)),
                     0
                   ) / dataGradesTest.length).toFixed(1) || 0}
                 </td>

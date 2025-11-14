@@ -1,5 +1,4 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import FaceAttendance from "./pages/Attendance";
 import { privateRoutes } from "./routes/privateRoutes";
 import { publicRoutes } from "./routes/publicRoutes";
 import { Suspense } from "react";
@@ -13,7 +12,7 @@ function App() {
           <Suspense
             fallback={
               <ScaleLoader
-                color="blue"
+                color="black"
                 cssOverride={{
                   display: "block",
                   position: "absolute",

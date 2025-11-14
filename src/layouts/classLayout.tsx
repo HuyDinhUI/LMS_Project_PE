@@ -87,7 +87,7 @@ const ClassLayout = ({ children }: Props) => {
   return (
     <div className="h-full dark:bg-background bg-[#fff8f0] p-5">
       <div className="flex h-full items-center">
-        <Sidebar items={getSidebarItems()} />
+        <Sidebar items={getSidebarItems()} ishidden={true}/>
         <div className="dark:bg-background flex-1 h-full overflow-hidden">
           <Header router={classCourseData?.ten_lop}/>
           <div className="flex px-5 gap-5 mt-5 h-full">

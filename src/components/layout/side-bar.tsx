@@ -29,6 +29,7 @@ type SidebarVariant = "default" | "primary"
 type SidebarItemProps = {
   items: SidebarItem[]
   variant?: SidebarVariant
+  ishidden?: boolean
 }
 
 const SidebarVariantOption = {
@@ -38,10 +39,10 @@ const SidebarVariantOption = {
 }
 
 
-export const Sidebar = ({items, variant = 'primary'}:SidebarItemProps) => {
+export const Sidebar = ({items, variant = 'primary',ishidden = false}:SidebarItemProps) => {
   const location = useLocation();
   const [openMenus, setOpenMenus] = useState<string[]>([]);
-  const [isHidden, setIsHidden] = useState<boolean>(false)
+  const [isHidden, setIsHidden] = useState<boolean>(ishidden)
 
   const toggleMenu = (label: string) => {
     setOpenMenus((prev) =>

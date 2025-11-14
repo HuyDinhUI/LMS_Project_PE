@@ -24,11 +24,11 @@ import { DropdownMenu } from "@/components/ui/dropdown";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import CheckboxDemo from "@/components/ui/checkbox";
 import ReactQuill from "react-quill-new";
+import { useAuth } from "@/hooks/useAuth";
 
 const Quiz = () => {
   const { id } = useParams();
-  const MaSV = localStorage.getItem("username");
-  const role = localStorage.getItem("role");
+  const {user} = useAuth();
   const [dataQuiz, setDataQuiz] = useState<any>([]);
   const [openFormAction, setOpenFormAction] = useState<string>("");
   const [selectedMaTN, setSelectedMaTN] = useState<string>("");
@@ -46,7 +46,7 @@ const Quiz = () => {
 
   const getQuizByStudent = async () => {
     try {
-      const res = await API.get(`/quiz/getQuizByStudent/${MaSV}/${id}`);
+      const res = await API.get(`/quiz/getQuizByStudent/${user?.username}/${id}`);
       console.log(res.data.result.data);
       setDataQuiz(res.data.result.data);
     } catch (err: any) {
@@ -84,17 +84,19 @@ const Quiz = () => {
   };
 
   useEffect(() => {
-    if (role === "SV") {
+    if (!user || !user.role) return;
+
+    if (user?.role === "SV") {
       getQuizByStudent();
     } else {
       getQuiz();
     }
-  }, []);
+  }, [user]);
   return (
     <div className="flex-1 overflow-auto max-h-165 p-2">
       <div className="flex flex-col justify-center px-20">
         <div className="flex items-center gap-2 mb-10 sticky -top-2 z-999 bg-[#fff8f0]">
-          {role === "GV" && (
+          {user?.role === "GV" && (
             <>
               <Button
                 onClick={() =>
@@ -169,7 +171,7 @@ const Quiz = () => {
                   )}
                 </div>
                 <div className="flex items-center absolute top-4 right-3">
-                  {role === "GV" && (
+                  {user?.role === "GV" && (
                     <div className="">
                       <DropdownMenu
                         size="sm"
@@ -187,7 +189,7 @@ const Quiz = () => {
                   )}
                 </div>
                 <div className="flex gap-2 items-center mt-5">
-                  {role === "SV" && q.TrangThai === "Mo" && (
+                  {user?.role === "SV" && q.TrangThai === "Mo" && (
                     <Button
                       variant="dark"
                       title={
@@ -209,7 +211,7 @@ const Quiz = () => {
                       }
                     ></Button>
                   )}
-                  {role === "SV" && q.TrangThaiNopBai && (
+                  {user?.role === "SV" && q.TrangThaiNopBai !== "Chưa nộp" && (
                     <Button
                       variant="outline"
                       title="View"
@@ -218,7 +220,7 @@ const Quiz = () => {
                       }
                     />
                   )}
-                  {role === "GV" && (
+                  {user?.role === "GV" && (
                     <Button
                       title="Xem danh sách nộp bài"
                       className="p-2 cursor-pointer backdrop-blur-md rounded-md flex items-center gap-2 bg-yellow-brand"
@@ -233,7 +235,7 @@ const Quiz = () => {
                       : "bg-rose-100 ring ring-rose-400 text-rose-600 text-sm px-2 rounded-md"
                   }`}
                 >
-                  {role === "GV" && (
+                  {user?.role === "GV" && (
                     <p>
                       {(new Date(q.NgayBatDau) <= new Date() &&
                         new Date(q.HanNop) >= new Date()) ||
@@ -242,7 +244,7 @@ const Quiz = () => {
                         : "Close"}
                     </p>
                   )}
-                  {role === "SV" && (
+                  {user?.role === "SV" && (
                     <p>
                       {q.TrangThaiNopBai === "Đã nộp" ? "Submited" : "Unsubmit"}
                     </p>

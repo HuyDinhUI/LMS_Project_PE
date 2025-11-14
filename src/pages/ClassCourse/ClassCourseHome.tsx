@@ -14,7 +14,6 @@ import {
   ChevronLeft,
   Ellipsis,
   File,
-  Link2,
   Pen,
   Plus,
   Search,
@@ -32,6 +31,8 @@ import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import { Dialog } from "@/components/ui/dialog";
 import logo_youtube from "@/assets/logo_youtube.png";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubmitLoading } from "@/hooks/useLoading";
+import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 const get_icon: any = {
   pdf: <FaFilePdf size={30} />,
@@ -42,7 +43,7 @@ const get_icon: any = {
 };
 
 const ClassCourseManagementHome = () => {
-  const {user} = useAuth()
+  const { user } = useAuth();
   const [contentData, setContentData] = useState<ContentType[]>([]);
   const { id } = useParams(); // MaLop
   const [preview, setPreview] = useState<any>(null);
@@ -67,6 +68,8 @@ const ClassCourseManagementHome = () => {
     reset,
     formState: { errors },
   } = useForm();
+
+  const { loading, withLoading } = useSubmitLoading();
 
   const getItemActionContent = (MaNoiDung: string) => {
     return [
@@ -131,13 +134,22 @@ const ClassCourseManagementHome = () => {
 
     console.log(formData);
     try {
-      await API.post("/contents/create", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      withLoading(async () => {
+        await API.post("/contents/create", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        getContent();
       });
 
-      getContent();
+      // await API.post("/contents/create", formData, {
+      //   headers: { "Content-Type": "multipart/form-data" },
+      // });
+
+      
       setOpenFormCreate(false);
       setSelectedVideoId(null);
+      setDescription("");
       setFile(null);
       reset();
       toast.success("Tạo nội dung thành công");
@@ -181,6 +193,7 @@ const ClassCourseManagementHome = () => {
   }, [classCourseData]);
   return (
     <div className="flex-1 overflow-auto max-h-170 px-20">
+      <LoadingOverlay show={loading} message="Đang tạo nhóm..." />
       {/* cover */}
       <div
         className="w-full h-40 flex flex-col justify-end rounded-xl bg-cover overflow-hidden"
@@ -196,7 +209,7 @@ const ClassCourseManagementHome = () => {
         >
           <h2
             onClick={() => setOpenFormCreate(!opentFormCreate)}
-            className="cursor-pointer flex gap-2 p-4 sticky top-0 bg-[#0c0f0a] text-white"
+            className="cursor-pointer flex gap-2 p-4 sticky top-0"
           >
             <Plus />
             Add content
@@ -206,7 +219,7 @@ const ClassCourseManagementHome = () => {
             <div className="overflow-auto h-90">
               <form
                 onSubmit={handleSubmit(handleCreateContent)}
-                className="h-120"
+                className="h-80"
               >
                 <div className="p-4 flex flex-col gap-3">
                   <div className="relative">
@@ -220,11 +233,11 @@ const ClassCourseManagementHome = () => {
                     />
                     {errors.tieu_de && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500">
-                        <TriangleAlert size={15}/>
+                        <TriangleAlert size={15} />
                       </div>
                     )}
                   </div>
-                  
+
                   <ReactQuill value={description} onChange={setDescription} />
                   <Input
                     {...register("file")}
@@ -261,7 +274,7 @@ const ClassCourseManagementHome = () => {
                   )}
                 </div>
                 <div
-                  className={`flex bg-[#0c0f0a] justify-between items-center p-3 gap-2 absolute bottom-0 left-0 right-0 ${
+                  className={`flex bg-black/3 justify-between items-center p-3 gap-2 absolute bottom-0 left-0 right-0 ${
                     opentFormCreate ? "" : "hidden"
                   }`}
                 >
@@ -271,8 +284,8 @@ const ClassCourseManagementHome = () => {
                       type="button"
                       variant="icon"
                       size="ic"
-                      className="bg-transparent ring"
-                      icon={<Upload />}
+                      className="bg-transparent ring ring-gray-500 hover:bg-gray-100"
+                      icon={<Upload color="black" />}
                     />
                     <Dialog
                       close={dialog}
@@ -286,8 +299,8 @@ const ClassCourseManagementHome = () => {
                           type="button"
                           variant="icon"
                           size="ic"
-                          className="bg-transparent ring"
-                          icon={<Youtube />}
+                          className="bg-transparent ring ring-gray-500 hover:bg-gray-100"
+                          icon={<Youtube color="black" />}
                         />
                       }
                     >
@@ -407,14 +420,8 @@ const ClassCourseManagementHome = () => {
                       }}
                       title="Cancle"
                       variant="transparent"
-                      className="text-white"
                     />
-                    <Button
-                      type="submit"
-                      variant="transparent"
-                      title="Post"
-                      className="bg-white"
-                    />
+                    <Button type="submit" variant="primary" title="Post" />
                   </div>
                 </div>
               </form>
@@ -425,7 +432,10 @@ const ClassCourseManagementHome = () => {
         {/* list content */}
         <div className="flex flex-col gap-3 mt-5">
           {contentData.map((c) => (
-            <div key={c.MaNoiDung} className="w-full p-5 bg-black/3 rounded-xl relative">
+            <div
+              key={c.MaNoiDung}
+              className="w-full p-5 bg-black/3 rounded-xl relative"
+            >
               {/* header */}
               <div className="flex gap-2">
                 <img
@@ -461,7 +471,7 @@ const ClassCourseManagementHome = () => {
               )}
               {/* file */}
               {c.file_name && (
-                <div className="grid grid-cols-4 mt-4">
+                <div className="grid grid-cols-3 mt-4">
                   <div
                     onClick={() =>
                       handlePreview(
@@ -469,16 +479,18 @@ const ClassCourseManagementHome = () => {
                         getFileType(c.mime_type)
                       )
                     }
-                    className="p-3 ring ring-gray-300 rounded-xl flex gap-2 cursor-pointer"
+                    className="p-3 ring ring-gray-300 rounded-md flex gap-2 cursor-pointer"
                   >
                     <div className="flex items-center">
                       {get_icon[`${getFileType(c.mime_type)}`]}
                     </div>
-                    <label className="w-full block cursor-pointer underline">{c.original_name}</label>
+                    <label className="w-full block cursor-pointer underline">
+                      {c.original_name}
+                    </label>
                   </div>
                 </div>
               )}
-              {c.userId === user?.username  && (
+              {c.userId === user?.username && (
                 <div className="absolute top-3 right-3">
                   <DropdownMenu
                     trigger={

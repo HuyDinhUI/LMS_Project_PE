@@ -37,7 +37,7 @@ const Guard = ({ children }: Props) => {
     checkLogin()
   })
 
-  if (auth === null) return <ScaleLoader color="blue" cssOverride={override} aria-setsize={10} />
+  if (auth === null) return <ScaleLoader color="black" cssOverride={override} aria-setsize={10} />
 
   if(!auth) return <Navigate to="/auth/login" replace/>
 

@@ -4,24 +4,20 @@ import { Input } from "@/components/ui/input";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import type { AssignmentType } from "@/types/AssignmentType";
 import API from "@/utils/axios";
-import {
-  Ellipsis,
-  File,
-  Pen,
-  Plus,
-  Trash,
-} from "lucide-react";
+import { Ellipsis, File, Pen, Plus, Trash } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
+import { useAuth } from "@/hooks/useAuth";
+import { useSubmitLoading } from "@/hooks/useLoading";
+import { LoadingOverlay } from "@/components/ui/loading-overlay";
 
 const ClassCourseManagementAssignment = () => {
-  const role = localStorage.getItem("role");
   const { id } = useParams(); // MaLop
-  const MaSV = localStorage.getItem("username");
+  const { user } = useAuth();
   const [assignmentsData, setAssignmentsData] = useState<AssignmentType[]>([]);
   const [opentFormCreate, setOpenFormCreate] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
@@ -30,6 +26,7 @@ const ClassCourseManagementAssignment = () => {
   const [selectedMaBaiTap, setSelectedMaBaiTap] = useState<string>("");
   const [selectedFilter, setSelectedFilter] = useState<string>("All");
   const dropRef = useRef<any>(null);
+  const { loading, withLoading } = useSubmitLoading();
   const {
     register,
     handleSubmit,
@@ -39,7 +36,9 @@ const ClassCourseManagementAssignment = () => {
 
   const getAllAssignments = async () => {
     try {
-      const res = await API.get(`/assignments/getAssignmentsByClass/${id}?filter=${selectedFilter}`);
+      const res = await API.get(
+        `/assignments/getAssignmentsByClass/${id}?filter=${selectedFilter}`
+      );
       setAssignmentsData(res.data.result.data);
     } catch (err: any) {
       toast.error(
@@ -51,7 +50,7 @@ const ClassCourseManagementAssignment = () => {
   const getAssignmentsByStudent = async () => {
     try {
       const res = await API.get(
-        `/assignments/getAssignmentByStudent/${MaSV}/${id}?filter=${selectedFilter}`
+        `/assignments/getAssignmentByStudent/${user?.username}/${id}?filter=${selectedFilter}`
       );
       setAssignmentsData(res.data.result.data);
     } catch (err: any) {
@@ -94,7 +93,19 @@ const ClassCourseManagementAssignment = () => {
   };
 
   useEffect(() => {
-    if (role === "GV") {
+    if (!user || !user.role) return;
+
+    if (user?.role === "GV") {
+      getAllAssignments();
+    } else {
+      getAssignmentsByStudent();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!user || !user.role) return;
+
+    if (user?.role === "GV") {
       getAllAssignments();
     } else {
       getAssignmentsByStudent();
@@ -113,13 +124,15 @@ const ClassCourseManagementAssignment = () => {
 
     console.log(...formData);
     try {
-      await API.post("/assignments/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      withLoading(async () => {
+        await API.post("/assignments/create", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        toast.success("Tạo bài tập thành công");
+        getAllAssignments();
       });
-      toast.success("Tạo bài tập thành công");
-      getAllAssignments();
     } catch (err: any) {
       toast.error(
         err.response?.data?.message || "Có lỗi xảy ra, vui lòng thử lại"
@@ -181,6 +194,7 @@ const ClassCourseManagementAssignment = () => {
 
   return (
     <div className="flex-1 overflow-auto max-h-165">
+      <LoadingOverlay show={loading} />
       {/* content */}
       <div className="flex flex-col justify-center px-20 w-full relative">
         {/* filter */}
@@ -198,7 +212,7 @@ const ClassCourseManagementAssignment = () => {
         </div>
         <div className="flex flex-col gap-3 w-full mt-5 mb-7">
           {/* Form tạo */}
-          {role === "GV" && (
+          {user?.role === "GV" && (
             <div
               className={`p-4 col-span-2 bg-black/3 rounded-xl overflow-scroll relative ${
                 opentFormCreate ? "h-130" : "h-13"
@@ -331,7 +345,7 @@ const ClassCourseManagementAssignment = () => {
                 </div>
               )}
               <div className="absolute top-5 right-5 text-sm text-gray-500 flex items-center gap-2">
-                {role === "GV" ? (
+                {user?.role === "GV" ? (
                   <p>
                     Created at: {new Date(item.NgayTao).toLocaleDateString()}{" "}
                     {item.NgayTao && " - "}{" "}
@@ -348,7 +362,7 @@ const ClassCourseManagementAssignment = () => {
                   </p>
                 )}
 
-                {role === "GV" && (
+                {user?.role === "GV" && (
                   <DropdownMenu
                     size="sm"
                     side="bottom"
@@ -361,28 +375,32 @@ const ClassCourseManagementAssignment = () => {
                 )}
               </div>
               <div className="absolute bottom-5 right-5 text-sm text-gray-500">
-                {role === "GV"
+                {user?.role === "GV"
                   ? `Maximum grade: ${item.DiemToiDa}`
                   : `Grade: ${item.DiemSo ?? "Chưa chấm điểm"}`}
               </div>
               <div className="mt-7">
                 <Link
                   to={`${
-                    role === "GV"
+                    user?.role === "GV"
                       ? `/classcourse/${id}/submissions/${item.MaBaiTap}`
                       : `/classcourse/${id}/guidance/${item.MaBaiTap}`
                   }`}
                   className="p-2 bg-yellow-brand rounded-md"
                 >
-                  {role === "GV" ? "View submission" : "View guide"}
+                  {user?.role === "GV" ? "View submission" : "View guide"}
                 </Link>
               </div>
             </div>
           ))}
-          {assignmentsData.length === 0 && <span className="text-center italic">☘ Luckily, there is no homework today.</span>}
+          {assignmentsData.length === 0 && (
+            <span className="text-center italic">
+              ☘ Luckily, there is no homework today.
+            </span>
+          )}
         </div>
       </div>
-      {role === "GV" && selectedMaBaiTap && (
+      {user?.role === "GV" && selectedMaBaiTap && (
         <FormUpdateAssignment
           MaBaiTap={selectedMaBaiTap}
           handleClose={() => {

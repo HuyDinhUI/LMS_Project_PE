@@ -3,9 +3,9 @@ import { io } from "socket.io-client";
 
 const socket = io(import.meta.env.VITE_BASE_STATIC_FILE);
 
-export const useSocket = (userId: string | null, classId: string | null, onNotification: (data: any) => void) => {
+export const useSocket = (userId: string | null, classIds: [] | string, onNotification: (data: any) => void) => {
   useEffect(() => {
-    socket.emit("join_room", { userId, classId });
+    socket.emit("join_room", { userId, classIds });
 
     socket.on("receive_notification", (data) => {
       onNotification(data);
@@ -14,5 +14,5 @@ export const useSocket = (userId: string | null, classId: string | null, onNotif
     return () => {
       socket.off("receive_notification"); 
     };
-  }, [userId, classId]);
+  }, [userId, classIds]);
 };

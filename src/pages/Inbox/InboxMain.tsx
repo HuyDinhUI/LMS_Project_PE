@@ -3,6 +3,7 @@ import { Input } from "@/components/ui/input";
 import { SearchForm } from "@/components/ui/search-form";
 import type { MessageType, InboxType } from "@/types/Inbox";
 import API from "@/utils/axios";
+import { Send } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
@@ -106,16 +107,16 @@ const InboxMain = () => {
       
       <div className="bg-green-brand/80 w-full flex gap-2 p-5 rounded-xl">
         {/* Sidebar: danh sách lớp */}
-        <div className="w-1/5 rounded-xl p-2 overflow-y-auto">
-          <div className="w-full py-4 text-white">
+        <div className="w-1/5 rounded-xl p-2 overflow-y-auto bg-white shadow-md">
+          <div className="w-full py-4">
             <Input placeholder="Search" variant="borderBottom" />
           </div>
           <div className="flex flex-col gap-2">
             {listInbox.map((inbox) => (
               <div
                 key={inbox.MaLop}
-                className={`p-2 cursor-pointer text-white ${
-                  selectedInbox?.MaLop === inbox.MaLop ? "font-bold" : ""
+                className={`p-2 cursor-pointer rounded-md ${
+                  selectedInbox?.MaLop === inbox.MaLop ? "bg-black text-white" : ""
                 }`}
                 onClick={() => setSelectedInbox(inbox)}
               >
@@ -126,42 +127,43 @@ const InboxMain = () => {
         </div>
         {/* Khung chat */}
         <div
-          className="flex-1 bg-[#fff8f0] rounded-xl overflow-hidden"
+          className="flex-1 bg-white shadow-md rounded-xl overflow-hidden"
         
         >
           {selectedInbox ? (
             <div className="h-full flex flex-col relative">
-              <div className="px-3 py-4.5 w-full border-b border-gray-300">
+              <div className="px-3 py-4.5 w-full border-b border-black">
                 <h1 className="text-xl font-bold uppercase">{selectedInbox.TieuDe}</h1>
               </div>
               {/* Tin nhắn */}
-              <div className="overflow-y-auto p-3 flex-1" ref={chatEndRef}>
-                {messages.map((msg, i) => (
-                  <div
-                    key={i}
-                    className={`flex ${
-                      msg.MaNguoiGui === id ? "justify-end" : "justify-start"
-                    }`}
-                  >
+              <div className="p-3 h-125 overflow-y-scroll">
+                  {messages.map((msg, i) => (
                     <div
-                      className={`p-2 rounded-xl max-w-[70%] mt-2 animate-slideInBottom ${
-                        msg.MaNguoiGui === id
-                          ? "bg-black text-white"
-                          : "bg-black/50 text-white"
+                      key={i}
+                      className={`flex ${
+                        msg.MaNguoiGui === id ? "justify-end" : "justify-start"
                       }`}
                     >
-                      <p className="text-sm mb-1">
-                        <b>
-                          {msg.VaiTro === "GV" ? "T." : "S."} {msg.hoten}
-                        </b>
-                      </p>
-                      <p>{msg.NoiDung}</p>
-                      <p className="text-xs opacity-60 mt-1">
-                        {new Date(msg.ThoiGianGui).toLocaleString()}
-                      </p>
+                      <div
+                        className={`p-2 rounded-xl max-w-[70%] mt-2 animate-slideInBottom ${
+                          msg.MaNguoiGui === id
+                            ? "bg-black text-white"
+                            : "bg-black/50 text-white"
+                        }`}
+                      >
+                        <p className="text-sm mb-1">
+                          <b>
+                            {msg.VaiTro === "GV" ? "T." : "S."} {msg.hoten}
+                          </b>
+                        </p>
+                        <p>{msg.NoiDung}</p>
+                        <p className="text-xs opacity-60 mt-1">
+                          {new Date(msg.ThoiGianGui).toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                  <div ref={chatEndRef} />
               </div>
               {/* Input gửi tin */}
               <form
@@ -169,14 +171,14 @@ const InboxMain = () => {
                   e.preventDefault();
                   handleSend();
                 }}
-                className="p-3 border-t border-gray-300 flex gap-2 absolute bottom-0 right-0 left-0"
+                className="p-3 border-t border-gray-300 flex gap-2 sticky bottom-0 right-0 left-0"
               >
                 <Input
                   placeholder="Enter message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                 />
-                <Button variant="primary" title="Send" type="submit"></Button>
+                <Button variant="primary" title="Send" type="submit" icon={<Send size={18}/>}></Button>
               </form>
             </div>
           ) : (

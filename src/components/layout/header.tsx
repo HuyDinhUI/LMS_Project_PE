@@ -19,7 +19,7 @@ import type { MenuItem } from "@/types/MenuItemType";
 
 import { Link, useNavigate } from "react-router-dom";
 import API from "@/utils/axios";
-import { toast } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 import { AlertDialogLogout } from "@/mock/AlertDialog-MockData";
 import { DropdownMenu, Notification } from "../ui/dropdown";
 import { SearchForm } from "../ui/search-form";
@@ -32,17 +32,43 @@ type props = {
 
 export const Header = ({ router }: props) => {
   const [notification, setNotifications] = useState<any>([]);
+  const [listClass, setListClass] = useState<any>([]);
   const [theme, setTheme] = useState<string>(
     localStorage.getItem("theme") ?? "light"
   );
-  
-  const MaSV = localStorage.getItem("username");
-  const {user} = useAuth()
+
+  const { user } = useAuth();
   const navigate = useNavigate();
 
-  useSocket(MaSV ?? null, null, (data) => {
-    setNotifications((prev: any) => [...prev, data])
-  });
+  const getClassByStudent = async () => {
+    try {
+      const res = await API.get(
+        `/classCourse/getClassCourseByStudent/${user?.username}`
+      );
+      setListClass(res.data.result.data);
+    } catch (err: any) {
+      console.log(err?.response?.data?.message);
+    }
+  };
+
+  useSocket(
+    user?.username ?? null,
+    listClass.map((item: any) => item.MaLop),
+    (data) => {
+      setNotifications((prev: any) => [...prev, data]);
+    toast(`${data.message}!`,{
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      transition: Bounce,
+    });
+    }
+  );
 
   useEffect(() => {
     localStorage.setItem("theme", theme);
@@ -52,6 +78,10 @@ export const Header = ({ router }: props) => {
       document.documentElement.classList.remove("dark");
     }
   }, [theme]);
+
+  useEffect(() => {
+    getClassByStudent();
+  }, []);
 
   const AccountItems: MenuItem[] = [
     {
@@ -99,7 +129,7 @@ export const Header = ({ router }: props) => {
 
   return (
     <div className="flex px-3 py-2 items-center justify-between">
-      <div className="w-[40%] ms-4 flex gap-2 items-center">
+      <div className="w-[40%] ms-4 md:flex gap-2 items-center hidden">
         <Button
           variant="transparent"
           size="ic"
@@ -115,7 +145,7 @@ export const Header = ({ router }: props) => {
         </div>
       </div>
 
-      <div className="w-[30%] flex justify-end items-center gap-2">
+      <div className="md:w-[30%] flex justify-end items-center gap-2">
         <SearchForm handleSearch={handleSearch} />
         {theme === "light" ? (
           <Button

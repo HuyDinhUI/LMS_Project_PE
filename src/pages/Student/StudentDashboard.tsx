@@ -181,21 +181,21 @@ const StudentDashboard = () => {
   }, [selectedMaLop]);
 
   return (
-    <div className="pt-5 ps-10 pe-5 w-full h-175">
-      <div className="flex gap-15 h-full">
-        <div className="w-[50%]">
+    <div className="pt-5 md:ps-10 md:pe-5 w-full h-175">
+      <div className="md:flex gap-15 h-full">
+        <div className="md:w-[50%]">
           <div className="p-10 mt-5 bg-black/5 rounded-xl relative h-40">
-            <h1 className="font-brand-logo text-5xl">
+            <h1 className="font-brand-logo sm:text-5xl">
               Meow! {getName(dataStudent?.hoten ?? "")}
             </h1>
-            <p>It's good to see you again.</p>
-            <div className="absolute -top-5 right-10">
+            <p className="">It's good to see you again.</p>
+            <div className="absolute sm:-top-5 sm:right-10 hidden md:block">
               <img width={170} src={CatImg} />
             </div>
           </div>
           <div className="flex-1 flex flex-col gap-5 mt-5">
             {/* filter */}
-            <div className="flex gap-2">
+            <div className="md:flex gap-2 hidden">
               {FILTER_LIST.map((f, i) => (
                 <Button
                   key={i}
@@ -206,7 +206,7 @@ const StudentDashboard = () => {
               ))}
             </div>
             {/* List assignment */}
-            <div className="h-120 grid grid-rows-6 gap-3">
+            <div className="h-120 md:grid grid-rows-6 gap-3 hidden">
               {dueSoon.map((d) => (
                 <div
                   key={d.MaBaiTap}
@@ -236,21 +236,21 @@ const StudentDashboard = () => {
           </div>
         </div>
         <div className="flex-1 flex flex-col gap-5 overflow-auto">
-          <div className="grid grid-cols-2 gap-3 mt-5 h-40">
-            <div className="h-full bg-black/5 rounded-xl flex gap-2 justify-center items-center">
+          <div className="grid grid-cols-2 gap-3 md:mt-5 h-40">
+            <div className="h-full bg-black/5 rounded-xl flex flex-col md:flex-row gap-2 justify-center items-center">
               <span className="text-7xl font-bold font-brand-title">11</span>
               <span>
                 Unsubmitted <br /> assignments
               </span>
             </div>
-            <div className="bg-black/5 rounded-xl flex gap-2 justify-center items-center">
+            <div className="bg-black/5 rounded-xl flex flex-col md:flex-row gap-2 justify-center items-center">
               <span className="text-7xl font-bold font-brand-title">4</span>
               <span>
                 Week <br /> schedule
               </span>
             </div>
           </div>
-          <div className="bg-black/5 py-3 px-2 rounded-xl">
+          <div className="bg-black/5 py-3 px-2 rounded-xl hidden md:block">
             <div className="flex justify-end">
               <select
                 className="p-2 outline-none bg-black/5 rounded-md"
