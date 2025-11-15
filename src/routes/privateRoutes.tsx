@@ -3,6 +3,9 @@ import MainLayout from "@/layouts/mainLayout";
 import Guard from "@/routes/guard";
 import { lazy } from "react";
 
+const ListAccountPage = lazy(
+  () => import('@/pages/admin/AccountManagement/ListAccount')
+)
 
 const ListTeacherPage = lazy(
   () => import("@/pages/admin/TeacherManagement/ListTeacher")
@@ -154,6 +157,17 @@ export const privateRoutes = [
         <ListStudentPage />
       </MainLayout>
     ),
+  },
+
+  {
+    path: "/accountmanagement",
+    element: (
+      <Guard>
+        <MainLayout>
+          <ListAccountPage/>
+        </MainLayout>
+      </Guard>
+    )
   },
 
   /////////////  Teacher  ////////////////

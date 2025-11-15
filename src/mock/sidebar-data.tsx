@@ -66,7 +66,7 @@ export const SidebarAdminData: SidebarItem[] = [
   {
     type: "item",
     label: "User account",
-    href: '/',
+    href: '/accountmanagement',
     icon: <CircleUser />,
   },
   {

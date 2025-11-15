@@ -3,6 +3,9 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { Button } from "./button";
+import { useAuth } from "@/hooks/useAuth";
+import { useSubmitLoading } from "@/hooks/useLoading";
+import API from "@/utils/axios";
 
 export type EventType = {
   id: string;
@@ -11,15 +14,34 @@ export type EventType = {
   start: string;
   end: string;
   status: string;
+  ngay_day: string
 };
 
 type props = {
   data: EventType[];
-  height?: string
+  height?: string;
 };
 
-export const Calendar = ({ data, height = '80vh' }: props) => {
-  const role = localStorage.getItem("role");
+export const Calendar = ({ data, height = "80vh" }: props) => {
+  const { user } = useAuth();
+  const { loading, withLoading } = useSubmitLoading();
+
+  const Attendance = async (MaLop: string, ngay_day: string) => {
+    const body = {
+      MaLop,
+      ngay_day
+    }
+    withLoading(async () => {
+      try {
+        const res = await API.post("/attendance/start",body);
+        console.log(res.data.redirectUrl)
+        window.location.href = res.data.redirectUrl
+      } catch (err: any) {
+        console.log(err);
+      }
+    });
+  };
+
   return (
     <FullCalendar
       eventContent={(arg) => {
@@ -38,13 +60,11 @@ export const Calendar = ({ data, height = '80vh' }: props) => {
             {arg.event.title}
             {new Date().toISOString() >=
               new Date(arg.event.start ?? "").toISOString() &&
-              new Date().toISOString() <=
+              new Date().toISOString() >
                 new Date(arg.event.end ?? "").toISOString() &&
-              role === "SV" && (
+              user?.role === "SV" && (
                 <Button
-                  onClick={() =>
-                    (location.href = `/student/attendance/${arg.event.extendedProps.MaLop}`)
-                  }
+                  onClick={() => Attendance(arg.event.extendedProps.MaLop, arg.event.extendedProps.ngay_day)}
                   variant="primary"
                   size="sm"
                   title="Điểm danh"
@@ -67,12 +87,11 @@ export const Calendar = ({ data, height = '80vh' }: props) => {
       slotMaxTime="20:00:00"
       locale="vi" // tiếng Việt
       allDaySlot={false}
-      
     />
   );
 };
 
-export const CalendarToday = ({ data,height = '35vh' }: props) => {
+export const CalendarToday = ({ data, height = "35vh" }: props) => {
   const role = localStorage.getItem("role");
   return (
     <FullCalendar

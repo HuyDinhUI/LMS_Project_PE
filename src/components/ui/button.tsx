@@ -18,7 +18,7 @@ const variantClass: Record<ButtonVariant, string> = {
     danger: 'bg-red-500 rounded-md hover:bg-red-600 text-white',
     dark: 'bg-[#0c0f0a] rounded-md hover:bg-[#0c0f0a]/80 text-white dark:bg-gray-200 dark:text-black dark:hover:bg-white',
     outline: 'rounded-md ring ring-gray-500 dark:ring-gray-500 hover:bg-white/10',
-    icon: 'rounded-full bg-[#0c0f0a] text-white hover:bg-[#0c0f0a]/90',
+    icon: 'rounded-md ring ring-gray-200 hover:bg-[#0c0f0a]/10',
     transparent: 'bg-transparent rounded-md text-black',
     item: 'bg-transparent dark:text-gray-300'
 };

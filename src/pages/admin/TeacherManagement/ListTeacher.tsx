@@ -30,6 +30,7 @@ const headerTableTeacher = [
 
 const data_mock = [
   {
+    label: "Giới tính",
     key: "gioitinh",
     select: [
       {
@@ -47,6 +48,7 @@ const data_mock = [
     ],
   },
   {
+    label:"Sắp xếp theo",
     key: "order",
     select: [
       {

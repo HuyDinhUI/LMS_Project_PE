@@ -26,23 +26,14 @@ const headerTableSchedule = [
 
 const data_mock = [
   {
+    label:"Giảng viên",
     key: "Khoa",
     select: [
-      {
-        name: "All",
-        value: "",
-      },
-      {
-        name: "Công nghệ thông tin",
-        value: "0100",
-      },
-      {
-        name: "Công nghệ thực phẩm",
-        value: "0200",
-      },
+      
     ],
   },
   {
+    label:"Sắp xếp theo",
     key: "order",
     select: [
       {

@@ -21,7 +21,7 @@ const ClassCourseManagementGrades = () => {
       setDataGradesAssignment(res.data.result.data);
       console.log(res.data.result.data);
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Lỗi khi lấy dữ liệu");
+      console.log(error?.response?.data?.message || "Lỗi khi lấy dữ liệu");
     }
   };
 
@@ -30,7 +30,7 @@ const ClassCourseManagementGrades = () => {
       const res = await API.get("quiz/getGrades/" + id);
       setDataGradesTest(res.data.result.data);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Lỗi khi lấy dữ liệu");
+      console.log(err?.response?.data?.message || "Lỗi khi lấy dữ liệu");
     }
   };
 
@@ -190,6 +190,7 @@ const ClassCourseManagementGrades = () => {
                 ))}
               </tbody>
             </table>
+            {dataGradesTest?.length === 0 && <span className="italic text-center py-2 block">Data empty.</span>}
           </div>
         </div>
       )}

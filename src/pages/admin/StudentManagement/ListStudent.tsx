@@ -5,14 +5,11 @@ import { Dialog } from "@/components/ui/dialog";
 import { FilterForm } from "@/components/ui/filter-form";
 import { Pagination } from "@/components/ui/pagination";
 import { SearchForm } from "@/components/ui/search-form";
-
-
 import API from "@/utils/axios";
 import {
   Pencil,
   Trash2,
   UserRoundPlus,
-  
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
@@ -33,7 +30,8 @@ const headerTableStudent = [
 ];
 
 const data_mock = [
-  {
+  { 
+    label: "Khoa",
     key: "Khoa",
     select: [
       {
@@ -50,7 +48,8 @@ const data_mock = [
       },
     ],
   },
-  {
+  { 
+    label:"Sắp xếp theo",
     key: "order",
     select: [
       {
@@ -103,7 +102,7 @@ const ListStudentPage = () => {
       const res = await API.get(`/student/getAllStudent?${params}`);
       console.log(res.data);
       setDataStudent(res.data.result.data);
-      setTotalPages(res.data.data.totalPages);
+      setTotalPages(res.data.result.totalPages);
     } catch (err: any) {
       console.log(err.message);
     }

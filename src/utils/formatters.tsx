@@ -24,7 +24,8 @@ export const formatterDataEventCalendar = (data: any) =>{
             title: `${item.ten_lop} - ${item.MaLop} - ${item.hoten} (${item.phonghoc})`,
             start: `${item.ngay_day}T${startTime}`,
             end: `${item.ngay_day}T${endTime}`,
-            status: item.TrangThai
+            status: item.TrangThai,
+            ngay_day: item.ngay_day
         }
 
     })

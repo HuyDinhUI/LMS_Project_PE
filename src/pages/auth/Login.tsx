@@ -12,6 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { TriangleAlert } from "lucide-react";
 import { useSubmitLoading } from "@/hooks/useLoading";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import TextField from "@mui/material/TextField";
 
 const Login = () => {
   const {
@@ -27,9 +28,8 @@ const Login = () => {
   const { loading, withLoading } = useSubmitLoading();
 
   const submitLogin = async (data: any) => {
-    console.log(data);
-    try {
-      withLoading(async () => {
+    withLoading(async () => {
+      try {
         const res = await API.post("/auth/login", data);
         setUser(res.data);
 
@@ -44,10 +44,10 @@ const Login = () => {
         if (res.data.role === "SV") {
           navigate("/student/dashboard");
         }
-      });
-    } catch (error: any) {
-      setError(error.response?.data?.message);
-    }
+      } catch (error: any) {
+        setError(error.response?.data?.message);
+      }
+    });
   };
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const Login = () => {
           : { backgroundImage: `url("${bg_light}")` }
       }
     >
-      <LoadingOverlay show={loading}/>
+      <LoadingOverlay show={loading} />
       <div className="w-100 min-h-[100px] rounded-xl bg-white/5 dark:bg-transparent dark:backdrop-blur-md dark:ring dark:ring-gray-500 shadow-md flex overflow-hidden">
         <form className="w-full p-5" onSubmit={handleSubmit(submitLogin)}>
           <div className="text-center mb-5 mt-4">
@@ -75,8 +75,8 @@ const Login = () => {
             </div>
           </div>
           {error && <AlertDanger title={error} />}
-          <div className="">
-            <div className="grid gap-2 mb-5 relative">
+          <div className="flex flex-col gap-5 mb-5">
+            {/* <div className="grid gap-2 mb-5 relative">
               <label>Username</label>
               <Input
                 type="username"
@@ -110,7 +110,28 @@ const Login = () => {
                   <TriangleAlert size={15} />
                 </div>
               )}
-            </div>
+            </div> */}
+            <TextField
+              error={errors.username ? true : false}
+              {...register("username", { required: "" })}
+              label="Username"
+              helperText={errors.username ? "Incorrect entry." : ""}
+              required
+              aria-invalid={errors.username ? "true" : "false"}
+              fullWidth
+              size="small"
+            />
+            <TextField
+              error={errors.password ? true : false}
+              {...register("password", { required: "" })}
+              type="password"
+              label="Password"
+              helperText={errors.password ? "Incorrect entry." : ""}
+              required
+              aria-invalid={errors.password ? "true" : "false"}
+              fullWidth
+              size="small"
+            />
           </div>
           <Button
             type="submit"
@@ -119,6 +140,9 @@ const Login = () => {
             title="Login"
             variant="primary"
           />
+          <Link to={"/auth/forgot"} className="mt-4 block text-center text-sm">
+            Forgot password?
+          </Link>
         </form>
       </div>
     </div>

@@ -131,9 +131,9 @@ export const Header = ({ router }: props) => {
     <div className="flex px-3 py-2 items-center justify-between">
       <div className="w-[40%] ms-4 md:flex gap-2 items-center hidden">
         <Button
-          variant="transparent"
+          variant="icon"
           size="ic"
-          icon={<Fullscreen />}
+          icon={<Fullscreen size={18}/>}
           onClick={() => handleFullscreen()}
         />
         <div>

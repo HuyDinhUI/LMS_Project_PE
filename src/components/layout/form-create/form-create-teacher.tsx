@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 type Props = {
   submitCreateTeacher: (data: any) => void;
@@ -46,129 +47,130 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               </h2>
             </div>
             <div className="grid grid-cols-4 gap-4 mt-3">
-              <div className="grid gap-2">
-                <label>Họ tên</label>
-                <Input
-                  type="text"
-                  placeholder="Nguyễn Văn A"
-                  {...register("hoten", { required: "Họ tên là bắt buộc" })}
-                  aria-invalid={errors.hoten ? "true" : "false"}
-                  variant={errors.hoten ? "danger" : "default"}
-                />
-              </div>
-              <div className="grid gap-2">
-                <label>Ngày sinh</label>
-                <Input
-                  type="date"
-                  {...register("ngaysinh", {
-                    required: "Ngày sinh là bắt buộc",
-                  })}
-                  aria-invalid={errors.ngaysinh ? "true" : "false"}
-                  variant={errors.ngaysinh ? "danger" : "default"}
-                />
-              </div>
-              <div className="grid gap-2">
-                <label>Giới tính</label>
-                <select
-                  className="ring ring-gray-200 rounded-sm p-2"
-                  {...register("gioitinh", {
-                    required: "Giới tính là bắt buộc",
-                  })}
-                  aria-invalid={errors.gioitinh ? "true" : "false"}
-                >
-                  <option value="Nam">Nam</option>
-                  <option value="Nữ">Nữ</option>
-                </select>
-              </div>
-              <div className="grid gap-2">
-                <label>Số điện thoại</label>
-                <Input
-                  type="text"
-                  placeholder="+86 54382607"
-                  {...register("sdt", {
-                    required: "Số điện thoại là bắt buộc",
-                  })}
-                  aria-invalid={errors.sdt ? "true" : "false"}
-                  variant={errors.sdt ? "danger" : "default"}
-                />
-              </div>
-              <div className="grid gap-2">
-                <label>Email</label>
-                <Input
-                  type="email"
-                  placeholder="m@example.com"
-                  {...register("email", { required: "Email là bắt buộc" })}
-                  aria-invalid={errors.email ? "true" : "false"}
-                  variant={errors.email ? "danger" : "default"}
-                />
-              </div>
-              <div className="grid gap-2">
-                <label>Địa chỉ </label>
-                <Input
-                  type="text"
-                  placeholder="15/8 Nguyễn Hữu Tiến"
-                  {...register("diachi", { required: "Địa chỉ là bắt buộc" })}
-                  aria-invalid={errors.diachi ? "true" : "false"}
-                  variant={errors.diachi ? "danger" : "default"}
-                />
-              </div>
-              <div className="grid gap-2">
-                <label>Khoa</label>
-                <select
-                  className="ring ring-gray-200 rounded-sm p-2"
-                  {...register("MaKhoa", { required: "Khoa là bắt buộc" })}
-                  aria-invalid={errors.MaKhoa ? "true" : "false"}
-                >
-                  {ListKhoa.map((k) => (
-                    <option value={k.id}>{k.name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className="grid gap-2">
-                <label>Trình độ</label>
-                <select
-                  className="ring ring-gray-200 rounded-sm p-2"
-                  {...register("trinhdo", { required: "Trình độ là bắt buộc" })}
-                  aria-invalid={errors.trinhdo ? "true" : "false"}
-                >
-                  <option value="Thạc sĩ">Thạc sĩ</option>
-                  <option value="Tiến sĩ">Tiến sĩ</option>
-                  <option value="Kỹ sư">Kỹ sư</option>
-                  <option value="Cử nhân">Cử nhân</option>
-                </select>
-              </div>
-              <div className="grid gap-2">
-                <label>Loại giảng viên</label>
-                <select
-                  className="ring ring-gray-200 rounded-sm p-2"
-                  {...register("loaigiangvien", {
-                    required: "Loại giảng viên là bắt buộc",
-                  })}
-                  aria-invalid={errors.loaigiangvien ? "true" : "false"}
-                >
-                  <option value="Cơ hữu">Cơ hữu</option>
-                  <option value="Thỉnh giảng">Thỉnh giảng</option>
-                </select>
-              </div>
-              <div className="grid gap-2">
-                <label>Đơn vị công tác</label>
-                <Input
-                  type="text"
-                  placeholder="Công thương"
-                  {...register("donvicongtac")}
-                  aria-invalid={errors.donvicongtac ? "true" : "false"}
-                  variant={errors.donvicongtac ? "danger" : "default"}
-                />
-              </div>
-              <div className="grid gap-2">
-                <label>Ngày tuyển dụng</label>
-                <Input
-                  type="date"
-                  {...register("ngaytuyendung")}
-                  aria-invalid={errors.ngaytuyendung ? "true" : "false"}
-                  variant={errors.ngaytuyendung ? "danger" : "default"}
-                />
-              </div>
+              <TextField
+                label="Họ và tên"
+                type="text"
+                placeholder="Nguyễn Văn A"
+                {...register("hoten", { required: "Họ tên là bắt buộc" })}
+                aria-invalid={errors.hoten ? "true" : "false"}
+                required
+                error={errors.hoten ? true : false}
+              />
+
+              <TextField
+                type="date"
+                {...register("ngaysinh", {
+                  required: "Ngày sinh là bắt buộc",
+                })}
+                aria-invalid={errors.ngaysinh ? "true" : "false"}
+                required
+                error={errors.ngaysinh ? true : false}
+                helperText="Ngày sinh"
+              />
+
+              <TextField
+                label="Giới tính"
+                select
+                {...register("gioitinh", {
+                  required: "Giới tính là bắt buộc",
+                })}
+                aria-invalid={errors.gioitinh ? "true" : "false"}
+                required
+                error={errors.gioitinh ? true : false}
+              >
+                <MenuItem value="Nam">Nam</MenuItem>
+                <MenuItem value="Nữ">Nữ</MenuItem>
+              </TextField>
+
+              <TextField
+                label="Số điện thoại"
+                type="text"
+                placeholder="+86 54382607"
+                {...register("sdt", {
+                  required: "Số điện thoại là bắt buộc",
+                })}
+                aria-invalid={errors.sdt ? "true" : "false"}
+                required
+                error={errors.sdt ? true : false}
+              />
+
+              <TextField
+                label="Email"
+                type="email"
+                placeholder="m@example.com"
+                {...register("email", { required: "Email là bắt buộc" })}
+                aria-invalid={errors.email ? "true" : "false"}
+                required
+                error={errors.email ? true : false}
+              />
+
+              <TextField
+                label="Địa chỉ"
+                type="text"
+                placeholder="15/8 Nguyễn Hữu Tiến"
+                {...register("diachi", { required: "Địa chỉ là bắt buộc" })}
+                aria-invalid={errors.diachi ? "true" : "false"}
+                required
+                error={errors.diachi ? true : false}
+              />
+
+              <TextField
+                label="Khoa"
+                select
+                {...register("MaKhoa", { required: "Khoa là bắt buộc" })}
+                aria-invalid={errors.MaKhoa ? "true" : "false"}
+                required
+                error={errors.MaKhoa ? true : false}
+              >
+                {ListKhoa.map((k) => (
+                  <MenuItem value={k.id} key={k.id}>{k.name}</MenuItem>
+                ))}
+              </TextField>
+
+              <TextField
+                label="Trình độ"
+                select
+                {...register("trinhdo", { required: "Trình độ là bắt buộc" })}
+                aria-invalid={errors.trinhdo ? "true" : "false"}
+              >
+                <MenuItem value="Thạc sĩ">Thạc sĩ</MenuItem>
+                <MenuItem value="Tiến sĩ">Tiến sĩ</MenuItem>
+                <MenuItem value="Kỹ sư">Kỹ sư</MenuItem>
+                <MenuItem value="Cử nhân">Cử nhân</MenuItem>
+              </TextField>
+
+              <TextField
+                label="Loại giảng viên"
+                select
+                {...register("loaigiangvien", {
+                  required: "Loại giảng viên là bắt buộc",
+                })}
+                aria-invalid={errors.loaigiangvien ? "true" : "false"}
+                required
+                error={errors.loaigiangvien ? true : false}
+
+              >
+                <MenuItem value="Cơ hữu">Cơ hữu</MenuItem>
+                <MenuItem value="Thỉnh giảng">Thỉnh giảng</MenuItem>
+              </TextField>
+
+              <TextField
+                label="Đơn vị công tác"
+                type="text"
+                placeholder="Công thương"
+                {...register("donvicongtac")}
+                aria-invalid={errors.donvicongtac ? "true" : "false"}
+                required
+                error={errors.donvicongtac ? true : false}
+              />
+
+              <TextField
+                type="date"
+                {...register("ngaytuyendung")}
+                aria-invalid={errors.ngaytuyendung ? "true" : "false"}
+                helperText="Ngày tuyển dụng"
+              />
+
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">
                 <Button variant="dark" title="Lưu và tiếp tục" type="submit" />
                 <Button type="submit" title="Lưu và đóng" />

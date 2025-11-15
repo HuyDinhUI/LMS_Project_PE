@@ -14,10 +14,10 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
   return (
     <div
       ref={ref}
-      className="flex items-center flex-1 rounded-full relative gap-2 ring ring-gray-400 px-2 py-1"
+      className="flex items-center flex-1 rounded-sm relative gap-2 ring ring-gray-200 p-1.5 h-full"
     >
-      <div className="p-2 bg-black rounded-full">
-        <Search size={15} color="white" />
+      <div className="border-r pe-1">
+        <Search size={18}/>
       </div>
       <input
         value={keyword}
@@ -25,7 +25,7 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
           setKeyword(e.target.value);
           handleSearch(e.target.value);
         }}
-        className="outline-none w-full rounded-full"
+        className="outline-none w-full"
         placeholder="Search"
       ></input>
       {/* {onSearch && (

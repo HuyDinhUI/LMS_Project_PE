@@ -27,6 +27,7 @@ const headerTableCourse = [
 
 const data_mock = [
   {
+    label:"Khoa",
     key: "Khoa",
     select: [
       {
@@ -44,6 +45,7 @@ const data_mock = [
     ],
   },
   {
+    label:"Sắp xếp theo",
     key: "order",
     select: [
       {
