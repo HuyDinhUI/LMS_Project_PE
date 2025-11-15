@@ -1,10 +1,9 @@
 import ClassLayout from "@/layouts/classLayout";
 import MainLayout from "@/layouts/mainLayout";
 import Guard from "@/routes/guard";
-import path from "path";
 import { lazy } from "react";
 
-const AttendancePage = lazy(() => import("@/pages/Attendance"));
+
 const ListTeacherPage = lazy(
   () => import("@/pages/admin/TeacherManagement/ListTeacher")
 );
@@ -322,17 +321,6 @@ export const privateRoutes = [
   },
 
   /////////////  Student  ////////////////
-
-  {
-    path: "student/attendance/:id",
-    element: (
-      <Guard>
-        <MainLayout>
-          <AttendancePage />
-        </MainLayout>
-      </Guard>
-    ),
-  },
 
   {
     path: "/student/dashboard",

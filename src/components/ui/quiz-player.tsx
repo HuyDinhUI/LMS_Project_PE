@@ -1,6 +1,6 @@
-import type { Question, QuizType } from "@/types/QuizType";
+import type { QuizType } from "@/types/QuizType";
 import API from "@/utils/axios";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import CheckboxDemo from "./checkbox";
 import AlertDialogDemo from "./alert-dialog";
@@ -20,7 +20,7 @@ type QuizPlayerProps = {
 /**
  * Utils
  */
-function shuffleArray<T>(arr: T[], seed?: number): T[] {
+function shuffleArray<T>(arr: T[]): T[] {
   // Fisher-Yates shuffle (non-deterministic)
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) {
@@ -47,7 +47,6 @@ export default function QuizPlayer({
   quiz,
   userId,
   autoShuffle = false,
-  onSubmit,
   submitUrl,
 }: QuizPlayerProps) {
   // shuffle at mount once
@@ -72,12 +71,11 @@ export default function QuizPlayer({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quiz.MaTN]); // re-run if quiz changes
 
-  const [questions, setQuestions] = useState<Question[]>(initialData);
+  const questions = initialData;
   const [current, setCurrent] = useState<number>(0);
   const [answers, setAnswers] = useState<(string | null)[]>(() =>
     Array(initialData.length).fill(null)
   ); // index of answer chosen per question
-  const [startedAt] = useState<number>(() => Date.now());
   const totalTimeSeconds = (quiz.ThoiGianLam ?? 15) * 60;
   const [timeLeft, setTimeLeft] = useState<number>(totalTimeSeconds);
   const timerRef = useRef<number | null>(null);

@@ -57,13 +57,18 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
         <h1 className="text-2xl uppercase">Thêm lớp học phần</h1>
       </div>
       <div className="py-4 overflow-auto relative h-150">
-        <form className="p-2 min-h-200" onSubmit={handleSubmit(submitCreateClassCourse)}>
+        <form
+          className="p-2 min-h-200"
+          onSubmit={handleSubmit(submitCreateClassCourse)}
+        >
           <div>
             <div className="flex flex-col gap-4 mt-3">
               {/* Thông tin lớp học phần */}
               <div className="flex flex-col gap-5">
                 <div>
-                  <h1 className="text-blue-500 font-bold">I. THÔNG TIN LỚP HỌC PHẦN</h1>
+                  <h1 className="text-blue-500 font-bold">
+                    I. THÔNG TIN LỚP HỌC PHẦN
+                  </h1>
                 </div>
                 <div className="grid grid-cols-3 gap-5">
                   <div className="grid gap-2">
@@ -74,6 +79,8 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("ten_lop", {
                         required: "Tên lớp học phần là bắt buộc",
                       })}
+                      aria-invalid={errors.ten_lop ? "true" : "false"}
+                      variant={errors.ten_lop ? "danger" : "default"}
                     />
                   </div>
                   <div className="grid gap-2">
@@ -83,6 +90,7 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("MaHK", {
                         required: "Học kỳ là bắt buộc",
                       })}
+                      aria-invalid={errors.MaHK ? "true" : "false"}
                     >
                       <option value={undefined} selected disabled>
                         Chọn học kỳ
@@ -99,6 +107,7 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("phonghoc", {
                         required: "Phòng học là bắt buộc",
                       })}
+                      aria-invalid={errors.phonghoc ? "true" : "false"}
                     >
                       <option value={undefined} selected disabled>
                         Chọn học phần
@@ -115,6 +124,8 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("si_so", {
                         required: "Sỉ số là bắt buộc",
                       })}
+                      aria-invalid={errors.si_so ? "true" : "false"}
+                      variant={errors.si_so ? "danger" : "default"}
                     />
                   </div>
                   <div className="grid gap-2">
@@ -124,6 +135,7 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("MaHP", {
                         required: "Học phần là bắt buộc",
                       })}
+                      aria-invalid={errors.MaHP ? "true" : "false"}
                     >
                       <option value={undefined} selected disabled>
                         Chọn học phần
@@ -142,12 +154,15 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("MSGV", {
                         required: "Giảng viên là bắt buộc",
                       })}
+                      aria-invalid={errors.MSGV ? "true" : "false"}
                     >
                       <option value={undefined} selected disabled>
                         Chọn giảng viên
                       </option>
                       {teacher?.map((t) => (
-                        <option value={t.MSGV}>{t.MSGV + " - " + t.hoten}</option>
+                        <option value={t.MSGV}>
+                          {t.MSGV + " - " + t.hoten}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -155,10 +170,12 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
               </div>
 
               {/* Lặp lịch */}
-              
+
               <div className="flex flex-col gap-5">
                 <div>
-                  <h1 className="text-blue-500 font-bold">II. LẶP LỊCH DẠY & HỌC</h1>
+                  <h1 className="text-blue-500 font-bold">
+                    II. LẶP LỊCH DẠY & HỌC
+                  </h1>
                 </div>
                 <div className="grid grid-cols-3 gap-5">
                   <div className="grid gap-2">
@@ -168,6 +185,8 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("ngay_batdau", {
                         required: "Ngày bắt đầu là bắt buộc",
                       })}
+                      aria-invalid={errors.ngay_batdau ? "true" : "false"}
+                      variant={errors.ngay_batdau ? "danger" : "default"}
                     />
                   </div>
                   <div className="grid gap-2">
@@ -177,6 +196,8 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("ngay_kethuc", {
                         required: "Ngày ngày kết thúc là bắt buộc",
                       })}
+                      aria-invalid={errors.ngay_kethuc ? "true" : "false"}
+                      variant={errors.ngay_kethuc ? "danger" : "default"}
                     />
                   </div>
                   <div className="grid gap-2">
@@ -186,12 +207,15 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("ThuTrongTuan", {
                         required: "Thứ trong tuần là bắt buộc",
                       })}
+                      aria-invalid={errors.ThuTrongTuan ? "true" : "false"}
                     >
                       <option value={undefined} selected disabled>
                         Chọn thứ trong tuần
                       </option>
                       {Array.from({ length: 7 }).map((_, k) => (
-                        <option value={k + 1}>{k + 1 < 7 ? `Thứ ${k + 2}` : 'Chủ nhật'}</option>
+                        <option value={k + 1}>
+                          {k + 1 < 7 ? `Thứ ${k + 2}` : "Chủ nhật"}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -202,6 +226,7 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("tiet_batdau", {
                         required: "Tiết bắt đầu là bắt buộc",
                       })}
+                      aria-invalid={errors.tiet_batdau ? "true" : "false"}
                     >
                       <option value={undefined} selected disabled>
                         Chọn tiết bắt đầu
@@ -220,6 +245,7 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("tiet_kethuc", {
                         required: "Tiết kết thúc là bắt buộc",
                       })}
+                      aria-invalid={errors.tiet_kethuc ? "true" : "false"}
                     >
                       <option value={undefined} selected disabled>
                         Chọn tiết kết thúc
@@ -238,6 +264,7 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                       {...register("TrangThai", {
                         required: "Trạng thái là bắt buộc",
                       })}
+                      aria-invalid={errors.TrangThai ? "true" : "false"}
                     >
                       <option value="BinhThuong">Bình thường</option>
                       <option value="TamNgung">Tạm ngưng</option>

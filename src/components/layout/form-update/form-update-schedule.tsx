@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { CourseType } from "@/types/CourseType";
-import type { TeacherDTO } from "@/types/TeacherType";
 import API from "@/utils/axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
@@ -19,7 +17,6 @@ export const FormUpdateSchedule = ({
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
   useEffect(() => {

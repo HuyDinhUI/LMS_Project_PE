@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const ClassCourseAssignmentGuidance = () => {
-  const { id, assignmentId } = useParams();
+  const { assignmentId } = useParams();
   const MaSV = localStorage.getItem("username");
   const [assignmentsData, setAssignmentsData] = useState<AssignmentType>();
   const [file, setFile] = useState<File | null>(null);

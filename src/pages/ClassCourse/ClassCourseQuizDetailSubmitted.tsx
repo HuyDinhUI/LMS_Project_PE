@@ -43,7 +43,7 @@ const DetailSubmitted = () => {
                 Question {idx + 1}: {item.NoiDung}
               </h2>
               <div className="flex flex-col gap-2">
-                  {item.DapAn?.map((item: any, idx: number) => (
+                  {item.DapAn?.map((item: any) => (
                     <div key={item.MaDapAn} className={`flex items-center gap-2 p-2 rounded-md ${item.DaChon && item.LaDapAnDung ? 'bg-green-brand/50' : ''}`}>
                       <CheckboxDemo
                         checked={item.DaChon}

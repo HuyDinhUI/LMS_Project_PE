@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { StudentType } from "@/types/StudentType";
-import type { TeacherDTO } from "@/types/TeacherType";
 import API from "@/utils/axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 
@@ -36,17 +34,13 @@ export const FormUpdateStudent = ({ submitUpdateStudent, masv }: Props) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
-
-  const [dataStudent, setDataStudent] = useState<StudentType>();
 
   useEffect(() => {
     const getStudent = async () => {
       try {
         const res = await API.get("/student/getOneStudent/" + masv);
         console.log(res.data);
-        setDataStudent(res.data.result.data[0]);
         reset(res.data.result.data[0]);
       } catch (err) {
         console.log(err);

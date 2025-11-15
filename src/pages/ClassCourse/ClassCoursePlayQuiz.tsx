@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 
 const PlayQuiz = () => {
   const [dataQuestion, setDataQuestion] = useState<QuizType>();
-  const { malop, matn } = useParams();
+  const { matn } = useParams();
   const MaSV = localStorage.getItem("username");
   const getQuestion = async () => {
     try {

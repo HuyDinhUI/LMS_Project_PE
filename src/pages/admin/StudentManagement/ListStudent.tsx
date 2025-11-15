@@ -17,8 +17,6 @@ import {
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import type { ScheduleType } from "@/types/ScheduleType";
-import { FormUpdateSchedule } from "@/components/layout/form-update/form-update-schedule";
 import type { StudentType } from "@/types/StudentType";
 import { FormCreateStudent } from "@/components/layout/form-create/form-create-student";
 import { FormUpdateStudent } from "@/components/layout/form-update/form-update-student";
@@ -114,7 +112,7 @@ const ListStudentPage = () => {
   const submitCreateStudent = async (data: any) => {
     console.log("data:", data);
     try {
-      const res = await API.post("/student/createStudent", data);
+      await API.post("/student/createStudent", data);
       toast.success("Thêm sinh viên thành công");
     } catch (err: any) {
       console.log(err);
@@ -126,7 +124,7 @@ const ListStudentPage = () => {
 
   const submitDeleteStudent = async (malich: string) => {
     try {
-      const res = await API.delete(`student/deleteStudent${malich}`);
+      await API.delete(`student/deleteStudent${malich}`);
       toast.success("Xoá sinh viên thành công");
     } catch (err) {
       console.log(err);
@@ -138,7 +136,7 @@ const ListStudentPage = () => {
   const submitupdateStudent = async (data: any) => {
     console.log(data);
     try {
-      const res = await API.put(`student/updateStudent`, data);
+      await API.put(`student/updateStudent`, data);
       toast.success("Cập nhật sinh viên thành công");
     } catch (err) {
       console.log(err);

@@ -8,7 +8,7 @@ import CatImg from "@/assets/Character_Cat_1.svg";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import { Button } from "@/components/ui/button";
 import { Pagination } from "@/components/ui/pagination";
-import { Doughnut, PolarArea, Pie } from "react-chartjs-2";
+import { PolarArea, Pie } from "react-chartjs-2";
 import { Plus } from "lucide-react";
 
 import { Chart as ChartJS, ArcElement, Tooltip, RadialLinearScale } from "chart.js";

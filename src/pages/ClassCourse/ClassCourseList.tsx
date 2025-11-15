@@ -1,8 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { FilterForm } from "@/components/ui/filter-form";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import API from "@/utils/axios";
-import { LayoutGrid, LayoutList, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";

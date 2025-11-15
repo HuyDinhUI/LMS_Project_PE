@@ -72,11 +72,6 @@ const ClassCourseManagementGrades = () => {
     console.log("Tìm kiếm:", query);
   };
 
-  const handleFilter = (filter: string) => {
-    // Xử lý lọc ở đây
-    console.log("Lọc theo:", filter);
-  };
-
   const exportToExcel = () => {
     const worksheet = XLSX.utils.json_to_sheet(dataGradesAssignment);
     const workbook = XLSX.utils.book_new();

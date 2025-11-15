@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import bg_light from "@/assets/v904-nunny-012.jpg";
-import { ArrowBigRight, ChevronLeft, ChevronRight, Pen } from "lucide-react";
+import {  ChevronLeft, Pen } from "lucide-react";
 
 const StudentInformation = () => {
   const [dataStudent, setDataStudent] = useState<StudentEducation>();
@@ -104,13 +104,12 @@ const StudentInformation = () => {
 };
 
 const FormUpdateInformation = () => {
-  const [dataStudent, setDataStudent] = useState<StudentEducation>();
+ 
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
   const getOneStudent = async () => {
@@ -118,7 +117,6 @@ const FormUpdateInformation = () => {
       const res = await API.get(
         "/student/getOneStudent/" + localStorage.getItem("username")
       );
-      setDataStudent(res.data.result.data[0]);
       reset(res.data.result.data[0]);
     } catch (err: any) {
       toast.error(err?.response?.message);
@@ -131,7 +129,7 @@ const FormUpdateInformation = () => {
 
   const handleUpdateInformation = async (data: any) => {
     try {
-      const res = await API.put(`student/updateStudent`, data);
+      await API.put(`student/updateStudent`, data);
       toast.success("Cập nhật thành công");
     } catch (err) {
       console.log(err);

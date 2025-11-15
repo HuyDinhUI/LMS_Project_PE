@@ -4,7 +4,6 @@ import type { SubmissionType } from "@/types/SubmissionType";
 import API from "@/utils/axios";
 import { File } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { set } from "react-hook-form";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 

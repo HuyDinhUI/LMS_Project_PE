@@ -1,6 +1,5 @@
 import { FormCreateCourse } from "@/components/layout/form-create/form-create-course";
 import { FormUpdateCourse } from "@/components/layout/form-update/form-update-course";
-import { FormUpdateTeacher } from "@/components/layout/form-update/form-update-teacher";
 import AlertDialogDemo from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
@@ -10,14 +9,9 @@ import { SearchForm } from "@/components/ui/search-form";
 import type { CourseType } from "@/types/CourseType";
 import API from "@/utils/axios";
 import {
-  Edit,
   Pencil,
   Plus,
-  Trash,
   Trash2,
-  UserRoundPen,
-  UserRoundPlus,
-  UserRoundX,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
@@ -111,7 +105,7 @@ const ListCoursePage = () => {
   const submitCreateCourse= async (data: any) => {
     console.log("data:", data);
     try {
-      const res = await API.post("/course/createCourse", data);
+      await API.post("/course/createCourse", data);
       toast.success("Thêm học phần thành công");
     } catch (err: any) {
       console.log(err);
@@ -123,7 +117,7 @@ const ListCoursePage = () => {
 
   const submitDeleteCourse = async (mahp: string) => {
     try {
-      const res = await API.delete(`course/deleteCourse/${mahp}`);
+      await API.delete(`course/deleteCourse/${mahp}`);
       toast.success("Xoá học phần thành công");
     } catch (err) {
       console.log(err);
@@ -135,7 +129,7 @@ const ListCoursePage = () => {
   const submitupdateCourse = async (data: any) => {
     console.log(data);
     try {
-      const res = await API.put(`course/updateCourse`, data);
+      await API.put(`course/updateCourse`, data);
       toast.success("Update học phần thành công");
     } catch (err) {
       console.log(err);

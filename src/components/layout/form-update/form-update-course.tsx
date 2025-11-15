@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { type CourseType } from "@/types/CourseType";
 import API from "@/utils/axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
@@ -34,17 +33,13 @@ export const FormUpdateCourse = ({ submitUpdateCourse, MaHP }: Props) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
-
-  const [dataCourse, setDataCourse] = useState<CourseType>();
 
   useEffect(() => {
     const getTeacher = async () => {
       try {
         const res = await API.get("/course/getOneCourse/" + MaHP);
         console.log(res.data);
-        setDataCourse(res.data.result.data[0]);
         reset(res.data.result.data[0]);
       } catch (err) {
         console.log(err);

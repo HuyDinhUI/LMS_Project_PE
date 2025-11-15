@@ -1,4 +1,3 @@
-import * as React from "react";
 import  * as Checkbox  from "@radix-ui/react-checkbox";
 import { CheckIcon } from "lucide-react";
 

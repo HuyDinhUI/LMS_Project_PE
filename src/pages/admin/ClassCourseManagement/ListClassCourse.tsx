@@ -1,5 +1,3 @@
-import { FormCreateCourse } from "@/components/layout/form-create/form-create-course";
-import { FormUpdateCourse } from "@/components/layout/form-update/form-update-course";
 import {FormCreateClassCourse} from "@/components/layout/form-create/form-create-classcourse"
 import AlertDialogDemo from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
@@ -8,17 +6,11 @@ import { FilterForm } from "@/components/ui/filter-form";
 import { Pagination } from "@/components/ui/pagination";
 import { SearchForm } from "@/components/ui/search-form";
 import type { ClassCourseType } from "@/types/ClassCourseType";
-import type { CourseType } from "@/types/CourseType";
 import API from "@/utils/axios";
 import {
-  Edit,
   Pencil,
   Plus,
-  Trash,
   Trash2,
-  UserRoundPen,
-  UserRoundPlus,
-  UserRoundX,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
@@ -115,7 +107,7 @@ const ListClassCoursePage = () => {
   const submitCreateClassCourse = async (data: any) => {
     console.log("data:", data);
     try {
-      const res = await API.post("/classCourse/createClassCourse", data);
+      await API.post("/classCourse/createClassCourse", data);
       toast.success("Thêm lớp học phần thành công");
     } catch (err: any) {
       console.log(err);
@@ -127,7 +119,7 @@ const ListClassCoursePage = () => {
 
   const submitDeleteClassCourse = async (mahp: string) => {
     try {
-      const res = await API.delete(`classCourse/deleteClassCourse/${mahp}`);
+      await API.delete(`classCourse/deleteClassCourse/${mahp}`);
       toast.success("Xoá lớp học phần thành công");
     } catch (err) {
       console.log(err);
@@ -139,7 +131,7 @@ const ListClassCoursePage = () => {
   const submitupdateClassCourse = async (data: any) => {
     console.log(data);
     try {
-      const res = await API.put(`classCourse/updateClassCourse`, data);
+      await API.put(`classCourse/updateClassCourse`, data);
       toast.success("Update lớp học phần thành công");
     } catch (err) {
       console.log(err);

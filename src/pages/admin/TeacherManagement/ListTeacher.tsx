@@ -10,16 +10,12 @@ import { SearchForm } from "@/components/ui/search-form";
 import type { TeacherDTO } from "@/types/TeacherType";
 import API from "@/utils/axios";
 import {
-  Edit,
-  Plus,
-  Trash,
   UserRoundPen,
   UserRoundPlus,
   UserRoundX,
 } from "lucide-react";
 
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const headerTableTeacher = [
@@ -112,7 +108,7 @@ const ListTeacherPage = () => {
   const submitCreateTeacher = async (data: any) => {
     console.log("data:", data);
     try {
-      const res = await API.post("/teacher/createTeacher", data);
+      await API.post("/teacher/createTeacher", data);
       toast.success("Thêm giảng viên thành công");
     } catch (err: any) {
       console.log(err);
@@ -124,7 +120,7 @@ const ListTeacherPage = () => {
 
   const submitDeleteTeacher = async (msgv: string) => {
     try {
-      const res = await API.delete(`teacher/deleteTeacher/${msgv}`);
+      await API.delete(`teacher/deleteTeacher/${msgv}`);
       toast.success("Xoá giảng viên thành công");
     } catch (err) {
       console.log(err);
@@ -136,7 +132,7 @@ const ListTeacherPage = () => {
   const submitupdateTeacher = async (data: any) => {
     console.log(data);
     try {
-      const res = await API.put(`teacher/updateTeacher`, data);
+      await API.put(`teacher/updateTeacher`, data);
       toast.success("Update giảng viên thành công");
     } catch (err) {
       console.log(err);

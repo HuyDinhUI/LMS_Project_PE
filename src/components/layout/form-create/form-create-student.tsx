@@ -28,9 +28,9 @@ const ListKhoa = [
 ];
 
 type MajorType = {
-  MaNganh: string
-  ten_nganh: string
-}
+  MaNganh: string;
+  ten_nganh: string;
+};
 
 export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
   const {
@@ -39,15 +39,15 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
     formState: { errors },
   } = useForm();
 
-  const [major,setMajor] = useState<MajorType[]>([])
+  const [major, setMajor] = useState<MajorType[]>([]);
 
   useEffect(() => {
     const getAllMajor = async () => {
-      const res = await API.get('/major/getAllMajor')
-      setMajor(res.data.result.data)
-    } 
-    getAllMajor()
-  },[])
+      const res = await API.get("/major/getAllMajor");
+      setMajor(res.data.result.data);
+    };
+    getAllMajor();
+  }, []);
 
   return (
     <div className="p-5 h-full relative">
@@ -69,6 +69,8 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                   type="text"
                   placeholder="Nguyễn Văn A"
                   {...register("hoten", { required: "Họ tên là bắt buộc" })}
+                  aria-invalid={errors.hoten ? "true" : "false"}
+                  variant={errors.hoten ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -78,6 +80,8 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                   {...register("ngaysinh", {
                     required: "Ngày sinh là bắt buộc",
                   })}
+                  aria-invalid={errors.ngaysinh ? "true" : "false"}
+                  variant={errors.ngaysinh ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -87,6 +91,7 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                   {...register("gioitinh", {
                     required: "Giới tính là bắt buộc",
                   })}
+                  aria-invalid={errors.gioitinh ? "true" : "false"}
                 >
                   <option value="Nam">Nam</option>
                   <option value="Nữ">Nữ</option>
@@ -100,6 +105,8 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                   {...register("sdt", {
                     required: "Số điện thoại là bắt buộc",
                   })}
+                  aria-invalid={errors.sdt ? "true" : "false"}
+                  variant={errors.sdt ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -108,6 +115,8 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                   type="email"
                   placeholder="m@example.com"
                   {...register("email", { required: "Email là bắt buộc" })}
+                  aria-invalid={errors.email ? "true" : "false"}
+                  variant={errors.email ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -116,6 +125,8 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                   type="text"
                   placeholder="15/8 Nguyễn Hữu Tiến"
                   {...register("diachi", { required: "Địa chỉ là bắt buộc" })}
+                  aria-invalid={errors.diachi ? "true" : "false"}
+                  variant={errors.diachi ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -123,6 +134,7 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                 <select
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("MaKhoa", { required: "Khoa là bắt buộc" })}
+                  aria-invalid={errors.MaKhoa ? "true" : "false"}
                 >
                   {ListKhoa.map((k) => (
                     <option value={k.id}>{k.name}</option>
@@ -133,7 +145,10 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                 <label>Chuyên ngành</label>
                 <select
                   className="ring ring-gray-200 rounded-sm p-2"
-                  {...register("MaNganh", { required: "Chuyên ngành là bắt buộc" })}
+                  {...register("MaNganh", {
+                    required: "Chuyên ngành là bắt buộc",
+                  })}
+                  aria-invalid={errors.MaNganh ? "true" : "false"}
                 >
                   {major.map((m) => (
                     <option value={m.MaNganh}>{m.ten_nganh}</option>
@@ -145,11 +160,18 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                 <Input
                   type="text"
                   {...register("MaLopHC", { required: "Lớp là bắt buộc" })}
+                  aria-invalid={errors.MaLopHC ? "true" : "false"}
+                  variant={errors.MaLopHC ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
                 <label>Ngày nhập học</label>
-                <Input type="date" {...register("ngay_nhaphoc")} />
+                <Input
+                  type="date"
+                  {...register("ngay_nhaphoc")}
+                  aria-invalid={errors.ngay_nhaphoc ? "true" : "false"}
+                  variant={errors.ngay_nhaphoc ? "danger" : "default"}
+                />
               </div>
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">
                 <Button variant="dark" title="Lưu và tiếp tục" type="submit" />

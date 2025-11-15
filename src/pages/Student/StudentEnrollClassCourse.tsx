@@ -4,9 +4,7 @@ import type { ClassCourseType } from "@/types/ClassCourseType";
 import type { CourseType } from "@/types/CourseType";
 import type { EnrollCourseType } from "@/types/EnrolledCourseType";
 import API from "@/utils/axios";
-import { Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { data } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const headerTableCourse = [
@@ -93,7 +91,7 @@ const StudentEnrollClassCourse = () => {
     };
     console.log(data);
     try {
-      const res = await API.post("/enrollClassCourse/enroll", {
+      await API.post("/enrollClassCourse/enroll", {
         MaSV,
         MaLop,
         MaHK,
@@ -110,7 +108,7 @@ const StudentEnrollClassCourse = () => {
 
   const CancleEnrollCourse = async (MaLop: string, MaHP: string) => {
     try {
-      const res = await API.delete(
+      await API.delete(
         `/enrollClassCourse/cancle?masv=${MaSV}&malop=${MaLop}&mahp=${MaHP}`
       );
       getEnrolledCourse();

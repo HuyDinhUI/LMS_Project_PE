@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SearchForm } from "@/components/ui/search-form";
 import type { MessageType, InboxType } from "@/types/Inbox";
 import API from "@/utils/axios";
 import { Send } from "lucide-react";
@@ -99,8 +98,6 @@ const InboxMain = () => {
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
-
-  const handleSearch = () => {};
 
   return (
     <div className="pt-5 ps-10 pe-5 w-full flex gap-2 flex-1">

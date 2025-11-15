@@ -31,7 +31,6 @@ const ClassCourseManagementAssignment = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
   const getAllAssignments = async () => {
@@ -159,7 +158,7 @@ const ClassCourseManagementAssignment = () => {
   const handleDeleteAssignment = async (MaBaiTap: string) => {
     console.log(MaBaiTap);
     try {
-      const res = await API.delete(`/assignments/delete/${MaBaiTap}`);
+      await API.delete(`/assignments/delete/${MaBaiTap}`);
       toast.success("Xoá bài tập thành công");
       getAllAssignments();
     } catch (err: any) {

@@ -53,6 +53,8 @@ export const FormCreateCourse = ({ submitCreateCourse }: Props) => {
                   type="text"
                   placeholder="Công nghệ phần mềm"
                   {...register("ten_hocphan", { required: "Tên học phần là bắt buộc" })}
+                  aria-invalid={errors.ten_hocphan ? "true" : "false"}
+                  variant={errors.ten_hocphan ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -62,6 +64,8 @@ export const FormCreateCourse = ({ submitCreateCourse }: Props) => {
                   {...register("so_tinchi", {
                     required: "Số tín chỉ là bắt buộc",
                   })}
+                  aria-invalid={errors.so_tinchi ? "true" : "false"}
+                  variant={errors.so_tinchi ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -71,6 +75,7 @@ export const FormCreateCourse = ({ submitCreateCourse }: Props) => {
                   {...register("MaKhoa", {
                     required: "Mã khoa là bắt buộc",
                   })}
+                  aria-invalid={errors.MaKhoa ? "true" : "false"}
                 >
                   {ListKhoa.map(k => (
                     <option value={k.id}>{k.name}</option>
@@ -84,6 +89,8 @@ export const FormCreateCourse = ({ submitCreateCourse }: Props) => {
                   {...register("HocPhi", {
                     required: "Học phí là bắt buộc",
                   })}
+                  aria-invalid={errors.HocPhi ? "true" : "false"}
+                  variant={errors.HocPhi ? "danger" : "default"}
                 />
               </div>
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">

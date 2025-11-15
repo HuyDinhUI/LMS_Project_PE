@@ -1,7 +1,6 @@
 import { Button } from "../ui/button";
 
 import {
-  Menu,
   HelpCircle,
   Bell,
   Sun,
@@ -56,17 +55,17 @@ export const Header = ({ router }: props) => {
     listClass.map((item: any) => item.MaLop),
     (data) => {
       setNotifications((prev: any) => [...prev, data]);
-    toast(`${data.message}!`,{
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: false,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "dark",
-      transition: Bounce,
-    });
+      toast(`${data.message}!`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
     }
   );
 
@@ -80,8 +79,9 @@ export const Header = ({ router }: props) => {
   }, [theme]);
 
   useEffect(() => {
+    if (!user) return;
     getClassByStudent();
-  }, []);
+  }, [user]);
 
   const AccountItems: MenuItem[] = [
     {

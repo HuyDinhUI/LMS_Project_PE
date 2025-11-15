@@ -32,7 +32,6 @@ export const DropdownMenu = ({
   size = "md",
   side,
   align,
-  label,
 }: DropdownMenuProps) => {
   const [history, setHistory] = useState<MenuItem[][]>([items]);
 

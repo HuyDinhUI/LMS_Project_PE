@@ -110,13 +110,12 @@ const TeacherInformation = () => {
 };
 
 const FormUpdateInformation = () => {
-  const [dataTeach, setDataTeach] = useState<TeacherDTO>();
+
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
   const getOneTeacher = async () => {
@@ -124,7 +123,6 @@ const FormUpdateInformation = () => {
       const res = await API.get(
         "/teacher/getOneTeacher/" + localStorage.getItem("username")
       );
-      setDataTeach(res.data.data[0]);
       reset(res.data.data[0]);
     } catch (err: any) {
       toast.error(err?.response?.message);
@@ -137,7 +135,7 @@ const FormUpdateInformation = () => {
 
   const handleUpdateInformation = async (data: any) => {
     try {
-      const res = await API.put(`teacher/updateTeacher`, data);
+      await API.put(`teacher/updateTeacher`, data);
       toast.success("Update giảng viên thành công");
     } catch (err) {
       console.log(err);

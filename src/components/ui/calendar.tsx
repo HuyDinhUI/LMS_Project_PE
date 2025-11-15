@@ -2,7 +2,6 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
-import { Link } from "react-router-dom";
 import { Button } from "./button";
 
 export type EventType = {

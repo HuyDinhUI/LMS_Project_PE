@@ -51,8 +51,6 @@ const Login = () => {
   };
 
   useEffect(() => {
-    localStorage.removeItem("role");
-    localStorage.removeItem("username");
     document.title = "Login - LMS";
   }, []);
 
@@ -65,7 +63,7 @@ const Login = () => {
           : { backgroundImage: `url("${bg_light}")` }
       }
     >
-      <LoadingOverlay show={loading}/>
+      <LoadingOverlay show={loading} />
       <div className="w-100 min-h-[100px] rounded-xl bg-white/5 dark:bg-transparent dark:backdrop-blur-md dark:ring dark:ring-gray-500 shadow-md flex overflow-hidden">
         <form className="w-full p-5" onSubmit={handleSubmit(submitLogin)}>
           <div className="text-center mb-5 mt-4">
@@ -76,47 +74,21 @@ const Login = () => {
           </div>
           {error && <AlertDanger title={error} />}
           <div className="">
-            <div className="grid gap-2 mb-5 relative">
-              <label>Username</label>
-              <Input
-                type="username"
-                placeholder="01001234"
-                {...register("username", { required: "Email cannot be blank" })}
-                aria-invalid={errors.username ? "true" : "false"}
-                variant={errors.username ? "danger" : "default"}
-              />
-              {errors.username?.type === "required" && (
-                <div className="absolute top-11 right-3 text-red-500">
-                  <TriangleAlert size={15} />
-                </div>
-              )}
-            </div>
-            <div className="grid gap-2 mb-5 relative">
-              <label>Password</label>
-              <Input
-                required
-                type="password"
-                {...register("password", {
-                  required: "Password cannot be blank",
-                })}
-                aria-invalid={errors.password ? "true" : "false"}
-                variant={errors.password ? "danger" : "default"}
-              />
-              <Link className="absolute top-0 right-0" to={"/auth/forgot"}>
-                Forgot password?
-              </Link>
-              {errors.password?.type === "required" && (
-                <div className="absolute top-11 right-3 text-red-500">
-                  <TriangleAlert size={15} />
-                </div>
-              )}
-            </div>
+            <label className="block mb-2 font-medium">Email</label>
+            <Input
+              type="email"
+              placeholder="Enter your email"
+              {...register("email", { required: "Email is required" })}
+              aria-invalid={errors.email ? "true" : "false"}
+              variant={errors.email ? "danger" : "default"}
+              className="mb-4"
+            />
           </div>
           <Button
             type="submit"
             className="w-full justify-center rounded-sm"
             size="md"
-            title="Login"
+            title="Submit"
             variant="primary"
           />
         </form>

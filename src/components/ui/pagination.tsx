@@ -11,7 +11,7 @@ type PaginationType = {
 }
 
 
-export const Pagination = ({page, limit, totalPages, prevFunction, nextFunction, pageFunction}: PaginationType) => {
+export const Pagination = ({page, totalPages, prevFunction, nextFunction, pageFunction}: PaginationType) => {
     return (
         <div className="mt-8">
             {/* pagination */}

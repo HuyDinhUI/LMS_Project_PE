@@ -36,7 +36,6 @@ export const FormUpdateClassCourse = ({
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
   const [course, setCourse] = useState<CourseType[]>();

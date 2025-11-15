@@ -4,7 +4,7 @@ import { SearchForm } from "@/components/ui/search-form";
 import { useAuth } from "@/hooks/useAuth";
 import API from "@/utils/axios";
 import { FolderOutput, PrinterCheck } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
@@ -70,7 +70,9 @@ const ClassCourseAttendance = () => {
     if (user?.role === "SV") getAttendanceDataForStudent();
   }, []);
 
-  const handleSearch = (value: string) => {};
+  const handleSearch = (value: string) => {
+    console.log("Search:", value);
+  };
   return (
     <div className="flex-1 overflow-auto max-h-170 px-20">
       <div className="flex items-center gap-2 mt-2">

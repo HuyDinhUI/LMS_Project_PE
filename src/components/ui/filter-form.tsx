@@ -1,4 +1,4 @@
-import { Select, type DataSelect, type SelectType } from "./select"
+import { Select, type SelectType } from "./select"
 
 export type DataFilter = {
     key: string

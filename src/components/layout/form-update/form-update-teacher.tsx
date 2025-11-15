@@ -1,11 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { TeacherDTO } from "@/types/TeacherType";
 import API from "@/utils/axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { data } from "react-router-dom";
-import { toast } from "react-toastify";
 
 type Props = {
   submitUpdateTeacher: (data: any) => void;
@@ -36,17 +33,14 @@ export const FormUpdateTeacher = ({ submitUpdateTeacher, msgv }: Props) => {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
   } = useForm();
 
-  const [dataTeacher, setDataTeacher] = useState<TeacherDTO>();
+
 
   useEffect(() => {
     const getTeacher = async () => {
       try {
         const res = await API.get("/teacher/getOneTeacher/" + msgv);
-        console.log(res.data);
-        setDataTeacher(res.data.data[0]);
         reset(res.data.data[0]);
       } catch (err) {
         console.log(err);

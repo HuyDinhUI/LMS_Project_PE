@@ -1,36 +1,29 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { type TeacherDTO } from "@/types/TeacherType";
-import API from "@/utils/axios";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 
 type Props = {
   submitCreateTeacher: (data: any) => void;
- 
 };
-
 
 const ListKhoa = [
   {
-    id: '0100',
-    name: 'Công nghệ thông tin'
+    id: "0100",
+    name: "Công nghệ thông tin",
   },
   {
-    id: '0200',
-    name: 'Công nghệ thực phẩm'
+    id: "0200",
+    name: "Công nghệ thực phẩm",
   },
   {
-    id: '0300',
-    name: 'Ngoại ngữ'
+    id: "0300",
+    name: "Ngoại ngữ",
   },
   {
-    id: '0400',
-    name: 'Kinh tế'
-  }
-]
-
+    id: "0400",
+    name: "Kinh tế",
+  },
+];
 
 export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
   const {
@@ -38,8 +31,6 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  
 
   return (
     <div className="p-5 h-full relative">
@@ -61,6 +52,8 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                   type="text"
                   placeholder="Nguyễn Văn A"
                   {...register("hoten", { required: "Họ tên là bắt buộc" })}
+                  aria-invalid={errors.hoten ? "true" : "false"}
+                  variant={errors.hoten ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -70,6 +63,8 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                   {...register("ngaysinh", {
                     required: "Ngày sinh là bắt buộc",
                   })}
+                  aria-invalid={errors.ngaysinh ? "true" : "false"}
+                  variant={errors.ngaysinh ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -79,6 +74,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                   {...register("gioitinh", {
                     required: "Giới tính là bắt buộc",
                   })}
+                  aria-invalid={errors.gioitinh ? "true" : "false"}
                 >
                   <option value="Nam">Nam</option>
                   <option value="Nữ">Nữ</option>
@@ -92,6 +88,8 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                   {...register("sdt", {
                     required: "Số điện thoại là bắt buộc",
                   })}
+                  aria-invalid={errors.sdt ? "true" : "false"}
+                  variant={errors.sdt ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -100,6 +98,8 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                   type="email"
                   placeholder="m@example.com"
                   {...register("email", { required: "Email là bắt buộc" })}
+                  aria-invalid={errors.email ? "true" : "false"}
+                  variant={errors.email ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -108,6 +108,8 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                   type="text"
                   placeholder="15/8 Nguyễn Hữu Tiến"
                   {...register("diachi", { required: "Địa chỉ là bắt buộc" })}
+                  aria-invalid={errors.diachi ? "true" : "false"}
+                  variant={errors.diachi ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
@@ -115,8 +117,9 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                 <select
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("MaKhoa", { required: "Khoa là bắt buộc" })}
+                  aria-invalid={errors.MaKhoa ? "true" : "false"}
                 >
-                  {ListKhoa.map(k => (
+                  {ListKhoa.map((k) => (
                     <option value={k.id}>{k.name}</option>
                   ))}
                 </select>
@@ -126,6 +129,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                 <select
                   className="ring ring-gray-200 rounded-sm p-2"
                   {...register("trinhdo", { required: "Trình độ là bắt buộc" })}
+                  aria-invalid={errors.trinhdo ? "true" : "false"}
                 >
                   <option value="Thạc sĩ">Thạc sĩ</option>
                   <option value="Tiến sĩ">Tiến sĩ</option>
@@ -140,6 +144,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                   {...register("loaigiangvien", {
                     required: "Loại giảng viên là bắt buộc",
                   })}
+                  aria-invalid={errors.loaigiangvien ? "true" : "false"}
                 >
                   <option value="Cơ hữu">Cơ hữu</option>
                   <option value="Thỉnh giảng">Thỉnh giảng</option>
@@ -151,11 +156,18 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                   type="text"
                   placeholder="Công thương"
                   {...register("donvicongtac")}
+                  aria-invalid={errors.donvicongtac ? "true" : "false"}
+                  variant={errors.donvicongtac ? "danger" : "default"}
                 />
               </div>
               <div className="grid gap-2">
                 <label>Ngày tuyển dụng</label>
-                <Input type="date" {...register("ngaytuyendung")} />
+                <Input
+                  type="date"
+                  {...register("ngaytuyendung")}
+                  aria-invalid={errors.ngaytuyendung ? "true" : "false"}
+                  variant={errors.ngaytuyendung ? "danger" : "default"}
+                />
               </div>
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">
                 <Button variant="dark" title="Lưu và tiếp tục" type="submit" />

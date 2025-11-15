@@ -22,7 +22,7 @@ import {
   Upload,
   Youtube,
 } from "lucide-react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import { DropdownMenu } from "@/components/ui/dropdown";
 import ReactQuill from "react-quill-new";
@@ -87,7 +87,7 @@ const ClassCourseManagementHome = () => {
     ];
   };
 
-  const { ref, onChange } = register("file");
+  const { ref } = register("file");
 
   const getContent = async () => {
     try {

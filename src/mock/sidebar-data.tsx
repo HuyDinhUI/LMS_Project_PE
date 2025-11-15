@@ -14,7 +14,6 @@ import {
   Presentation,
   Settings,
   Shield,
-  SquareKanban,
 } from "lucide-react";
 
 export const SidebarAdminData: SidebarItem[] = [

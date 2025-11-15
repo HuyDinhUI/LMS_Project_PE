@@ -1,9 +1,7 @@
-import { Calendar,CalendarToday, type EventType } from "@/components/ui/calendar";
-import { SearchForm } from "@/components/ui/search-form";
+import { Calendar, type EventType } from "@/components/ui/calendar";
 import API from "@/utils/axios";
 import { formatterDataEventCalendar } from "@/utils/formatters";
-import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 
 
 const StudentSchedule = () => {

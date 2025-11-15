@@ -1,27 +1,16 @@
 import { Search } from "lucide-react";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 type InputSearchProps = {
   handleSearch: (keyword: string) => void;
 };
 
 export const InputSearch = ({ handleSearch }: InputSearchProps) => {
-  const [onSearch, setOnSearch] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
   const [keyword, setKeyword] = useState<string>("");
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        setOnSearch(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+  
   return (
     <div
       ref={ref}
@@ -36,7 +25,6 @@ export const InputSearch = ({ handleSearch }: InputSearchProps) => {
           setKeyword(e.target.value);
           handleSearch(e.target.value);
         }}
-        onFocus={() => setOnSearch(true)}
         className="outline-none w-full rounded-full"
         placeholder="Search"
       ></input>

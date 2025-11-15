@@ -5,14 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
-import type { QuizType } from "@/types/QuizType";
 import {
   ChevronLeft,
   Clock,
   Ellipsis,
   Import,
-  Lock,
-  LockOpen,
   Pen,
   Play,
   Plus,
@@ -64,7 +61,7 @@ const Quiz = () => {
     }
   };
 
-  const getItemActionQuiz = (MaTN: string, status: string) => {
+  const getItemActionQuiz = (MaTN: string) => {
     return [
       {
         label: "Edit",
@@ -183,7 +180,7 @@ const Quiz = () => {
                             icon={<Ellipsis size={18} />}
                           />
                         }
-                        items={getItemActionQuiz(q.MaTN, q.TrangThai)}
+                        items={getItemActionQuiz(q.MaTN)}
                       />
                     </div>
                   )}
@@ -345,7 +342,6 @@ type props = {
 
 function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
   const { id } = useParams();
-  const [dataQuiz, setDataQuiz] = useState<QuizType>();
   const [tieuDe, setTieuDe] = useState("");
   const [moTa, setMoTa] = useState("");
   const [thoiGian, setThoiGian] = useState<number>();
@@ -393,7 +389,6 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
     try {
       const res = await API.get(`/quiz/getQuestionById/${MaTN}`);
       console.log(res.data.result.data);
-      setDataQuiz(res.data.result.data);
       setTieuDe(res.data.result.data.TieuDe);
       setMoTa(res.data.result.data.MoTa);
       setThoiGian(res.data.result.data.ThoiGianLam);

@@ -1,26 +1,15 @@
-
-import {FormCreateClassCourse} from "@/components/layout/form-create/form-create-classcourse"
 import AlertDialogDemo from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { FilterForm } from "@/components/ui/filter-form";
 import { Pagination } from "@/components/ui/pagination";
 import { SearchForm } from "@/components/ui/search-form";
-import type { ClassCourseType } from "@/types/ClassCourseType";
 
 import API from "@/utils/axios";
-import {
- 
-  Pencil,
-  Plus,
-
-  Trash2,
-  
-} from "lucide-react";
+import { Pencil, Trash2 } from "lucide-react";
 
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { FormUpdateClassCourse } from "@/components/layout/form-update/form-update-classcourse";
 import type { ScheduleType } from "@/types/ScheduleType";
 import { FormUpdateSchedule } from "@/components/layout/form-update/form-update-schedule";
 
@@ -32,7 +21,7 @@ const headerTableSchedule = [
   "Ngày dạy",
   "Tiết bắt đầu",
   "Tiết kết thúc",
-  "Tác vụ"
+  "Tác vụ",
 ];
 
 const data_mock = [
@@ -114,7 +103,7 @@ const ListSchedulePage = () => {
 
   const submitDeleteSchedule = async (malich: string) => {
     try {
-      const res = await API.delete(`schedule/deleteSchedule/${malich}`);
+      await API.delete(`schedule/deleteSchedule/${malich}`);
       toast.success("Xoá lịch thành công");
     } catch (err) {
       console.log(err);
@@ -126,7 +115,7 @@ const ListSchedulePage = () => {
   const submitupdateSchedule = async (data: any) => {
     console.log(data);
     try {
-      const res = await API.put(`schedule/updateSchedule`, data);
+      await API.put(`schedule/updateSchedule`, data);
       toast.success("Cập nhật lịch thành công");
     } catch (err) {
       console.log(err);
