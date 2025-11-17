@@ -21,19 +21,18 @@ const headerTableSchedule = [
   "Ngày dạy",
   "Tiết bắt đầu",
   "Tiết kết thúc",
+  "Trạng thái",
   "Tác vụ",
 ];
 
 const data_mock = [
   {
-    label:"Giảng viên",
+    label: "Giảng viên",
     key: "Khoa",
-    select: [
-      
-    ],
+    select: [],
   },
   {
-    label:"Sắp xếp theo",
+    label: "Sắp xếp theo",
     key: "order",
     select: [
       {
@@ -189,6 +188,17 @@ const ListSchedulePage = () => {
                   <td>{t.ngay_day}</td>
                   <td>{t.tiet_batdau}</td>
                   <td>{t.tiet_kethuc}</td>
+                  <td>
+                    <span
+                      className={`block w-30 text-center rounded-xl px-2 ${
+                        t.TrangThai === "TamNgung"
+                          ? "bg-amber-50 ring ring-amber-500 text-amber-700"
+                          : "bg-green-50 ring ring-green-500 text-green-700"
+                      }`}
+                    >
+                      {t.TrangThai}
+                    </span>
+                  </td>
                   <td>
                     <div className="flex gap-2">
                       <Dialog

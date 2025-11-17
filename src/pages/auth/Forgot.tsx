@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import API from "@/utils/axios";
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,6 @@ import bg_dark from "@/assets/10139763.jpg";
 import bg_light from "@/assets/v567-n-50-doodles.jpg";
 import logo from "@/assets/logo_cat_black.svg";
 import { useAuth } from "@/hooks/useAuth";
-import { TriangleAlert } from "lucide-react";
 import { useSubmitLoading } from "@/hooks/useLoading";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 

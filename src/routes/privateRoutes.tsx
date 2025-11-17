@@ -104,58 +104,84 @@ const ClassCourseAttendancePage = lazy(
   () => import("@/pages/ClassCourse/ClassCourseAttendance")
 );
 
+const ClassCourseGroupPage = lazy(
+  () => import("@/pages/ClassCourse/ClassCourseGroups")
+)
+
 const InboxMainPage = lazy(() => import("@/pages/Inbox/InboxMain"));
 
 
 export const privateRoutes = [
+  {
+    path: "/",
+    element: (
+      <Guard>
+        <MainLayout>
+          <div></div>
+        </MainLayout>
+      </Guard>
+    )
+  },
   /////////////  Admin  /////////////////
   {
     path: "/teachermanagement/listteacher",
     element: (
-      <MainLayout>
-        <ListTeacherPage />
-      </MainLayout>
+      <Guard>
+        <MainLayout>
+          <ListTeacherPage />
+        </MainLayout>
+      </Guard>
     ),
   },
   {
     path: "/teachermanagement/schedules",
     element: (
-      <MainLayout>
-        <ScheduleTeacherPage />
-      </MainLayout>
+      <Guard>
+        <MainLayout>
+          <ScheduleTeacherPage />
+        </MainLayout>
+      </Guard>
     ),
   },
   {
     path: "/coursemanagement/listcourse",
     element: (
-      <MainLayout>
-        <ListCoursePage />
-      </MainLayout>
+      <Guard>
+        <MainLayout>
+          <ListCoursePage />
+        </MainLayout>
+      </Guard>
     ),
   },
   {
     path: "/classcoursemanagement/listclasscourse",
     element: (
-      <MainLayout>
-        <ListClassCoursePage />
-      </MainLayout>
+      <Guard>
+        <MainLayout>
+          <ListClassCoursePage />
+        </MainLayout>
+      </Guard>
     ),
   },
   {
     path: "/schedulemanagement/listschedule",
     element: (
-      <MainLayout>
-        <ListSchedulePage />
-      </MainLayout>
+      <Guard>
+        <MainLayout>
+          <ListSchedulePage />
+        </MainLayout>
+      </Guard>
     ),
   },
 
   {
     path: "/studentmanagement/liststudent",
     element: (
-      <MainLayout>
-        <ListStudentPage />
-      </MainLayout>
+      <Guard>
+        <MainLayout>
+          <ListStudentPage />
+        </MainLayout>
+      </Guard>
     ),
   },
 
@@ -332,6 +358,17 @@ export const privateRoutes = [
         </ClassLayout>
       </Guard>
     ),
+  },
+
+  {
+    path: "/classcourse/:id/groups",
+    element: (
+      <Guard>
+        <ClassLayout>
+          <ClassCourseGroupPage/>
+        </ClassLayout>
+      </Guard>
+    )
   },
 
   /////////////  Student  ////////////////

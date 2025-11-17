@@ -48,10 +48,10 @@ export function getTimeDiff(createdAt: any) {
   const diffHour = Math.floor(diffMin / 60);
   const diffDay = Math.floor(diffHour / 24);
 
-  if (diffSec < 60) return "vừa xong";
-  if (diffMin < 60) return `${diffMin} phút trước`;
-  if (diffHour < 24) return `${diffHour} giờ trước`;
-  if (diffDay < 7) return `${diffDay} ngày trước`;
+  if (diffSec < 60) return "now";
+  if (diffMin < 60) return `${diffMin} minute ago`;
+  if (diffHour < 24) return `${diffHour} hour ago`;
+  if (diffDay < 7) return `${diffDay} day ago`;
 
   return new Date(createdAt).toLocaleDateString("vi-VN");
 }

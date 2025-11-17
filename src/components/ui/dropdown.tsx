@@ -216,7 +216,7 @@ export const Notification = ({
       <Dropdown.Trigger asChild>{trigger}</Dropdown.Trigger>
       <Dropdown.Portal>
         <Dropdown.Content
-          className={clsx(sizeClass[size], "bg-white text-black shadow-md rounded-md")}
+          className={clsx(sizeClass[size], "bg-white text-black shadow-md rounded-md z-9999")}
           side="bottom"
           align="end"
         >

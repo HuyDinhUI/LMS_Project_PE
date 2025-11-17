@@ -6,4 +6,5 @@ export type ScheduleType = {
     giangvien: string,
     ten_hocphan: string,
     ten_lop: string
+    TrangThai: string
 }

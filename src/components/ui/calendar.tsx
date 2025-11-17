@@ -24,7 +24,7 @@ type props = {
 
 export const Calendar = ({ data, height = "80vh" }: props) => {
   const { user } = useAuth();
-  const { loading, withLoading } = useSubmitLoading();
+  const { withLoading } = useSubmitLoading();
 
   const Attendance = async (MaLop: string, ngay_day: string) => {
     const body = {
@@ -35,7 +35,7 @@ export const Calendar = ({ data, height = "80vh" }: props) => {
       try {
         const res = await API.post("/attendance/start",body);
         console.log(res.data.redirectUrl)
-        window.location.href = res.data.redirectUrl
+        window.open(res.data.redirectUrl, '_blank')
       } catch (err: any) {
         console.log(err);
       }
@@ -55,7 +55,7 @@ export const Calendar = ({ data, height = "80vh" }: props) => {
         }
         return (
           <div
-            className={`${bgColor} px-1 rounded w-full h-full p-2 overflow-hidden`}
+            className={`${bgColor} rounded w-full h-full p-3 overflow-hidden`}
           >
             {arg.event.title}
             {new Date().toISOString() >=
@@ -65,10 +65,9 @@ export const Calendar = ({ data, height = "80vh" }: props) => {
               user?.role === "SV" && (
                 <Button
                   onClick={() => Attendance(arg.event.extendedProps.MaLop, arg.event.extendedProps.ngay_day)}
-                  variant="primary"
                   size="sm"
                   title="Điểm danh"
-                  className="mt-2"
+                  className="mt-2 bg-yellow-brand"
                 />
               )}
           </div>
