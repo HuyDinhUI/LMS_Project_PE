@@ -33,16 +33,22 @@ const ClassCourseAttendance = () => {
     }
   };
 
-  const Recordhandle = async (MaSV: string, MaLop: string, status: boolean, ngay_day: string) => {
+  const Recordhandle = async (
+    MaSV: string,
+    MaLop: string,
+    status: boolean,
+    ngay_day: string
+  ) => {
     try {
       await API.post(`/attendance/record`, {
         MaSV,
         MaLop,
         status,
-        ngay_day
+        ngay_day,
       });
+      getAttendanceData();
     } catch (err: any) {
-      toast.warning(err?.response?.data?.message);
+      toast.warning(err?.response?.data?.message, { theme: "light" });
     }
   };
 

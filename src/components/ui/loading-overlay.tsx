@@ -9,7 +9,7 @@ export const LoadingOverlay = ({ show, message = "Processing..." }:LoadingOverla
 
   return (
     <div className="
-      fixed inset-0 bg-black/40 backdrop-blur-sm z-9999
+      fixed inset-0 bg-black/40 backdrop-blur-sm z-9999999
       flex items-center justify-center
     ">
       <div className="bg-white p-4 rounded-xl shadow-lg text-center">

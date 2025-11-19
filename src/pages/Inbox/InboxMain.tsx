@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
+import type { ClassCourseType } from "@/types/ClassCourseType";
 import type { MessageType, InboxType } from "@/types/Inbox";
 import API from "@/utils/axios";
 import { Send } from "lucide-react";
@@ -12,8 +14,7 @@ const InboxMain = () => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
   const chatEndRef = useRef<HTMLDivElement>(null);
-  const role = localStorage.getItem("role");
-  const id = localStorage.getItem("username");
+  const {user} = useAuth()
 
   const getAllInboxByTeacher = async () => {
     try {
@@ -32,6 +33,8 @@ const InboxMain = () => {
       toast.error(err?.response?.data?.message);
     }
   };
+
+
 
   const getAllMessageByTeacher = async () => {
     try {
@@ -69,7 +72,7 @@ const InboxMain = () => {
 
       setNewMessage("");
 
-      if (role === "GV") {
+      if (user?.role === "GV") {
         getAllMessageByTeacher();
       } else {
         getAllMessageByStudent();
@@ -80,15 +83,18 @@ const InboxMain = () => {
   };
 
   useEffect(() => {
-    if (role === "GV") {
-      getAllInboxByTeacher();
+    if (!user) return
+
+    if (user?.role === "GV") {
+      getAllInboxByTeacher()
     } else {
       getAllInboxByStudent();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
-    if (role === "GV") {
+
+    if (user?.role === "GV") {
       getAllMessageByTeacher();
     } else {
       getAllMessageByStudent();
@@ -138,12 +144,12 @@ const InboxMain = () => {
                     <div
                       key={i}
                       className={`flex ${
-                        msg.MaNguoiGui === id ? "justify-end" : "justify-start"
+                        msg.MaNguoiGui === user?.username ? "justify-end" : "justify-start"
                       }`}
                     >
                       <div
                         className={`p-2 rounded-xl max-w-[70%] mt-2 animate-slideInBottom ${
-                          msg.MaNguoiGui === id
+                          msg.MaNguoiGui === user?.username
                             ? "bg-black text-white"
                             : "bg-black/50 text-white"
                         }`}

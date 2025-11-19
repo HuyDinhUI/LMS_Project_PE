@@ -62,7 +62,7 @@ const StudentEnrollClassCourse = () => {
       setCourseSelected(course);
       setDataClassCourse(res.data.result.data);
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message,{theme: 'light'});
     }
   };
 
@@ -100,9 +100,9 @@ const StudentEnrollClassCourse = () => {
       });
       getClassCourseByPrograme(CourseSelected);
       getEnrolledCourse();
-      toast.success("Đăng ký học phần thành công");
+      toast.success("Đăng ký học phần thành công",{theme: 'light'});
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message,{theme: 'light'});
     }
   };
 
@@ -112,9 +112,9 @@ const StudentEnrollClassCourse = () => {
         `/enrollClassCourse/cancle?masv=${MaSV}&malop=${MaLop}&mahp=${MaHP}`
       );
       getEnrolledCourse();
-      toast.success("Huỷ học phần thành công");
+      toast.success("Huỷ học phần thành công",{theme: 'light'});
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      toast.error(err?.response?.data?.message, {theme: 'light'});
     }
   };
 

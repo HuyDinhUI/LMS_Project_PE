@@ -14,6 +14,7 @@ import "react-quill-new/dist/quill.snow.css";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubmitLoading } from "@/hooks/useLoading";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import TextField from "@mui/material/TextField";
 
 const ClassCourseManagementAssignment = () => {
   const { id } = useParams(); // MaLop
@@ -27,11 +28,7 @@ const ClassCourseManagementAssignment = () => {
   const [selectedFilter, setSelectedFilter] = useState<string>("All");
   const dropRef = useRef<any>(null);
   const { loading, withLoading } = useSubmitLoading();
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const getAllAssignments = async () => {
     try {
@@ -129,7 +126,7 @@ const ClassCourseManagementAssignment = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        toast.success("Tạo bài tập thành công");
+        toast.success("Tạo bài tập thành công", { theme: "light" });
         getAllAssignments();
       });
     } catch (err: any) {
@@ -159,7 +156,7 @@ const ClassCourseManagementAssignment = () => {
     console.log(MaBaiTap);
     try {
       await API.delete(`/assignments/delete/${MaBaiTap}`);
-      toast.success("Xoá bài tập thành công");
+      toast.success("Xoá bài tập thành công", { theme: "light" });
       getAllAssignments();
     } catch (err: any) {
       toast.error(
@@ -214,7 +211,7 @@ const ClassCourseManagementAssignment = () => {
           {user?.role === "GV" && (
             <div
               className={`p-4 col-span-2 bg-black/3 rounded-xl overflow-scroll relative ${
-                opentFormCreate ? "h-130" : "h-13"
+                opentFormCreate ? "h-140" : "h-13"
               } transition-all duration-300 ease-in-out`}
             >
               <div
@@ -230,47 +227,33 @@ const ClassCourseManagementAssignment = () => {
                   onSubmit={handleSubmit(handleCreateAssignment)}
                   className="flex flex-col gap-3 mt-7"
                 >
-                  <Input
+                  <TextField
+                    label="Title"
                     {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
-                    placeholder="Title"
+                    fullWidth
                   />
                   <ReactQuill value={description} onChange={setDescription} />
                   <div className="grid grid-cols-2 gap-3">
                     <div className="flex flex-col gap-2">
-                      <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">
-                          Start date
-                        </label>
-                        <Input
-                          {...register("NgayBatDau")}
-                          type="datetime-local"
-                          variant="primary"
-                          placeholder=""
-                        />
-                      </div>
-                      <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">
-                          End date
-                        </label>
-                        <Input
-                          {...register("HanNop")}
-                          type="datetime-local"
-                          variant="primary"
-                          placeholder=""
-                        />
-                      </div>
+                      <TextField
+                        label="Point"
+                        {...register("DiemToiDa")}
+                        type="number"
+                        placeholder="10"
+                      />
+                      <TextField
+                        slotProps={{ inputLabel: { shrink: true } }}
+                        label="Start date"
+                        {...register("NgayBatDau")}
+                        type="datetime-local"
+                      />
 
-                      <div className="flex gap-2 ring ring-gray-200 rounded-md overflow-hidden">
-                        <label className="w-30 p-2 text-center border-r border-gray-200 bg-black/5">
-                          Point
-                        </label>
-                        <Input
-                          {...register("DiemToiDa")}
-                          type="number"
-                          variant="primary"
-                          placeholder="10"
-                        />
-                      </div>
+                      <TextField
+                        label="End date"
+                        slotProps={{ inputLabel: { shrink: true } }}
+                        {...register("HanNop")}
+                        type="datetime-local"
+                      />
                     </div>
                     <div>
                       <div
@@ -450,7 +433,7 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
           "Content-Type": "multipart/form-data",
         },
       });
-      toast.success("Cập nhật bài tập thành công");
+      toast.success("Cập nhật bài tập thành công", { theme: "light" });
       handleClose();
     } catch (err: any) {
       toast.error(err?.response?.message?.data);

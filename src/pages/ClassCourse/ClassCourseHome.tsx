@@ -33,6 +33,8 @@ import logo_youtube from "@/assets/logo_youtube.png";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubmitLoading } from "@/hooks/useLoading";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import { formatsQuill, modulesQuill } from "@/mock/quill";
+import TextField from "@mui/material/TextField";
 
 const get_icon: any = {
   pdf: <FaFilePdf size={30} />,
@@ -142,19 +144,14 @@ const ClassCourseManagementHome = () => {
         getContent();
       });
 
-      // await API.post("/contents/create", formData, {
-      //   headers: { "Content-Type": "multipart/form-data" },
-      // });
-
-      
       setOpenFormCreate(false);
       setSelectedVideoId(null);
       setDescription("");
       setFile(null);
       reset();
-      toast.success("Tạo nội dung thành công");
+      toast.success("Tạo nội dung thành công", { theme: "light" });
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      console.log(err?.response?.data?.message);
     }
   };
 
@@ -165,7 +162,7 @@ const ClassCourseManagementHome = () => {
       getContent();
       toast.success("Xoá nội dung thành công");
     } catch (err: any) {
-      toast.error(err?.response?.data?.message);
+      console.log(err?.response?.data?.message);
     }
   };
 
@@ -223,13 +220,13 @@ const ClassCourseManagementHome = () => {
               >
                 <div className="p-4 flex flex-col gap-3">
                   <div className="relative">
-                    <Input
-                      placeholder="Title"
+                    <TextField
+                      label="Title"
                       {...register("tieu_de", {
                         required: "Tiêu đề không được để trống",
                       })}
-                      variant={errors.tieu_de ? "danger" : "default"}
                       aria-invalid={errors.tieu_de ? "true" : "false"}
+                      fullWidth
                     />
                     {errors.tieu_de && (
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 text-red-500">
@@ -238,12 +235,17 @@ const ClassCourseManagementHome = () => {
                     )}
                   </div>
 
-                  <ReactQuill value={description} onChange={setDescription} />
+                  <ReactQuill
+                    value={description}
+                    modules={modulesQuill}
+                    formats={formatsQuill}
+                    onChange={setDescription}
+                  />
                   <Input
                     {...register("file")}
                     ref={(e) => {
-                      ref(e); // Gắn ref của React Hook Form
-                      fileInputRef.current = e; // Lưu ref của bạn để trigger click
+                      ref(e);
+                      fileInputRef.current = e;
                     }}
                     hidden
                     type="file"
@@ -602,7 +604,7 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
       await API.put("/contents/update", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("Cập nhật nội dung thành công");
+      toast.success("Cập nhật nội dung thành công", { theme: "light" });
       handleClose();
     } catch (err: any) {
       console.log(err?.response?.data?.message);
@@ -621,17 +623,19 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
         </h1>
         <form onSubmit={handleSubmit(handleUpdate)}>
           <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <label className="font-bold">Title:</label>
-              <Input
-                {...register("tieu_de", { required: "Tiêu đề là bắt buộc" })}
-                placeholder="Title"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label className="font-bold">Description:</label>
-              <ReactQuill value={description} onChange={setDescription} />
-            </div>
+            <TextField
+              label="Title"
+              {...register("tieu_de", { required: "Tiêu đề là bắt buộc" })}
+              fullWidth
+            />
+
+            <ReactQuill
+              placeholder="Description"
+              value={description}
+              modules={modulesQuill}
+              formats={formatsQuill}
+              onChange={setDescription}
+            />
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
                 <label className="font-bold">Current video:</label>

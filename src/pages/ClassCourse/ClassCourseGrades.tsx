@@ -230,7 +230,7 @@ const ClassCourseManagementGrades = () => {
                   {(dataGradesAssignment.reduce(
                     (acc, row) => acc + (row.DiemSo),
                     0
-                  ) / dataGradesAssignment.filter(item => !item.DiemSo).length || 0).toFixed(1)}
+                  ) / dataGradesAssignment.filter(item => item.DiemSo).length)}
                 </td>
               </tr>
             </tbody>
@@ -271,7 +271,7 @@ const ClassCourseManagementGrades = () => {
                   {(dataGradesTest.reduce(
                     (acc, row) => acc + (parseFloat(row.DiemSo)),
                     0
-                  ) / dataGradesTest.length).toFixed(1) || 0}
+                  ) / dataGradesTest.length) || 0}
                 </td>
               </tr>
             </tbody>

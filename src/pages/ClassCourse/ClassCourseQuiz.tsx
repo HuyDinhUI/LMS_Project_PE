@@ -2,7 +2,6 @@ import { useEffect, useReducer, useRef, useState } from "react";
 import API from "@/utils/axios";
 import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { v4 as uuidv4 } from "uuid";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -16,16 +15,19 @@ import {
   Repeat,
   Shuffle,
   Trash,
+  X,
 } from "lucide-react";
 import { DropdownMenu } from "@/components/ui/dropdown";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import CheckboxDemo from "@/components/ui/checkbox";
 import ReactQuill from "react-quill-new";
 import { useAuth } from "@/hooks/useAuth";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 const Quiz = () => {
   const { id } = useParams();
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [dataQuiz, setDataQuiz] = useState<any>([]);
   const [openFormAction, setOpenFormAction] = useState<string>("");
   const [selectedMaTN, setSelectedMaTN] = useState<string>("");
@@ -43,7 +45,9 @@ const Quiz = () => {
 
   const getQuizByStudent = async () => {
     try {
-      const res = await API.get(`/quiz/getQuizByStudent/${user?.username}/${id}`);
+      const res = await API.get(
+        `/quiz/getQuizByStudent/${user?.username}/${id}`
+      );
       console.log(res.data.result.data);
       setDataQuiz(res.data.result.data);
     } catch (err: any) {
@@ -76,7 +80,7 @@ const Quiz = () => {
         icon: <Trash size={16} />,
         dialog: AlertDialogDelete,
         onClick: () => handleDeleteQuiz(MaTN),
-      }
+      },
     ];
   };
 
@@ -117,11 +121,19 @@ const Quiz = () => {
         </div>
 
         {openFormAction === "create" && (
-          <QuizAction title="Create Quiz" typeAction="create" handleGetQuiz={getQuiz} />
+          <QuizAction
+            title="Create Quiz"
+            typeAction="create"
+            handleGetQuiz={getQuiz}
+          />
         )}
 
         {openFormAction === "import" && (
-          <QuizAction title="Import Quiz" typeAction="import" handleGetQuiz={getQuiz} />
+          <QuizAction
+            title="Import Quiz"
+            typeAction="import"
+            handleGetQuiz={getQuiz}
+          />
         )}
 
         {openFormAction === "update" && (
@@ -282,6 +294,9 @@ const quizReducer = (state: any, action: any) => {
         },
       ];
 
+    case "DELETE_QUESTION":
+      return state.filter((q: any) => q.MaCauHoi !== action.qid);
+
     case "UPDATE_QUESTION":
       return state.map((q: any) =>
         q.MaCauHoi === action.qid ? { ...q, [action.field]: action.value } : q
@@ -296,6 +311,16 @@ const quizReducer = (state: any, action: any) => {
                 ...q.DapAn,
                 { MaDapAn: uuidv4(), NoiDung: "", LaDapAnDung: false },
               ],
+            }
+          : q
+      );
+
+    case "DELETE_ANSWER":
+      return state.map((q: any) =>
+        q.MaCauHoi === action.qid
+          ? {
+              ...q,
+              DapAn: q.DapAn.filter((a: any) => a.MaDapAn !== action.aid),
             }
           : q
       );
@@ -334,7 +359,7 @@ const quizReducer = (state: any, action: any) => {
 };
 
 type props = {
-  title: string
+  title: string;
   handleGetQuiz: () => void;
   MaTN?: string;
   typeAction: string;
@@ -486,66 +511,50 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
         ],
       });
     }
-  }, []);
+  }, [typeAction]);
 
   return (
     <div className="px-5 pb-10 flex flex-col gap-3">
       <h1 className="text-2xl font-semibold">{title}</h1>
-      <div className="flex items-center rounded-md overflow-hidden ring ring-gray-300">
-        <label className="w-[13%] p-2 bg-black/5 text-center">Title</label>
-        <Input
-          placeholder="Test 1"
-          value={tieuDe}
-          onChange={(e) => setTieuDe(e.target.value)}
-          variant="primary"
-        />
-      </div>
-      <ReactQuill value={moTa} onChange={setMoTa} />
+      <TextField
+        label="Title"
+        placeholder="Test 1"
+        value={tieuDe}
+        onChange={(e) => setTieuDe(e.target.value)}
+        fullWidth
+      />
+      <ReactQuill placeholder="Description" value={moTa} onChange={setMoTa} />
       <div className="grid grid-cols-2 gap-2">
-        <div className="flex items-center rounded-md overflow-hidden ring ring-gray-300">
-          <label className="w-[30%] p-2 bg-black/5 text-center">Time</label>
-          <Input
-            type="number"
-            placeholder="15"
-            value={thoiGian}
-            onChange={(e) => setThoiGian(Number(e.target.value))}
-            variant="primary"
-          />
-        </div>
-        <select
+        <TextField
+          label="Time"
+          type="number"
+          placeholder="15"
+          value={thoiGian}
+          onChange={(e) => setThoiGian(Number(e.target.value))}
+        />
+        <TextField
+          label="Type"
+          select
           onChange={(e) => setType(String(e.target.value))}
-          className="p-2 h-10 ring ring-gray-300 rounded-md"
           value={type}
         >
-          <option value="" disabled selected>
-            Type quiz
-          </option>
-          <option value="test">Test</option>
-          <option value="review">Review</option>
-        </select>
+          <MenuItem value="test">Test</MenuItem>
+          <MenuItem value="review">Review</MenuItem>
+        </TextField>
       </div>
       <div className="grid grid-cols-2 gap-2">
-        <div className="flex items-center rounded-md overflow-hidden ring ring-gray-300">
-          <label className="w-[30%] p-2 bg-black/5 text-center">
-            Start date
-          </label>
-          <Input
-            value={startDate}
-            type="datetime-local"
-            variant="primary"
-            onChange={(e) => setStartDate(e.target.value)}
-          />
-        </div>
-        <div className="flex items-center rounded-md overflow-hidden ring ring-gray-300">
-          <label className="w-[30%] p-2 bg-black/5 text-center">End date</label>
-          <Input
-            value={endDate}
-            type="datetime-local"
-            variant="primary"
-            onChange={(e) => setEndDate(e.target.value)}
-          />
-        </div>
-
+        <TextField
+          value={startDate}
+          type="datetime-local"
+          onChange={(e) => setStartDate(e.target.value)}
+          helperText="Start date"
+        />
+        <TextField
+          value={endDate}
+          type="datetime-local"
+          onChange={(e) => setEndDate(e.target.value)}
+          helperText="End date"
+        />
         {typeAction === "import" && (
           <>
             <div
@@ -577,9 +586,11 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
       {typeAction !== "import" &&
         questions.length > 0 &&
         questions.map((q: any, qi: number) => (
-          <div key={q.MaCauHoi} className="p-4 shadow-sm rounded-xl mb-4">
+          <div key={q.MaCauHoi} className="p-4 shadow-sm rounded-xl mb-4 flex flex-col gap-5">
             <label className="font-semibold">Question {qi + 1}:</label>
-            <ReactQuill
+            <TextField
+            label="Content"
+              multiline
               value={q.NoiDung}
               onChange={(e) =>
                 dispatch({
@@ -589,12 +600,15 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
                   value: e,
                 })
               }
-              className="my-2"
+              fullWidth
             />
 
             <h4 className="font-medium mt-2 mb-2">Answer:</h4>
             {q.DapAn.map((a: any, i: number) => (
-              <div key={a.MaDapAn} className="flex items-center gap-2 mb-2">
+              <div
+                key={a.MaDapAn}
+                className="flex items-center gap-2 relative"
+              >
                 <CheckboxDemo
                   checked={a.LaDapAnDung}
                   onCheckedChange={(e) =>
@@ -605,8 +619,8 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
                     })
                   }
                 />
-                <Input
-                  placeholder={`Answer ${i + 1}`}
+                <TextField
+                  label={`Answer ${i + 1}`}
                   value={a.NoiDung}
                   onChange={(e) =>
                     dispatch({
@@ -618,17 +632,42 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
                     })
                   }
                   className="flex-1"
+                  size="small"
+                />
+                <Button
+                  onClick={() =>
+                    dispatch({
+                      type: "DELETE_ANSWER",
+                      qid: q.MaCauHoi,
+                      aid: a.MaDapAn,
+                    })
+                  }
+                  variant="transparent"
+                  size="ic"
+                  icon={<X size={18} />}
+                  className="absolute text-red-500 right-2 top-1/2 -translate-y-1/2"
                 />
               </div>
             ))}
 
-            <Button
-              title="Add answer"
-              icon={<Plus size={18} />}
-              type="button"
-              onClick={() => dispatch({ type: "ADD_ANSWER", qid: q.MaCauHoi })}
-              className="mt-3 bg-yellow-brand text-white hover:bg-yellow-brand/80"
-            ></Button>
+            <div className="">
+              <Button
+                title="Add answer"
+                icon={<Plus size={18} />}
+                type="button"
+                onClick={() => dispatch({ type: "ADD_ANSWER", qid: q.MaCauHoi })}
+                className="mt-3 bg-yellow-brand text-white hover:bg-yellow-brand/80"
+              ></Button>
+              <Button
+                title="Delete"
+                variant="transparent"
+                icon={<Trash size={18} />}
+                onClick={() =>
+                  dispatch({ type: "DELETE_QUESTION", qid: q.MaCauHoi })
+                }
+                className="text-red-500 ring ring-red-600 ml-2"
+              />
+            </div>
           </div>
         ))}
 
@@ -641,11 +680,7 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
             variant="outline"
           ></Button>
         )}
-        <Button
-          title="Save"
-          onClick={handleSubmit}
-          variant="primary"
-        ></Button>
+        <Button title="Save" onClick={handleSubmit} variant="primary"></Button>
       </div>
     </div>
   );

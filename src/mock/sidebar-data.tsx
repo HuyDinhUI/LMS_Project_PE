@@ -108,19 +108,19 @@ export const SidebarTeacherData: SidebarItem[] = [
   {
     type: "item",
     label: "Analytics",
-    href: "/",
+    href: "#",
     icon: <ChartArea/>
   },
   {
     type: "item",
     label: "Setting",
-    href: "/",
+    href: "#",
     icon: <Settings/>
   },
   {
     type: "item",
     label: "Help center",
-    href: "/",
+    href: "#",
     icon: <HelpCircle/>
   },
 ];
@@ -162,19 +162,19 @@ export const SidebarStudentData: SidebarItem[] = [
   {
     type: "item",
     label: "Analytics",
-    href: "/",
+    href: "#",
     icon: <ChartArea/>
   },
   {
     type: "item",
     label: "Setting",
-    href: "/",
+    href: "#",
     icon: <Settings/>
   },
   {
     type: "item",
     label: "Help center",
-    href: "/",
+    href: "#",
     icon: <HelpCircle/>
   },
 ];

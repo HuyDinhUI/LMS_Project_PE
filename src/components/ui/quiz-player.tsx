@@ -151,7 +151,7 @@ export default function QuizPlayer({
 
       if (submitUrl) {
         const res = await API.post(submitUrl, payload);
-        toast.success("Nộp bài thành công");
+        toast.success("Nộp bài thành công",{theme: 'light'});
         setResult({ score: Number(res.data.result.data.TongDiem), total: 10 });
       }
 

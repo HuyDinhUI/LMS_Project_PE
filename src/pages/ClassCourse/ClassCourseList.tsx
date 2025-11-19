@@ -1,20 +1,21 @@
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import type { ClassCourseType } from "@/types/ClassCourseType";
 import API from "@/utils/axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
-
 const ClassCourseList = () => {
   const [classData, setClassData] = useState<ClassCourseType[]>([]);
-  const [selectedFilter, setSelectedFilter] = useState<string>("All")
-  const role = localStorage.getItem("role");
-  const id = localStorage.getItem("username");
+  const [selectedFilter, setSelectedFilter] = useState<string>("All");
+  const { user } = useAuth();
 
   const getClassByTeacher = async () => {
     try {
-      const res = await API.get(`/classCourse/getClassCourseByTeacher/${id}?filter=${selectedFilter}`);
+      const res = await API.get(
+        `/classCourse/getClassCourseByTeacher/${user?.username}?filter=${selectedFilter}`
+      );
       setClassData(res.data.result.data);
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
@@ -23,7 +24,9 @@ const ClassCourseList = () => {
 
   const getClassByStudent = async () => {
     try {
-      const res = await API.get(`/classCourse/getClassCourseByStudent/${id}?filter=${selectedFilter}`);
+      const res = await API.get(
+        `/classCourse/getClassCourseByStudent/${user?.username}?filter=${selectedFilter}`
+      );
       setClassData(res.data.result.data);
     } catch (err: any) {
       toast.error(err?.response?.data?.message);
@@ -31,8 +34,8 @@ const ClassCourseList = () => {
   };
 
   const handleFilter = async (key: string) => {
-    setSelectedFilter(key)
-  }
+    setSelectedFilter(key);
+  };
 
   const FILTER_LIST = [
     {
@@ -53,21 +56,36 @@ const ClassCourseList = () => {
     },
   ];
 
-  
   useEffect(() => {
-    if (role === "GV") {
+    if (!user) return;
+
+    if (user?.role === "GV") {
+      getClassByTeacher();
+    } else {
+      getClassByStudent();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.role === "GV") {
       getClassByTeacher();
     } else {
       getClassByStudent();
     }
   }, [selectedFilter]);
+  
   return (
     <div className="py-5 px-10 w-full h-full dark:bg-card overflow-auto">
       <div className="w-full px-2 flex gap-2">
         {/* Filter */}
         <div className="flex gap-2">
-          {FILTER_LIST.map((f,i) => (
-            <Button key={i} title={f.title} onClick={f.onclick} variant={f.title === selectedFilter ? "primary" : "outline"}/>
+          {FILTER_LIST.map((f, i) => (
+            <Button
+              key={i}
+              title={f.title}
+              onClick={f.onclick}
+              variant={f.title === selectedFilter ? "primary" : "outline"}
+            />
           ))}
         </div>
       </div>
@@ -80,18 +98,26 @@ const ClassCourseList = () => {
               className={`rounded-xl shadow-sm overflow-hidden hover:-translate-y-1 transition-transform relative`}
             >
               <div
-                className={`h-50 w-full relative bg-cover ${new Date(c.ngay_kethuc) < new Date() ? 'opacity-70' : ''}`}
+                className={`h-50 w-full relative bg-cover ${
+                  new Date(c.ngay_kethuc) < new Date() ? "opacity-70" : ""
+                }`}
                 style={{ backgroundImage: `url(${c.cover})` }}
-              >
-                
-              </div>
+              ></div>
               <div className="p-2">
                 <h3 className="text-md font-bold">{c.ten_lop}</h3>
               </div>
-              {new Date(c.ngay_kethuc) < new Date() && <span className="absolute bg-black p-2 text-white top-5 right-0 -left-70 -rotate-45 text-center">It's over</span>}
+              {new Date(c.ngay_kethuc) < new Date() && (
+                <span className="absolute bg-black p-2 text-white top-5 right-0 -left-70 -rotate-45 text-center">
+                  It's over
+                </span>
+              )}
             </Link>
           ))}
-          {classData.length === 0 && <span className="italic text-center col-span-3">No data available</span>}
+          {classData.length === 0 && (
+            <span className="italic text-center col-span-3">
+              No data available
+            </span>
+          )}
         </div>
       </div>
     </div>
