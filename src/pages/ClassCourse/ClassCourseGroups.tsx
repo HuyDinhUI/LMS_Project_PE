@@ -1,7 +1,6 @@
 import AvatarDemo from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
-import { DropdownMenu } from "@/components/ui/dropdown";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
 import { Popover } from "@/components/ui/popover";
 import { SearchForm } from "@/components/ui/search-form";
@@ -9,19 +8,16 @@ import { useAuth } from "@/hooks/useAuth";
 import { useSubmitLoading } from "@/hooks/useLoading";
 import { formatsQuill, modulesQuill } from "@/mock/quill";
 import type { GroupType } from "@/types/GroupType";
-import type { MenuItem } from "@/types/MenuItemType";
 import API from "@/utils/axios";
 import { getTimeDiff } from "@/utils/formatters";
 import TextField from "@mui/material/TextField";
 import {
   Clock,
-  Ellipsis,
   MessageSquareText,
+  Minus,
   Paperclip,
-  Pen,
   Plus,
   SquareCheckBig,
-  Trash,
   UserPlus,
   Users,
 } from "lucide-react";
@@ -36,7 +32,6 @@ const ClassCourseGroup = () => {
   const { id } = useParams();
   const { loading, withLoading } = useSubmitLoading();
   const [groups, setGroups] = useState<GroupType[]>([]);
-  const [opentFormCreate, setOpenFormCreate] = useState<boolean>(false);
 
   const getAllGroup = () => {
     withLoading(async () => {
@@ -60,19 +55,8 @@ const ClassCourseGroup = () => {
     });
   };
 
-  const getItemsAction = (MaNhom: string) => {
-    const items: MenuItem[] = [
-      {
-        label: "Edit",
-        icon: <Pen size={20} />,
-      },
-      {
-        label: "Delete",
-        icon: <Trash size={20} />,
-      },
-    ];
-
-    return items;
+  const handleSearch = async (keyword: string) => {
+    console.log(keyword);
   };
 
   useEffect(() => {
@@ -91,18 +75,22 @@ const ClassCourseGroup = () => {
         <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto fixed top-1/2 right-1/2 translate-x-20"></div>
       )}
       <div className="flex items-center gap-2 mt-2">
-        <div className="flex-1 flex gap-2 items-center"></div>
-        <div>
-          <Button
-            variant="primary"
-            title="Create"
-            className="rounded-md"
-            icon={<Plus />}
-            onClick={() => setOpenFormCreate(true)}
-          />
-        </div>
+        <SearchForm handleSearch={handleSearch} />
       </div>
       <div className="grid grid-cols-3 gap-5 mt-5">
+        <Popover
+          side="right"
+          align="start"
+          trigger={
+            <div className="h-40 bg-black/3 rounded-xl p-3 flex gap-2 justify-center items-center cursor-pointer hover:-translate-y-2 transition-transform">
+              <Plus size={20} />
+              <span>Add group</span>
+            </div>
+          }
+        >
+          <FormCreateGroup MaLop={id!} getGroup={() => getAllGroup()} />
+        </Popover>
+
         {groups.map((g) => (
           <Dialog
             trigger={
@@ -123,17 +111,6 @@ const ClassCourseGroup = () => {
                     {g.current_member ?? 0} / {g.max_members}
                   </p>
                 </div>
-                <div className="absolute top-3 right-3">
-                  {g.created_by === user?.username && (
-                    <DropdownMenu
-                      items={getItemsAction(g.MaNhom)}
-                      trigger={<Button icon={<Ellipsis />} />}
-                      size="sm"
-                      side="bottom"
-                      align="end"
-                    />
-                  )}
-                </div>
                 <div className="absolute bottom-3 right-3">
                   <span className="text-sm">{getTimeDiff(g.update_at)}</span>
                 </div>
@@ -148,18 +125,6 @@ const ClassCourseGroup = () => {
           </Dialog>
         ))}
       </div>
-      {groups.length === 0 && (
-        <span className="block text-center italic w-full">
-          No groups have been created yet.
-        </span>
-      )}
-      {opentFormCreate && (
-        <FormCreateGroup
-          handleClose={() => setOpenFormCreate(false)}
-          MaLop={id!}
-          getGroup={() => getAllGroup()}
-        />
-      )}
     </div>
   );
 };
@@ -167,11 +132,10 @@ const ClassCourseGroup = () => {
 type Props = {
   MaNhom?: string;
   MaLop?: string;
-  handleClose?: () => void;
   getGroup: () => void;
 };
 
-const FormCreateGroup = ({ handleClose, MaLop, getGroup }: Props) => {
+const FormCreateGroup = ({ MaLop, getGroup }: Props) => {
   const { register, handleSubmit } = useForm();
   const { loading, withLoading } = useSubmitLoading();
 
@@ -194,54 +158,46 @@ const FormCreateGroup = ({ handleClose, MaLop, getGroup }: Props) => {
     });
   };
   return (
-    <div className="right-0 top-0 left-0 z-999 h-[100vh] w-[100-vw] bg-black/20 fixed">
-      <div className="bg-white w-100 p-5 h-[100vh] absolute right-0 flex flex-col gap-2 animate-slideInRight overflow-auto">
-        <h1 className="uppercase font-bold pb-2 mb-3 border-b sticky top-0 bg-white">
-          Create Group
-        </h1>
-        <form onSubmit={handleSubmit(CreateGroup)}>
-          <div className="flex flex-col gap-5">
-            <TextField
-              label="Name"
-              {...register("name", { required: "Tên nhóm là bắt buộc" })}
-              placeholder="Nhom A"
-              fullWidth
-            />
+    <div className="bg-white dark:bg-card w-100 p-2 flex flex-col gap-2 overflow-auto">
+      <h1 className="uppercase font-bold pb-2 mb-3 border-b sticky top-0">
+        Create Group
+      </h1>
+      <form onSubmit={handleSubmit(CreateGroup)}>
+        <div className="flex flex-col gap-5">
+          <TextField
+            label="Name"
+            {...register("name", { required: "Tên nhóm là bắt buộc" })}
+            placeholder="Nhom A"
+            fullWidth
+          />
 
-            <TextField
-              label="Limit"
-              type="number"
-              {...register("max_members", {
-                required: "Số lượng thành viên là bắt buộc",
-              })}
-              placeholder="4"
-            />
+          <TextField
+            label="Limit"
+            type="number"
+            {...register("max_members", {
+              required: "Số lượng thành viên là bắt buộc",
+            })}
+            placeholder="4"
+          />
 
-            <TextField
-              label="Description"
-              multiline
-              {...register("description")}
-              rows={5}
-            />
+          <TextField
+            label="Description"
+            multiline
+            {...register("description")}
+            rows={5}
+          />
 
-            <div className="flex gap-2 justify-end fixed top-4 right-5 rounded-md">
-              <Button
-                type="submit"
-                title="Save"
-                size="sm"
-                variant="dark"
-                disabled={loading}
-              />
-              <Button
-                type="button"
-                onClick={handleClose}
-                size="sm"
-                title="Cancel"
-              />
-            </div>
+          <div className="flex gap-2 justify-end rounded-md">
+            <Button
+              type="submit"
+              title="Save"
+              size="md"
+              variant="dark"
+              disabled={loading}
+            />
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 };
@@ -383,7 +339,7 @@ const Group = ({ MaNhom, getGroup, MaLop }: Props) => {
                         {m.sinhvien}
                         <Button
                           onClick={() => handleAddMember(m.MaSV)}
-                          variant="icon"
+                          variant="transparent"
                           size="ic"
                           icon={<Plus size={18} />}
                         />
@@ -425,10 +381,13 @@ const Group = ({ MaNhom, getGroup, MaLop }: Props) => {
             {membersGroup.map((m) => (
               <div
                 key={m.MaSV}
-                className="flex gap-2 items-center bg-black/3 p-2 rounded-full"
+                className="flex gap-2 items-center justify-between bg-black/3 px-2 py-1 rounded-full"
               >
-                <AvatarDemo img={m.avatar} />
-                <p>{m.hoten}</p>
+                <div className="flex gap-2 items-center">
+                  <AvatarDemo img={m.avatar} />
+                  <p className="text-[10px]">{m.hoten}</p>
+                </div>
+                <Button icon={<Minus size={15}/>} size="ic" variant="transparent"/>
               </div>
             ))}
             {membersGroup.length === 0 && (
@@ -440,7 +399,7 @@ const Group = ({ MaNhom, getGroup, MaLop }: Props) => {
           <div className="mt-5">
             <div className="flex gap-2 items-center">
               <MessageSquareText size={20} />
-              <h2 className="font-bold">Comment and activitys</h2>
+              <h2 className="font-bold">Comment and activities</h2>
             </div>
             <div className="mt-3">
               <ReactQuill

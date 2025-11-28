@@ -193,7 +193,7 @@ const ClassCourseAssignmentGuidance = () => {
                   You have submitted this assignment. If you want to change,
                   please contact your instructor.
                 </p>
-                <div className="flex flex-col items-center justify-center gap-2 p-3 bg-green-brand text-white rounded-md">
+                <div className="flex flex-col items-center justify-center gap-2 p-3 bg-black text-white rounded-md">
                   <File size={20} />
                   <a
                     href={`http://localhost:4180/contents/${dataSubmission?.file_name}`}

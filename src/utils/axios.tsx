@@ -6,9 +6,6 @@ const API = axios.create({
   baseURL: import.meta.env.VITE_BASE_URI_API || 'http://localhost:4000/v1',
   timeout: 10000,
   withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 })
 
 // Optional: Interceptors
@@ -28,8 +25,12 @@ API.interceptors.response.use(
   (error) => {
     // Optional: handle global errors
     if (error.response?.status === 401) {
-      // logout, redirect, or show message
-      console.error('Unauthorized')
+      const currentPath = window.location.pathname;
+
+      // Không redirect khi đang ở trang login → tránh loop
+      if (currentPath !== "/auth/login") {
+        window.location.href = "/auth/login";
+      }
     }
     return Promise.reject(error)
   }

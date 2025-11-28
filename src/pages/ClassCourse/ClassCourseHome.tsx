@@ -1,6 +1,6 @@
 import type { ContentType } from "@/types/ContentType";
 import API from "@/utils/axios";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaFilePdf } from "react-icons/fa6";
@@ -20,6 +20,7 @@ import {
   Trash,
   TriangleAlert,
   Upload,
+  X,
   Youtube,
 } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -44,6 +45,19 @@ const get_icon: any = {
   zip: <GoFileZip size={30} />,
 };
 
+const fileReducer = (state: File[], action: any) => {
+  switch (action.type) {
+    case "SET_DATA":
+      return action.value;
+    case "ADD_FILE":
+      return [...state, action.value];
+    case "DELETE_FILE":
+      return state.filter((f: any) => f.name !== action.name);
+    default:
+      return state;
+  }
+};
+
 const ClassCourseManagementHome = () => {
   const { user } = useAuth();
   const [contentData, setContentData] = useState<ContentType[]>([]);
@@ -51,7 +65,7 @@ const ClassCourseManagementHome = () => {
   const [preview, setPreview] = useState<any>(null);
   const [opentFormCreate, setOpenFormCreate] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, dispatch] = useReducer(fileReducer, []);
   const [classCourseData, setClassCourseData] = useState<ClassCourseType>();
   const [description, setDescription] = useState<string>("");
   const [selectedMaNoiDung, setSelectedMaNoiDung] = useState<string>("");
@@ -132,24 +146,22 @@ const ClassCourseManagementHome = () => {
     formData.append("id_youtube", selectedVideoId?.id ?? "");
     formData.append("thumbnail_youtube", selectedVideoId?.thumbnail ?? "");
     formData.append("title_youtube", selectedVideoId?.title ?? "");
-    formData.append("file", file!);
+    file.forEach((f: File) => {
+      formData.append("file", f);
+    });
 
-    console.log(formData);
     try {
       withLoading(async () => {
-        await API.post("/contents/create", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        });
+        await API.post("/contents/create", formData);
 
         getContent();
+        setOpenFormCreate(false);
+        setSelectedVideoId(null);
+        setDescription("");
+        dispatch({ type: "SET_DATA", value: [] });
+        reset();
+        toast.success("Tạo nội dung thành công", { theme: "light" });
       });
-
-      setOpenFormCreate(false);
-      setSelectedVideoId(null);
-      setDescription("");
-      setFile(null);
-      reset();
-      toast.success("Tạo nội dung thành công", { theme: "light" });
     } catch (err: any) {
       console.log(err?.response?.data?.message);
     }
@@ -160,14 +172,15 @@ const ClassCourseManagementHome = () => {
     try {
       await API.delete(`/contents/delete/${MaNoiDung}`);
       getContent();
-      toast.success("Xoá nội dung thành công");
+      toast.success("Xoá nội dung thành công", { theme: "light" });
     } catch (err: any) {
       console.log(err?.response?.data?.message);
     }
   };
 
   const handleFileOnChange = (e: any) => {
-    setFile(e.target.files[0]);
+    if (!e.target.files[0]) return;
+    dispatch({ type: "ADD_FILE", value: e.target.files[0] });
   };
 
   const submitSearch = async () => {
@@ -182,7 +195,7 @@ const ClassCourseManagementHome = () => {
   useEffect(() => {
     getClassCourse();
     getContent();
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     document.title =
@@ -200,23 +213,23 @@ const ClassCourseManagementHome = () => {
       <div className="mt-5">
         {/* form tạo content */}
         <div
-          className={`rounded-xl bg-black/3 transition-all duration-300 relative overflow-hidden ${
-            opentFormCreate ? "h-100" : "h-13"
+          className={`rounded-xl bg-black/3 transition-all duration-300 relative ${
+            opentFormCreate ? "h-130" : "h-13"
           }`}
         >
           <h2
             onClick={() => setOpenFormCreate(!opentFormCreate)}
-            className="cursor-pointer flex gap-2 p-4 sticky top-0"
+            className="cursor-pointer flex gap-2 p-4"
           >
             <Plus />
             Add content
           </h2>
 
           {opentFormCreate && (
-            <div className="overflow-auto h-90">
+            <div className="">
               <form
                 onSubmit={handleSubmit(handleCreateContent)}
-                className="h-80"
+                className="max-h-100 overflow-auto"
               >
                 <div className="p-4 flex flex-col gap-3">
                   <div className="relative">
@@ -251,32 +264,43 @@ const ClassCourseManagementHome = () => {
                     type="file"
                     onChange={handleFileOnChange}
                   />
-                  {/* Preview */}
-                  {selectedVideoId && (
-                    <div className="grid grid-cols-3">
+                  <div className="grid grid-cols-3 gap-2">
+                    {/* Preview */}
+                    {selectedVideoId && (
                       <div className="flex items-center gap-2 p-2 ring ring-gray-300 rounded-xl">
                         <span className="flex-1">{selectedVideoId.title}</span>
                         <img width={100} src={selectedVideoId.thumbnail}></img>
                       </div>
-                    </div>
-                  )}
-                  {file && (
-                    <div className="grid grid-cols-4">
-                      <div className="p-3 ring ring-gray-200 rounded-md">
-                        <label>
-                          <div className="flex justify-center items-center p-5">
+                    )}
+                  </div>
+                  <div className="grid grid-cols-3 gap-2">
+                    {file &&
+                      file.map((f: any) => (
+                        <div className="px-3 py-3 ring ring-gray-200 rounded-md flex justify-between items-center gap-2">
+                          <a
+                            href={URL.createObjectURL(f)}
+                            target="_blank"
+                            className="flex items-center gap-2"
+                          >
                             <File />
-                          </div>
-                          <label className="text-center w-full block">
-                            {file.name}
-                          </label>
-                        </label>
-                      </div>
-                    </div>
-                  )}
+                            <span className="w-full block hover:underline">
+                              {f.name}
+                            </span>
+                          </a>
+                          <Button
+                            type="button"
+                            onClick={() =>
+                              dispatch({ type: "DELETE_FILE", name: f.name })
+                            }
+                            variant="transparent"
+                            icon={<X />}
+                          />
+                        </div>
+                      ))}
+                  </div>
                 </div>
                 <div
-                  className={`flex bg-black/3 justify-between items-center p-3 gap-2 absolute bottom-0 left-0 right-0 ${
+                  className={`flex bg-black/3 justify-between items-center p-3 gap-2 rounded-bl-xl rounded-br-xl absolute bottom-0 left-0 right-0 ${
                     opentFormCreate ? "" : "hidden"
                   }`}
                 >
@@ -416,9 +440,10 @@ const ClassCourseManagementHome = () => {
                       type="button"
                       onClick={() => {
                         setSelectedVideoId(null);
-                        setFile(null);
+                        dispatch({ type: "SET_DATA", value: [] });
                         reset();
                         setOpenFormCreate(false);
+                        setDescription("");
                       }}
                       title="Cancle"
                       variant="transparent"
@@ -447,7 +472,7 @@ const ClassCourseManagementHome = () => {
                   className="rounded-full"
                 ></img>
                 <div>
-                  <h2>{c.hoten}</h2>
+                  <h2>{c.create_by.hoten}</h2>
                   <p className="text-sm text-gray-500">
                     {new Date(c.ngay_tao).toLocaleDateString("vi-VN")}
                   </p>
@@ -459,40 +484,40 @@ const ClassCourseManagementHome = () => {
                 <div dangerouslySetInnerHTML={{ __html: c.mota }}></div>
               </div>
               {/* youtube */}
-              {c.youtube_id && (
-                <div className="grid grid-cols-3 mt-4">
+              <div className="grid grid-cols-3 mt-4 gap-2">
+                {c.videos.map((v) => (
                   <a
                     target="_blank"
-                    href={`https://www.youtube.com/watch?v=${c.youtube_id}`}
+                    href={`https://www.youtube.com/watch?v=${v.youtube_id}`}
                     className="ring ring-gray-300 rounded-md p-2 flex gap-2"
                   >
-                    <p className="flex-1 underline">{c.youtube_title}</p>
-                    <img width={70} src={c.thumbnail}></img>
+                    <p className="flex-1 underline">{v.youtube_title}</p>
+                    <img width={70} src={v.thumbnail}></img>
                   </a>
-                </div>
-              )}
+                ))}
+              </div>
               {/* file */}
-              {c.file_name && (
-                <div className="grid grid-cols-3 mt-4">
+              <div className="grid grid-cols-3 mt-4 gap-2">
+                {c.files.map((f) => (
                   <div
                     onClick={() =>
                       handlePreview(
-                        getFileUrl(c.file_name),
-                        getFileType(c.mime_type)
+                        getFileUrl(f.file_name),
+                        getFileType(f.mime_type)
                       )
                     }
                     className="p-3 ring ring-gray-300 rounded-md flex gap-2 cursor-pointer"
                   >
                     <div className="flex items-center">
-                      {get_icon[`${getFileType(c.mime_type)}`]}
+                      {get_icon[`${getFileType(f.mime_type)}`]}
                     </div>
                     <label className="w-full block cursor-pointer underline">
-                      {c.original_name}
+                      {f.original_name}
                     </label>
                   </div>
-                </div>
-              )}
-              {c.userId === user?.username && (
+                ))}
+              </div>
+              {c.create_by.userId === user?.username && (
                 <div className="absolute top-3 right-3">
                   <DropdownMenu
                     trigger={
@@ -613,7 +638,7 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
 
   useEffect(() => {
     getOneContentById();
-  }, []);
+  }, [MaNoiDung]);
 
   return (
     <div className="right-0 top-0 left-0 z-999 h-[100vh] w-[100-vw] bg-black/20 fixed">
@@ -627,6 +652,7 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
               label="Title"
               {...register("tieu_de", { required: "Tiêu đề là bắt buộc" })}
               fullWidth
+              slotProps={{ inputLabel: { shrink: true } }}
             />
 
             <ReactQuill
@@ -639,40 +665,34 @@ const FormUpdateContent = ({ MaNoiDung, handleClose }: Props) => {
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
                 <label className="font-bold">Current video:</label>
-                {contentData?.youtube_id ? (
+                {contentData?.videos.map((v) => (
                   <a
+                    key={v.youtube_id}
                     className="bg-gray-100 underline p-2 rounded-md flex"
-                    href={`https://www.youtube.com/watch?v=${contentData?.youtube_id}`}
+                    href={`https://www.youtube.com/watch?v=${v.youtube_id}`}
                     target="_blank"
                   >
-                    <span className="flex-1">{contentData?.youtube_title}</span>
-                    <img width={100} src={contentData?.thumbnail}></img>
+                    <span className="flex-1">{v.youtube_title}</span>
+                    <img width={100} src={v.thumbnail}></img>
                   </a>
-                ) : (
-                  <p className="text-center italic bg-gray-50 rounded-md p-2">
-                    There are no video
-                  </p>
-                )}
+                ))}
               </div>
             </div>
             <div className="flex flex-col gap-5">
               <div className="flex flex-col gap-2">
                 <label className="font-bold">Current file:</label>
-                {contentData?.file_path ? (
+                {contentData?.files.map((f) => (
                   <a
+                    key={f.file_name}
                     className="bg-gray-100 underline p-2 rounded-md"
                     href={`${import.meta.env.VITE_BASE_STATIC_FILE}/${
-                      contentData?.file_path
+                      f.file_path
                     }`}
                     target="_blank"
                   >
-                    {contentData?.original_name}
+                    {f.original_name}
                   </a>
-                ) : (
-                  <p className="text-center italic bg-gray-50 rounded-md p-2">
-                    There are no files
-                  </p>
-                )}
+                ))}
               </div>
               <div
                 onClick={handleClick}

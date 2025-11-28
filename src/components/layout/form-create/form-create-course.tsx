@@ -34,14 +34,14 @@ export const FormCreateCourse = ({ submitCreateCourse }: Props) => {
   } = useForm();
 
   return (
-    <div className="p-5 h-full relative">
-      <div className="border-b py-2">
-        <h1 className="text-2xl uppercase">Thêm học phần</h1>
+    <div className="h-full relative">
+      <div className="border-b py-4">
+        <h1 className="text-xl text-center font-bold uppercase">Thêm học phần</h1>
       </div>
-      <div className="py-4 overflow-auto relative">
+      <div className="py-4 px-5 overflow-auto relative">
         <form className="p-2" onSubmit={handleSubmit(submitCreateCourse)}>
           <div>
-            <div className="grid grid-cols-2 gap-4 mt-3">
+            <div className="grid grid-cols-1 gap-4 mt-3">
               <TextField
                 label="Tên học phần"
                 type="text"

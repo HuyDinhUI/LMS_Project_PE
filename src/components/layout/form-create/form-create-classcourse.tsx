@@ -52,11 +52,11 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
   }, []);
 
   return (
-    <div className="p-5 h-full relative overflow-hidden">
-      <div className="border-b py-2">
-        <h1 className="text-2xl uppercase">Thêm lớp học phần</h1>
+    <div className="h-full relative overflow-hidden">
+      <div className="border-b py-4">
+        <h1 className="text-xl text-center font-bold uppercase">Thêm lớp học phần</h1>
       </div>
-      <div className="py-4 overflow-auto relative h-150">
+      <div className="py-4 px-5 overflow-auto relative h-150">
         <form
           className="p-2 min-h-200"
           onSubmit={handleSubmit(submitCreateClassCourse)}
@@ -171,23 +171,25 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                 </div>
                 <div className="grid grid-cols-3 gap-5">
                   <TextField
-                    helperText="Ngày bắt đầu"
+                    label="Ngày bắt đầu"
                     type="date"
                     {...register("ngay_batdau", {
                       required: "Ngày bắt đầu là bắt buộc",
                     })}
                     aria-invalid={errors.ngay_batdau ? "true" : "false"}
                     required
+                    slotProps={{inputLabel:{shrink: true}}}
                   />
 
                   <TextField
-                    helperText="Ngày kết thúc"
+                    label="Ngày kết thúc"
                     type="date"
                     {...register("ngay_kethuc", {
                       required: "Ngày ngày kết thúc là bắt buộc",
                     })}
                     aria-invalid={errors.ngay_kethuc ? "true" : "false"}
                     required
+                    slotProps={{inputLabel:{shrink: true}}}
                   />
 
                   <TextField
@@ -208,7 +210,7 @@ export const FormCreateClassCourse = ({ submitCreateClassCourse }: Props) => {
                   </TextField>
 
                   <TextField
-                    label="Tuần học"
+                    label="Tiết bắt đầu"
                     select
                     {...register("tiet_batdau", {
                       required: "Tiết bắt đầu là bắt buộc",

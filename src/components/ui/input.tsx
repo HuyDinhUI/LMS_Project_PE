@@ -52,7 +52,7 @@ const variantClass: Record<InputVariant, string> = {
   default: "ring ring-gray-300 dark:ring-gray-500 rounded-md",
   primary: "",
   danger: "ring ring-red-500 rounded-md",
-  borderBottom: "rounded-none border-b border-black",
+  borderBottom: "rounded-none border-b border-gray-300",
 };
 
 const sizeClass: Record<InputSize, string> = {

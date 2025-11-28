@@ -51,11 +51,11 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
   }, []);
 
   return (
-    <div className="p-5 h-full relative">
-      <div className="border-b py-2">
-        <h1 className="text-2xl uppercase">Thêm sinh viên</h1>
+    <div className="h-full relative">
+      <div className="border-b py-4">
+        <h1 className="text-xl text-center font-bold uppercase">Thêm sinh viên</h1>
       </div>
-      <div className="py-4 overflow-auto relative">
+      <div className="py-4 px-5 overflow-auto relative">
         <form className="p-2" onSubmit={handleSubmit(submitCreateStudent)}>
           <div>
             <div>
@@ -75,6 +75,7 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
               />
 
               <TextField
+                label="Ngày sinh"
                 type="date"
                 {...register("ngaysinh", {
                   required: "Ngày sinh là bắt buộc",
@@ -82,7 +83,7 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
                 aria-invalid={errors.ngaysinh ? "true" : "false"}
                 required
                 error={errors.ngaysinh ? true : false}
-                helperText="Ngày sinh"
+                slotProps={{inputLabel:{shrink: true}}}
               />
 
               <TextField
@@ -172,12 +173,13 @@ export const FormCreateStudent = ({ submitCreateStudent }: Props) => {
               />
 
               <TextField
+                label="Ngày nhập học"
                 type="date"
                 {...register("ngay_nhaphoc")}
                 aria-invalid={errors.ngay_nhaphoc ? "true" : "false"}
                 required
                 error={errors.ngay_nhaphoc ? true : false}
-                helperText="Ngày nhập học"
+                slotProps={{inputLabel:{shrink: true}}}
               />
 
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">

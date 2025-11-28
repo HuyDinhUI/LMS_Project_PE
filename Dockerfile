@@ -1,11 +1,12 @@
-# Dockerfile.react
+# Stage 1: Build React
 FROM node:18 AS build
-WORKDIR /LMS_Project_FE
-COPY LMS_Project_FE/package*.json ./
+WORKDIR /app
+COPY package*.json ./
 RUN npm install
-COPY LMS_Project_FE/. ./
+COPY . .
 RUN npm run build
 
-FROM nginx:latest
-COPY --from=build /LMS_Project_FE/dist /usr/share/nginx/html
+FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=build app/dist /usr/share/nginx/html
+ENTRYPOINT ["nginx", "-g", "daemon off;"]

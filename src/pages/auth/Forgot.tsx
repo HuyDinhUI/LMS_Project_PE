@@ -11,6 +11,7 @@ import logo from "@/assets/logo_cat_black.svg";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubmitLoading } from "@/hooks/useLoading";
 import { LoadingOverlay } from "@/components/ui/loading-overlay";
+import TextField from "@mui/material/TextField";
 
 const Login = () => {
   const {
@@ -65,22 +66,23 @@ const Login = () => {
       <LoadingOverlay show={loading} />
       <div className="w-100 min-h-[100px] rounded-xl bg-white/5 dark:bg-transparent dark:backdrop-blur-md dark:ring dark:ring-gray-500 shadow-md flex overflow-hidden">
         <form className="w-full p-5" onSubmit={handleSubmit(submitLogin)}>
-          <div className="text-center mb-5 mt-4">
+          <div className="text-center mb-3 mt-4">
             <div className="flex justify-center items-center">
               <img width={50} src={logo} className="mb-8"></img>
               <h1 className="font-brand-logo text-4xl font-bold">eduCat</h1>
             </div>
           </div>
           {error && <AlertDanger title={error} />}
-          <div className="">
-            <label className="block mb-2 font-medium">Email</label>
-            <Input
+          <div className="mb-2">
+            <TextField
+              label="Email"
+              size="small"
+              required
               type="email"
               placeholder="Enter your email"
               {...register("email", { required: "Email is required" })}
               aria-invalid={errors.email ? "true" : "false"}
-              variant={errors.email ? "danger" : "default"}
-              className="mb-4"
+              fullWidth
             />
           </div>
           <Button

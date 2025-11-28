@@ -7,7 +7,7 @@ type AvatarProps = {
 	img: string
 }
 
-const AvatarDemo = ({size = '25px', img}:AvatarProps) => (
+const AvatarDemo = ({img}:AvatarProps) => (
 	<div className="flex gap-5">
 		<Avatar.Root className={`inline-flex select-none items-center size-[25px] justify-center overflow-hidden rounded-full`}>
 			<Avatar.Image

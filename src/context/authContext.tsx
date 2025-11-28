@@ -20,15 +20,16 @@ interface UserType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const [user, setUser] = useState<UserType | null>(null); // {id, email, role, name, ...}
+  const [user, setUser] = useState<UserType | null>(null); 
   const [loading, setLoading] = useState<boolean>(true);
 
-  // Khi app load lần đầu → tự động lấy thông tin user
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const res = await API.post("/auth/getUserInfo");
-        setUser(res.data.user[0]); // { id, email, role, ... }
+        setUser(res.data.user[0]);
+        localStorage.setItem("username", res.data.user[0].username)
+        localStorage.setItem("role", res.data.user[0].role)
       } catch (err) {
         setUser({ id: "", username: "", role: "" });
       } finally {

@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { DropdownMenu } from "@/components/ui/dropdown";
-import { Input } from "@/components/ui/input";
 import { AlertDialogDelete } from "@/mock/AlertDialog-MockData";
 import type { AssignmentType } from "@/types/AssignmentType";
 import API from "@/utils/axios";
@@ -485,9 +484,11 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
           <div className="flex flex-col gap-5">
             <div className="flex flex-col gap-2">
               <label className="font-bold">Title:</label>
-              <Input
+              <TextField
+                label="Title"
                 {...register("TieuDe", { required: "Tiêu đề là bắt buộc" })}
                 placeholder="Title"
+                slotProps={{ inputLabel: { shrink: true } }}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -497,30 +498,27 @@ const FormUpdateAssignment = ({ MaBaiTap, handleClose }: Props) => {
             <div className="flex flex-col gap-3">
               <div className="flex flex-col gap-2">
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="flex flex-col gap-2">
-                    <label className="font-bold">Start date:</label>
-                    <Input
-                      {...register("NgayBatDau")}
-                      type="datetime-local"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="font-bold">End date:</label>
-                    <Input
-                      {...register("HanNop")}
-                      type="datetime-local"
-                      placeholder=""
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="font-bold">Point:</label>
-                    <Input
-                      {...register("DiemToiDa")}
-                      type="number"
-                      placeholder="10"
-                    />
-                  </div>
+                  <TextField
+                    label="Start date"
+                    {...register("NgayBatDau")}
+                    type="datetime-local"
+                    slotProps={{ inputLabel: { shrink: true } }}
+                  />
+
+                  <TextField
+                    label="End date"
+                    {...register("HanNop")}
+                    type="datetime-local"
+                    slotProps={{ inputLabel: { shrink: true } }}
+                  />
+
+                  <TextField
+                    label="Point"
+                    {...register("DiemToiDa")}
+                    type="number"
+                    placeholder="10"
+                    slotProps={{ inputLabel: { shrink: true } }}
+                  />
                 </div>
               </div>
               <div className="flex flex-col gap-5">

@@ -34,11 +34,13 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
   } = useForm();
 
   return (
-    <div className="p-5 h-full relative">
-      <div className="border-b py-2">
-        <h1 className="text-2xl uppercase">Thêm giảng viên</h1>
+    <div className="h-full relative">
+      <div className="border-b py-4">
+        <h1 className="text-xl font-bold text-center uppercase">
+          Thêm giảng viên
+        </h1>
       </div>
-      <div className="py-4 overflow-auto relative">
+      <div className="py-4 px-5 overflow-auto relative">
         <form className="p-2" onSubmit={handleSubmit(submitCreateTeacher)}>
           <div>
             <div>
@@ -58,6 +60,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               />
 
               <TextField
+                label="Ngày sinh"
                 type="date"
                 {...register("ngaysinh", {
                   required: "Ngày sinh là bắt buộc",
@@ -65,7 +68,7 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                 aria-invalid={errors.ngaysinh ? "true" : "false"}
                 required
                 error={errors.ngaysinh ? true : false}
-                helperText="Ngày sinh"
+                slotProps={{ inputLabel: { shrink: true } }}
               />
 
               <TextField
@@ -123,7 +126,9 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                 error={errors.MaKhoa ? true : false}
               >
                 {ListKhoa.map((k) => (
-                  <MenuItem value={k.id} key={k.id}>{k.name}</MenuItem>
+                  <MenuItem value={k.id} key={k.id}>
+                    {k.name}
+                  </MenuItem>
                 ))}
               </TextField>
 
@@ -148,7 +153,6 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
                 aria-invalid={errors.loaigiangvien ? "true" : "false"}
                 required
                 error={errors.loaigiangvien ? true : false}
-
               >
                 <MenuItem value="Cơ hữu">Cơ hữu</MenuItem>
                 <MenuItem value="Thỉnh giảng">Thỉnh giảng</MenuItem>
@@ -165,10 +169,11 @@ export const FormCreateTeacher = ({ submitCreateTeacher }: Props) => {
               />
 
               <TextField
+                label="Ngày tuyển dụng"
                 type="date"
                 {...register("ngaytuyendung")}
                 aria-invalid={errors.ngaytuyendung ? "true" : "false"}
-                helperText="Ngày tuyển dụng"
+                slotProps={{ inputLabel: { shrink: true } }}
               />
 
               <div className="fixed flex gap-2 justify-end left-0 bottom-0 p-4 border-t border-gray-200 w-full">

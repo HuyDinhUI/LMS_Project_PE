@@ -164,12 +164,15 @@ const ClassCourseAttendance = () => {
                   <td className="border border-gray-500 px-4 py-2">
                     <span
                       className={`py-1 px-2 rounded-md text-sm ${
-                        record.DaDiemDanh === 1
-                          ? "bg-green-100 ring ring-green-400 text-green-600"
-                          : "bg-rose-200 ring ring-rose-400 text-rose-600"
-                      }`}
+                        record.DaDiemDanh === "Present" &&
+                        "bg-green-100 ring ring-green-400 text-green-600"
+                      }
+                          ${
+                            record.DaDiemDanh === "Absent" &&
+                            "bg-rose-200 ring ring-rose-400 text-rose-600"
+                          }`}
                     >
-                      {record.DaDiemDanh === 1 ? "Present" : "Absent"}
+                      {record.DaDiemDanh}
                     </span>
                   </td>
                 </tr>

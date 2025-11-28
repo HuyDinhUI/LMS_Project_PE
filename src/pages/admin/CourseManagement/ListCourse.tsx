@@ -193,6 +193,7 @@ const ListCoursePage = () => {
             <FilterForm data={data_mock} handleFilter={handleFilter} />
           </div>
           <Dialog
+          size="sm"
             trigger={
               <Button
                 title="Thêm"

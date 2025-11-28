@@ -1,7 +1,7 @@
+import AvatarDemo from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
-import type { ClassCourseType } from "@/types/ClassCourseType";
 import type { MessageType, InboxType } from "@/types/Inbox";
 import API from "@/utils/axios";
 import { Send } from "lucide-react";
@@ -108,9 +108,9 @@ const InboxMain = () => {
   return (
     <div className="pt-5 ps-10 pe-5 w-full flex gap-2 flex-1">
       
-      <div className="bg-green-brand/80 w-full flex gap-2 p-5 rounded-xl">
+      <div className="w-full flex gap-2 py-5 rounded-xl">
         {/* Sidebar: danh sách lớp */}
-        <div className="w-1/5 rounded-xl p-2 overflow-y-auto bg-white shadow-md">
+        <div className="w-1/5 ring ring-gray-100 rounded-xl p-2 overflow-y-auto shadow-md">
           <div className="w-full py-4">
             <Input placeholder="Search" variant="borderBottom" />
           </div>
@@ -130,39 +130,40 @@ const InboxMain = () => {
         </div>
         {/* Khung chat */}
         <div
-          className="flex-1 bg-white shadow-md rounded-xl overflow-hidden"
+          className="flex-1 ring ring-gray-100 shadow-md rounded-xl overflow-hidden"
         
         >
           {selectedInbox ? (
             <div className="h-full flex flex-col relative">
-              <div className="px-3 py-4.5 w-full border-b border-black">
-                <h1 className="text-xl font-bold uppercase">{selectedInbox.TieuDe}</h1>
+              <div className="px-3 py-4.5 w-full border-b border-gray-300">
+                <h1 className="text-xl text-center font-bold uppercase">{selectedInbox.TieuDe}</h1>
               </div>
               {/* Tin nhắn */}
-              <div className="p-3 h-125 overflow-y-scroll">
+              <div className="p-3 h-125 overflow-y-scroll flex flex-col gap-2">
                   {messages.map((msg, i) => (
                     <div
                       key={i}
-                      className={`flex ${
-                        msg.MaNguoiGui === user?.username ? "justify-end" : "justify-start"
+                      className={`flex gap-2 ${
+                        msg.MaNguoiGui === user?.username ? "flex-row-reverse" : "justify-start"
                       }`}
                     >
+                      <AvatarDemo img={msg.avatar}/>
                       <div
-                        className={`p-2 rounded-xl max-w-[70%] mt-2 animate-slideInBottom ${
+                        className={`p-2 rounded-xl max-w-[70%] animate-slideInBottom ${
                           msg.MaNguoiGui === user?.username
                             ? "bg-black text-white"
                             : "bg-black/50 text-white"
                         }`}
                       >
-                        <p className="text-sm mb-1">
+                        {/* <p className="text-sm mb-1">
                           <b>
                             {msg.VaiTro === "GV" ? "T." : "S."} {msg.hoten}
                           </b>
-                        </p>
+                        </p> */}
                         <p>{msg.NoiDung}</p>
-                        <p className="text-xs opacity-60 mt-1">
+                        {/* <p className="text-xs opacity-60 mt-1">
                           {new Date(msg.ThoiGianGui).toLocaleString()}
-                        </p>
+                        </p> */}
                       </div>
                     </div>
                   ))}

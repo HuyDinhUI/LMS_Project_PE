@@ -231,6 +231,7 @@ const ListClassCoursePage = () => {
                   <td>
                     <div className="flex gap-2">
                       <Dialog
+                        size="sm"
                         trigger={
                           <Button
                             variant="icon"

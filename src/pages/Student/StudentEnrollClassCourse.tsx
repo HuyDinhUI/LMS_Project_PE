@@ -129,7 +129,7 @@ const StudentEnrollClassCourse = () => {
         <h2 className="py-3 text-xl uppercase text-center bg-black/5 font-semibold rounded-lg">
           COURSES
         </h2>
-        <div className="w-full p-4 shadow-sm rounded-xl">
+        <div className="w-full p-4 shadow-sm rounded-xl mt-3">
           <table className="table-auto w-full bg-black/3">
             <thead>
               <tr className="text-left bg-green-brand text-white">
@@ -159,7 +159,7 @@ const StudentEnrollClassCourse = () => {
         <h2 className="py-3 text-xl uppercase mt-5 text-center bg-black/5 font-semibold rounded-lg">
           Class
         </h2>
-        <div className="w-full p-4 shadow-sm rounded-xl">
+        <div className="w-full p-4 shadow-sm rounded-xl mt-3">
           <table className="table-auto w-full bg-black/3">
             <thead>
               <tr className="text-left bg-yellow-brand text-white">
@@ -211,7 +211,7 @@ const StudentEnrollClassCourse = () => {
         <h2 className="py-3 text-xl uppercase mt-5 text-center bg-black/5 font-semibold rounded-lg">
           Enrolled
         </h2>
-        <div className="w-full p-4 shadow-sm rounded-xl">
+        <div className="w-full p-4 shadow-sm rounded-xl mt-3">
           <table className="table-auto w-full bg-black/3">
             <thead>
               <tr className="text-left bg-orange-brand text-white">

@@ -14,15 +14,10 @@ import {
   Presentation,
   Settings,
   Shield,
+  Trello,
 } from "lucide-react";
 
 export const SidebarAdminData: SidebarItem[] = [
-  {
-    type: "item",
-    label: "Dashboard",
-    icon: <LayoutDashboard />,
-    href: "/management/dashboard",
-  },
   { type: "separator" },
   { type: "separator", label: "User" },
   {
@@ -72,8 +67,15 @@ export const SidebarAdminData: SidebarItem[] = [
   {
     type: "item",
     label: "Permission",
-    href: '/',
+    href: '#',
     icon: <Shield />,
+  },
+  { type: "separator", label: "Tool" },
+  {
+    type: "item",
+    label: "Analysis",
+    href: 'http://localhost:3030/',
+    icon: <ChartArea />,
   },
 ];
 
@@ -105,12 +107,6 @@ export const SidebarTeacherData: SidebarItem[] = [
   },
   { type: "separator" },
   { type: "separator",label: "Tools" },
-  {
-    type: "item",
-    label: "Analytics",
-    href: "#",
-    icon: <ChartArea/>
-  },
   {
     type: "item",
     label: "Setting",
@@ -161,9 +157,9 @@ export const SidebarStudentData: SidebarItem[] = [
   { type: "separator",label: "Tools" },
   {
     type: "item",
-    label: "Analytics",
-    href: "#",
-    icon: <ChartArea/>
+    label: "Trello",
+    href: "/trello",
+    icon: <Trello/>
   },
   {
     type: "item",

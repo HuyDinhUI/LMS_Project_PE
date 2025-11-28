@@ -60,7 +60,7 @@ export const Calendar = ({ data, height = "80vh" }: props) => {
             {arg.event.title}
             {new Date().toISOString() >=
               new Date(arg.event.start ?? "").toISOString() &&
-              new Date().toISOString() >
+              new Date().toISOString() <=
                 new Date(arg.event.end ?? "").toISOString() &&
               user?.role === "SV" && (
                 <Button

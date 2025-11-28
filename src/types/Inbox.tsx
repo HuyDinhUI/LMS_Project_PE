@@ -16,4 +16,5 @@ export type MessageType = {
     ThoiGianGui: Date
     hoten: string
     VaiTro: string
+    avatar: string
 }

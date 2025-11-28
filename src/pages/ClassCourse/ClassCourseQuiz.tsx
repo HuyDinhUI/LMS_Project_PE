@@ -85,7 +85,7 @@ const Quiz = () => {
   };
 
   useEffect(() => {
-    if (!user || !user.role) return;
+    if (!user || !id) return;
 
     if (user?.role === "SV") {
       getQuizByStudent();
@@ -214,7 +214,8 @@ const Quiz = () => {
                       disabled={
                         (q.TrangThaiNopBai === "Đã nộp" &&
                           q.SoLanChoPhep > 0) ||
-                        (new Date(q.HanNop) < new Date() && q.HanNop)
+                        (new Date(q.NgayBatDau) > new Date() && q.NgayBatDau) ||
+                        (new Date(q.HanNop) <= new Date() && q.HanNop)
                           ? true
                           : false
                       }
@@ -239,7 +240,10 @@ const Quiz = () => {
                 </div>
                 <div
                   className={`w-20 text-center absolute bottom-3 right-5 ${
-                    q.TrangThaiNopBai != "Chưa nộp"
+                    (user?.role === "SV" && q.TrangThaiNopBai !== "Chưa nộp") ||
+                    !q.HanNop ||
+                    (new Date(q.HanNop) >= new Date() &&
+                    new Date(q.NgayBatDau) <= new Date())
                       ? "bg-green-100 ring ring-green-400 text-green-600 text-sm px-2 rounded-md"
                       : "bg-rose-100 ring ring-rose-400 text-rose-600 text-sm px-2 rounded-md"
                   }`}
@@ -468,8 +472,8 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
         formData.append("MoTa", moTa);
         formData.append("LoaiTracNghiem", type);
         formData.append("ThoiGianLam", String(thoiGian));
-        formData.append("HanNop", String(startDate));
-        formData.append("NgayBatDau", String(endDate));
+        formData.append("HanNop", String(endDate));
+        formData.append("NgayBatDau", String(startDate));
         formData.append("TongDiem", String(10));
         formData.append("file", file!);
 
@@ -586,10 +590,13 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
       {typeAction !== "import" &&
         questions.length > 0 &&
         questions.map((q: any, qi: number) => (
-          <div key={q.MaCauHoi} className="p-4 shadow-sm rounded-xl mb-4 flex flex-col gap-5">
+          <div
+            key={q.MaCauHoi}
+            className="p-4 shadow-sm rounded-xl mb-4 flex flex-col gap-5"
+          >
             <label className="font-semibold">Question {qi + 1}:</label>
             <TextField
-            label="Content"
+              label="Content"
               multiline
               value={q.NoiDung}
               onChange={(e) =>
@@ -597,7 +604,7 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
                   type: "UPDATE_QUESTION",
                   qid: q.MaCauHoi,
                   field: "NoiDung",
-                  value: e,
+                  value: e.target.value,
                 })
               }
               fullWidth
@@ -605,10 +612,7 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
 
             <h4 className="font-medium mt-2 mb-2">Answer:</h4>
             {q.DapAn.map((a: any, i: number) => (
-              <div
-                key={a.MaDapAn}
-                className="flex items-center gap-2 relative"
-              >
+              <div key={a.MaDapAn} className="flex items-center gap-2 relative">
                 <CheckboxDemo
                   checked={a.LaDapAnDung}
                   onCheckedChange={(e) =>
@@ -655,7 +659,9 @@ function QuizAction({ handleGetQuiz, typeAction, MaTN, title }: props) {
                 title="Add answer"
                 icon={<Plus size={18} />}
                 type="button"
-                onClick={() => dispatch({ type: "ADD_ANSWER", qid: q.MaCauHoi })}
+                onClick={() =>
+                  dispatch({ type: "ADD_ANSWER", qid: q.MaCauHoi })
+                }
                 className="mt-3 bg-yellow-brand text-white hover:bg-yellow-brand/80"
               ></Button>
               <Button
